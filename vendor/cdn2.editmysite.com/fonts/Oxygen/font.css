@@ -1,0 +1,33 @@
+
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 300;
+  src: url("/vendor/cdn2.editmysite.com/fonts/Oxygen/light.eot"); /* IE9 Compat Modes */
+  src: url("/vendor/cdn2.editmysite.com/fonts/Oxygen/light.eot") format('embedded-opentype'), /* IE6-IE8 */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/light.woff2") format('woff2'), /* Super Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/light.woff") format('woff'), /* Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/light.ttf") format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 700;
+  src: url("/vendor/cdn2.editmysite.com/fonts/Oxygen/bold.eot"); /* IE9 Compat Modes */
+  src: url("/vendor/cdn2.editmysite.com/fonts/Oxygen/bold.eot") format('embedded-opentype'), /* IE6-IE8 */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/bold.woff2") format('woff2'), /* Super Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/bold.woff") format('woff'), /* Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/bold.ttf") format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 400;
+  src: url("/vendor/cdn2.editmysite.com/fonts/Oxygen/regular.eot"); /* IE9 Compat Modes */
+  src: url("/vendor/cdn2.editmysite.com/fonts/Oxygen/regular.eot") format('embedded-opentype'), /* IE6-IE8 */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/regular.woff2") format('woff2'), /* Super Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/regular.woff") format('woff'), /* Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Oxygen/regular.ttf") format('truetype'); /* Safari, Android, iOS */
+}

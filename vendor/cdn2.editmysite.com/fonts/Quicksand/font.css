@@ -1,0 +1,33 @@
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 300;
+  src: url("/vendor/cdn2.editmysite.com/fonts/Quicksand/light.eot"); /* IE9 Compat Modes */
+  src: url("/vendor/cdn2.editmysite.com/fonts/Quicksand/light.eot") format('embedded-opentype'), /* IE6-IE8 */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/light.woff2") format('woff2'), /* Super Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/light.woff") format('woff'), /* Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/light.ttf") format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 400;
+  src: url("/vendor/cdn2.editmysite.com/fonts/Quicksand/regular.eot"); /* IE9 Compat Modes */
+  src: url("/vendor/cdn2.editmysite.com/fonts/Quicksand/regular.eot") format('embedded-opentype'), /* IE6-IE8 */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/regular.woff2") format('woff2'), /* Super Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/regular.woff") format('woff'), /* Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/regular.ttf") format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  src: url("/vendor/cdn2.editmysite.com/fonts/Quicksand/bold.eot"); /* IE9 Compat Modes */
+  src: url("/vendor/cdn2.editmysite.com/fonts/Quicksand/bold.eot") format('embedded-opentype'), /* IE6-IE8 */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/bold.woff2") format('woff2'), /* Super Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/bold.woff") format('woff'), /* Modern Browsers */
+       url("/vendor/cdn2.editmysite.com/fonts/Quicksand/bold.ttf") format('truetype'); /* Safari, Android, iOS */
+}
