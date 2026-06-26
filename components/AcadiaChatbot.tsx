@@ -292,23 +292,39 @@ function getPriorityRuleSources(normalizedQuestion: string, queryTerms: string[]
   const asksAboutRvParking =
     includesAny(normalizedQuestion, ["rv", "recreational", "camper", "motorhome", "motor home", "trailer", "boat"]) &&
     includesAny(normalizedQuestion, ["park", "parking", "driveway", "stored", "storage"]);
+  const asksAboutPartiesOrNoise = isPartyOrNoiseQuestion(normalizedQuestion);
 
-  if (!asksAboutRvParking) {
-    return [];
+  if (asksAboutPartiesOrNoise) {
+    return ocrChunks
+      .filter((chunk) => {
+        const text = normalizeText(chunk.text);
+
+        return (
+          text.includes("personal conduct of the members and their guests") ||
+          text.includes("objectionable noise") ||
+          text.includes("special gatherings or events") ||
+          text.includes("nuisance or unreasonable inconvenience")
+        );
+      })
+      .map((chunk) => mapChunkToSource(chunk, 99, queryTerms));
   }
 
-  return ocrChunks
-    .filter((chunk) => {
-      const text = normalizeText(chunk.text);
+  if (asksAboutRvParking) {
+    return ocrChunks
+      .filter((chunk) => {
+        const text = normalizeText(chunk.text);
 
-      return (
-        text.includes("vehicles and recreational equipment") ||
-        text.includes("recreational vehicle") ||
-        text.includes("motor home") ||
-        (text.includes("camper") && text.includes("four consecutive hours"))
-      );
-    })
-    .map((chunk) => mapChunkToSource(chunk, 99, queryTerms));
+        return (
+          text.includes("vehicles and recreational equipment") ||
+          text.includes("recreational vehicle") ||
+          text.includes("motor home") ||
+          (text.includes("camper") && text.includes("four consecutive hours"))
+        );
+      })
+      .map((chunk) => mapChunkToSource(chunk, 99, queryTerms));
+  }
+
+  return [];
 }
 
 function mergeSources(primarySources: ChatSource[], secondarySources: ChatSource[]) {
@@ -345,12 +361,17 @@ function buildConciseAnswer(question: string, sources: ChatSource[]) {
 
 function buildDirectRuleAnswer(normalizedQuestion: string, sources: ChatSource[]) {
   const combinedSourceText = normalizeText(sources.map((source) => source.rawText).join(" "));
+  const asksAboutPartiesOrNoise = isPartyOrNoiseQuestion(normalizedQuestion);
   const asksAboutParking =
     includesAny(normalizedQuestion, ["park", "parking", "driveway", "stored", "storage"]) ||
     includesAny(combinedSourceText, ["parked", "parking", "stored"]);
   const asksAboutRv =
     includesAny(normalizedQuestion, ["rv", "recreational", "camper", "motorhome", "motor home", "trailer", "boat"]) ||
     includesAny(combinedSourceText, ["recreational vehicle", "motor home", "camper", "trailer"]);
+
+  if (asksAboutPartiesOrNoise) {
+    return "Short answer: I do not see a specific HOA rule in these documents that sets a guest limit or a music cutoff time. The closest language is general: the board can make rules about member and guest conduct, and objectionable noise or nuisance behavior may be an issue. For an actual party, check current board rules and local noise ordinances too.";
+  }
 
   if (asksAboutParking && asksAboutRv && combinedSourceText.includes("consecutive hours")) {
     return "Short answer: No, not as regular driveway parking or storage. RVs and similar recreational vehicles appear to be limited to four consecutive hours unless they are inside a garage or in a specifically approved/designated space. Use Read more... to check the exact source language.";
@@ -403,6 +424,22 @@ function looksLikeRecordingHeader(sentence: string) {
 
 function includesAny(value: string, needles: string[]) {
   return needles.some((needle) => value.includes(needle));
+}
+
+function isPartyOrNoiseQuestion(normalizedQuestion: string) {
+  return includesAny(normalizedQuestion, [
+    "party",
+    "parties",
+    "music",
+    "noise",
+    "quiet",
+    "loud",
+    "guest",
+    "guests",
+    "people over",
+    "how late",
+    "throwing a party"
+  ]);
 }
 
 function scoreDocumentsByTitle(normalizedQuestion: string) {
@@ -525,7 +562,11 @@ function expandQueryTerms(terms: string[]) {
     fees: ["fee", "assessment", "assessments"],
     meeting: ["meetings", "notice"],
     meetings: ["meeting", "notice"],
+    music: ["noise", "nuisance", "guest", "guests"],
+    noise: ["music", "nuisance", "guest", "guests"],
     parking: ["park", "vehicle", "vehicles"],
+    party: ["parties", "guest", "guests", "noise", "nuisance", "gathering"],
+    parties: ["party", "guest", "guests", "noise", "nuisance", "gathering"],
     restriction: ["restrictions", "covenant", "covenants"],
     restrictions: ["restriction", "covenant", "covenants"],
     rv: ["recreational", "vehicle", "vehicles", "motor", "home", "camper", "trailer"],
