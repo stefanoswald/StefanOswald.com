@@ -22,6 +22,12 @@ export type RelatedDocument = {
   fileType: "DOCX" | "PDF";
 };
 
+export type AcadiaGoverningDocument = RelatedDocument & {
+  id: string;
+  summary: string;
+  topicTags: string[];
+};
+
 export type Project = {
   id: string;
   title: string;
