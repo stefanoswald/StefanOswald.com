@@ -38,12 +38,37 @@ export function ProjectDetailPage({ project }: { project: Project }) {
           </DetailPanel>
           <section className="rounded-lg border border-dashed border-acadia-moss/40 bg-white p-5">
             <h2 className="text-xl font-bold text-acadia-ink">Related documents</h2>
-            <p className="mt-3 text-slate-700">
-              Documents, quotes, meeting packets, or board reference files can be added here later.
-            </p>
-            <div className="mt-4 rounded-md bg-acadia-sky px-4 py-3 text-sm font-medium text-acadia-ink">
-              Placeholder: no public documents are attached yet.
-            </div>
+            {project.relatedDocuments?.length ? (
+              <div className="mt-4 space-y-3">
+                {project.relatedDocuments.map((document) => (
+                  <a
+                    key={document.href}
+                    href={document.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-between gap-4 rounded-md border border-acadia-moss/20 bg-acadia-sky px-4 py-3 text-acadia-ink transition hover:border-acadia-leaf hover:bg-white"
+                  >
+                    <span>
+                      <span className="block text-sm font-bold">{document.title}</span>
+                      <span className="mt-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        {document.fileType}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-sm font-bold text-acadia-leaf">Open</span>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <>
+                <p className="mt-3 text-slate-700">
+                  Public documents, quotes, meeting packets, or board reference files can be added
+                  here later.
+                </p>
+                <div className="mt-4 rounded-md bg-acadia-sky px-4 py-3 text-sm font-medium text-acadia-ink">
+                  No public documents are attached yet.
+                </div>
+              </>
+            )}
           </section>
         </div>
 
