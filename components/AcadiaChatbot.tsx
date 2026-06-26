@@ -289,10 +289,24 @@ function mapChunkToSource(chunk: OcrChunk, score: number, queryTerms: string[]) 
 }
 
 function getPriorityRuleSources(normalizedQuestion: string, queryTerms: string[]) {
-  const asksAboutRvParking =
-    includesAny(normalizedQuestion, ["rv", "recreational", "camper", "motorhome", "motor home", "trailer", "boat"]) &&
-    includesAny(normalizedQuestion, ["park", "parking", "driveway", "stored", "storage"]);
+  const asksAboutGrilling = isGrillingQuestion(normalizedQuestion);
+  const asksAboutRvParking = isRvParkingQuestion(normalizedQuestion);
   const asksAboutPartiesOrNoise = isPartyOrNoiseQuestion(normalizedQuestion);
+
+  if (asksAboutGrilling) {
+    return ocrChunks
+      .filter((chunk) => {
+        const text = normalizeText(chunk.text);
+
+        return (
+          text.includes("unsightly or unkempt conditions") ||
+          text.includes("pursuit of hobbies or other activities") ||
+          text.includes("eliminate fire hazards") ||
+          text.includes("fire hazards")
+        );
+      })
+      .map((chunk) => mapChunkToSource(chunk, 99, queryTerms));
+  }
 
   if (asksAboutPartiesOrNoise) {
     return ocrChunks
@@ -361,24 +375,26 @@ function buildConciseAnswer(question: string, sources: ChatSource[]) {
 
 function buildDirectRuleAnswer(normalizedQuestion: string, sources: ChatSource[]) {
   const combinedSourceText = normalizeText(sources.map((source) => source.rawText).join(" "));
+  const asksAboutGrilling = isGrillingQuestion(normalizedQuestion);
   const asksAboutPartiesOrNoise = isPartyOrNoiseQuestion(normalizedQuestion);
-  const asksAboutParking =
-    includesAny(normalizedQuestion, ["park", "parking", "driveway", "stored", "storage"]) ||
-    includesAny(combinedSourceText, ["parked", "parking", "stored"]);
-  const asksAboutRv =
-    includesAny(normalizedQuestion, ["rv", "recreational", "camper", "motorhome", "motor home", "trailer", "boat"]) ||
-    includesAny(combinedSourceText, ["recreational vehicle", "motor home", "camper", "trailer"]);
+  const asksAboutVehicleParking = isVehicleParkingQuestion(normalizedQuestion);
+  const asksAboutRv = isRvParkingQuestion(normalizedQuestion);
+  const asksAboutStreetParking = isStreetParkingQuestion(normalizedQuestion);
+
+  if (asksAboutGrilling) {
+    return "Short answer: I do not see a specific HOA rule in these documents that says whether you can grill meat in the front or on your driveway. The closest language is general and may touch on unsightly conditions or fire-safety concerns, so I would check current board rules and local fire/safety ordinances before doing it.";
+  }
 
   if (asksAboutPartiesOrNoise) {
     return "Short answer: I do not see a specific HOA rule in these documents that sets a guest limit or a music cutoff time. The closest language is general: the board can make rules about member and guest conduct, and objectionable noise or nuisance behavior may be an issue. For an actual party, check current board rules and local noise ordinances too.";
   }
 
-  if (asksAboutParking && asksAboutRv && combinedSourceText.includes("consecutive hours")) {
+  if (asksAboutVehicleParking && asksAboutRv && combinedSourceText.includes("consecutive hours")) {
     return "Short answer: No, not as regular driveway parking or storage. RVs and similar recreational vehicles appear to be limited to four consecutive hours unless they are inside a garage or in a specifically approved/designated space. Use Read more... to check the exact source language.";
   }
 
   if (
-    asksAboutParking &&
+    asksAboutStreetParking &&
     combinedSourceText.includes("parking of vehicles within a street is prohibited")
   ) {
     return "Short answer: No, street parking appears to be prohibited except for momentary parking or isolated special circumstances. Vehicles parked against the rule may be removed by the Association. Use Read more... to check the exact source language.";
@@ -440,6 +456,76 @@ function isPartyOrNoiseQuestion(normalizedQuestion: string) {
     "how late",
     "throwing a party"
   ]);
+}
+
+function isGrillingQuestion(normalizedQuestion: string) {
+  return includesAny(normalizedQuestion, [
+    "grill",
+    "grilling",
+    "bbq",
+    "barbecue",
+    "barbeque",
+    "cook meat",
+    "cooking meat",
+    "open flame",
+    "fire pit"
+  ]);
+}
+
+function isVehicleParkingQuestion(normalizedQuestion: string) {
+  if (isGrillingQuestion(normalizedQuestion)) {
+    return false;
+  }
+
+  const mentionsVehicle = includesAny(normalizedQuestion, [
+    "vehicle",
+    "vehicles",
+    "car",
+    "cars",
+    "truck",
+    "trucks",
+    "rv",
+    "recreational",
+    "camper",
+    "motorhome",
+    "motor home",
+    "trailer",
+    "boat"
+  ]);
+  const mentionsParkingAction = includesAny(normalizedQuestion, [
+    "park",
+    "parking",
+    "parked",
+    "stored",
+    "storage",
+    "leave my",
+    "keep my"
+  ]);
+  const mentionsParkingLocation = includesAny(normalizedQuestion, ["street", "road", "driveway"]);
+
+  return mentionsParkingAction && (mentionsVehicle || mentionsParkingLocation);
+}
+
+function isRvParkingQuestion(normalizedQuestion: string) {
+  return (
+    isVehicleParkingQuestion(normalizedQuestion) &&
+    includesAny(normalizedQuestion, [
+      "rv",
+      "recreational",
+      "camper",
+      "motorhome",
+      "motor home",
+      "trailer",
+      "boat"
+    ])
+  );
+}
+
+function isStreetParkingQuestion(normalizedQuestion: string) {
+  return (
+    isVehicleParkingQuestion(normalizedQuestion) &&
+    includesAny(normalizedQuestion, ["street", "road"])
+  );
 }
 
 function scoreDocumentsByTitle(normalizedQuestion: string) {
