@@ -16,6 +16,12 @@ export type Vote = {
   timestamp: string;
 };
 
+export type RelatedDocument = {
+  title: string;
+  href: string;
+  fileType: "DOCX" | "PDF";
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -26,7 +32,7 @@ export type Project = {
   estimatedTimeline: string;
   boardNotes: string;
   vendorQuoteNotes?: string;
-  relatedDocuments?: string[];
+  relatedDocuments?: RelatedDocument[];
 };
 
 export type ProjectVoteCounts = {

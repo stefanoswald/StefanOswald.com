@@ -1,5 +1,23 @@
 import type { Project } from "@/types/acadia";
 
+const juneProjectUpdate = {
+  title: "June 25, 2026 Project Update",
+  href: "/acadia-documents/june-25-2026-project-update.docx",
+  fileType: "DOCX" as const
+};
+
+const actionTreeOpinion = {
+  title: "Action Environmental Tree Opinion",
+  href: "/acadia-documents/ace-tree-opinion.docx",
+  fileType: "DOCX" as const
+};
+
+const landscapeEstimate = {
+  title: "Action Environmental Landscape Estimate",
+  href: "/acadia-documents/aec-landscape-estimate-all-acadia.pdf",
+  fileType: "PDF" as const
+};
+
 export const acadiaProjects: Project[] = [
   {
     id: "security-cameras",
@@ -14,7 +32,8 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "The proposal is expected to include a modern Network Video Recorder system, secure access for multiple administrators, and reduced reliance on monthly cloud storage or monitoring costs.",
     vendorQuoteNotes:
-      "Commercial internet service for the existing camera locations is expected to remain necessary."
+      "Commercial internet service for the existing camera locations is expected to remain necessary.",
+    relatedDocuments: [juneProjectUpdate]
   },
   {
     id: "gigapower-fiber",
@@ -45,7 +64,8 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "Preserving trees could save the Association approximately $60,000 compared with complete removal and replacement, but the board is seeking additional expert input before making a recommendation.",
     vendorQuoteNotes:
-      "Action Environmental provided an opinion that selective root pruning and canopy management can be performed on Southern Live Oaks if properly planned and executed. Jennifer Hitchcock, an ISA Certified Arborist and TRAQ-qualified consulting arborist, is being considered for an independent opinion costing under $600."
+      "Action Environmental provided an opinion that selective root pruning and canopy management can be performed on Southern Live Oaks if properly planned and executed. Jennifer Hitchcock, an ISA Certified Arborist and TRAQ-qualified consulting arborist, is being considered for an independent opinion costing under $600.",
+    relatedDocuments: [juneProjectUpdate, actionTreeOpinion, landscapeEstimate]
   },
   {
     id: "road-assessment",
@@ -59,7 +79,8 @@ export const acadiaProjects: Project[] = [
     estimatedTimeline: "Information gathering and quote comparison",
     boardNotes:
       "Road scope should be coordinated with any tree, sidewalk, or utility work that may affect pavement.",
-    vendorQuoteNotes: "Current quotes have not been finalized."
+    vendorQuoteNotes: "Current quotes have not been finalized.",
+    relatedDocuments: [juneProjectUpdate]
   },
   {
     id: "sidewalk-repair",
@@ -74,7 +95,8 @@ export const acadiaProjects: Project[] = [
       "Expected sequence is damaged sidewalk removal, tree/root work, then new sidewalk installation",
     boardNotes:
       "Tree and sidewalk decisions are linked. If tree preservation is recommended, root pruning, root mitigation, and root barriers may need to occur before replacement sidewalk work.",
-    vendorQuoteNotes: "Two concrete sidewalk proposals have been received."
+    vendorQuoteNotes: "Two concrete sidewalk proposals have been received.",
+    relatedDocuments: [juneProjectUpdate, actionTreeOpinion]
   },
   {
     id: "pest-control",
