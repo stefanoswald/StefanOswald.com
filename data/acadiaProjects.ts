@@ -1,4 +1,5 @@
 import type { Project } from "@/types/acadia";
+import { acadiaGoverningRelatedDocuments } from "@/data/acadiaGoverningDocuments";
 
 const juneProjectUpdate = {
   title: "June 25, 2026 Project Update",
@@ -168,7 +169,8 @@ export const acadiaProjects: Project[] = [
     estimatedTimeline: "Proposed for review",
     boardNotes:
       "Michele requested volunteers to review bylaws, covenants, and the master agreement to identify needed changes. No volunteers have come forward yet, and Michele has started notes.",
-    vendorQuoteNotes: "No vendor or attorney quote notes are available yet."
+    vendorQuoteNotes: "No vendor or attorney quote notes are available yet.",
+    relatedDocuments: acadiaGoverningRelatedDocuments
   },
   {
     id: "community-website",
