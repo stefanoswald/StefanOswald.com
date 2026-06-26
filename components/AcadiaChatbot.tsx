@@ -2,6 +2,7 @@
 
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { acadiaGoverningDocuments } from "@/data/acadiaGoverningDocuments";
+import acadiaOcrIndex from "@/data/acadiaOcrIndex.json";
 import type { AcadiaGoverningDocument } from "@/types/acadia";
 
 type ChatMessage = {
@@ -9,16 +10,41 @@ type ChatMessage = {
   role: "assistant" | "resident";
   text: string;
   documents?: AcadiaGoverningDocument[];
+  sources?: ChatSource[];
+};
+
+type ChatSource = {
+  id: string;
+  documentTitle: string;
+  href: string;
+  page: number;
+  excerpt: string;
+  score: number;
+};
+
+type OcrChunk = {
+  id: string;
+  documentId: string;
+  documentTitle: string;
+  href: string;
+  page: number;
+  text: string;
+  excerpt: string;
+  topicTags: string[];
+  vector: number[];
+  topTerms: string[];
 };
 
 const introMessage: ChatMessage = {
   id: 1,
   role: "assistant",
   text:
-    "Hi, I can help point you to likely HOA governing documents. These PDFs are scanned, so I can match topics and document titles right now, but full text search will need OCR later."
+    "Hi, I can search the OCR text from the HOA governing PDFs and point you to the most relevant pages. This is informational only, not legal advice."
 };
 
-const quickPrompts = ["Bylaws", "Covenants", "Amendments", "Plat"];
+const quickPrompts = ["Parking rules", "Bylaws", "Covenants", "Assessments"];
+const ocrChunks = acadiaOcrIndex.chunks as OcrChunk[];
+const vectorVocabulary = acadiaOcrIndex.vocabulary as string[];
 
 export function AcadiaChatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +76,8 @@ export function AcadiaChatbot() {
         id: nextId.current++,
         role: "assistant",
         text: answer.text,
-        documents: answer.documents
+        documents: answer.documents,
+        sources: answer.sources
       }
     ]);
     setInput("");
@@ -173,6 +200,28 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             ))}
           </div>
         ) : null}
+        {message.sources?.length ? (
+          <div className="mt-3 space-y-2">
+            {message.sources.map((source) => (
+              <a
+                key={source.id}
+                href={source.href}
+                target="_blank"
+                rel="noreferrer"
+                className="block rounded-md border border-acadia-moss/20 bg-acadia-sky px-3 py-2 text-acadia-ink transition hover:border-acadia-leaf hover:bg-white"
+              >
+                <span className="block font-bold">{source.documentTitle}</span>
+                <span className="mt-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Page {source.page}
+                </span>
+                <span className="mt-2 block text-xs leading-5 text-slate-700">{source.excerpt}</span>
+                <span className="mt-2 block text-xs font-bold uppercase tracking-wide text-acadia-leaf">
+                  Open source page
+                </span>
+              </a>
+            ))}
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -180,29 +229,54 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 
 function buildDocumentAnswer(question: string) {
   const normalizedQuestion = normalizeText(question);
-  const scoredDocuments = acadiaGoverningDocuments
+  const primaryTerms = tokenize(normalizedQuestion);
+  const queryTerms = expandQueryTerms(primaryTerms);
+  const queryVector = buildQueryVector(queryTerms);
+  const scoredSources = ocrChunks
+    .map((chunk) => ({
+      chunk,
+      score: scoreChunk(chunk, primaryTerms, queryTerms, queryVector)
+    }))
+    .filter(({ score }) => score > 0.08)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+    .map(({ chunk, score }) => ({
+      id: chunk.id,
+      documentTitle: chunk.documentTitle,
+      href: chunk.href,
+      page: chunk.page,
+      excerpt: bestExcerpt(chunk.text, queryTerms) || chunk.excerpt,
+      score
+    }));
+
+  if (scoredSources.length === 0) {
+    const fallbackDocuments = scoreDocumentsByTitle(normalizedQuestion).slice(0, 4);
+
+    return {
+      text:
+        "I am not finding a strong OCR match yet. Try asking about parking, assessments, meetings, board powers, bylaws, covenants, easements, restrictions, amendments, or the plat. Please confirm official interpretations with the HOA board or recorded documents.",
+      documents: fallbackDocuments,
+      sources: []
+    };
+  }
+
+  return {
+    text:
+      `I found ${scoredSources.length} relevant OCR result${scoredSources.length === 1 ? "" : "s"}. Open the source pages below to review the original document language, and confirm important interpretations with the HOA board or official recorded documents.`,
+    documents: [],
+    sources: scoredSources
+  };
+}
+
+function scoreDocumentsByTitle(normalizedQuestion: string) {
+  return acadiaGoverningDocuments
     .map((document) => ({
       document,
       score: scoreDocument(document, normalizedQuestion)
     }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 3)
     .map(({ document }) => document);
-
-  if (scoredDocuments.length === 0) {
-    return {
-      text:
-        "I am not finding a strong match yet. Try asking about bylaws, covenants, declarations, amendments, articles of incorporation, or the plat. Please confirm official interpretations with the HOA board or recorded documents.",
-      documents: acadiaGoverningDocuments.slice(0, 4)
-    };
-  }
-
-  return {
-    text:
-      "Here are the most likely documents to start with. Because these are scanned PDFs, please open the PDF to review the original pages and confirm anything important with the HOA board or official recorded documents.",
-    documents: scoredDocuments
-  };
 }
 
 function scoreDocument(document: AcadiaGoverningDocument, normalizedQuestion: string) {
@@ -231,6 +305,105 @@ function scoreDocument(document: AcadiaGoverningDocument, normalizedQuestion: st
   }
 
   return score;
+}
+
+function scoreChunk(
+  chunk: OcrChunk,
+  primaryTerms: string[],
+  queryTerms: string[],
+  queryVector: number[]
+) {
+  const vectorScore = cosineSimilarity(queryVector, chunk.vector);
+  const normalizedText = normalizeText(
+    [chunk.documentTitle, chunk.text, ...chunk.topicTags, ...chunk.topTerms].join(" ")
+  );
+  const chunkTerms = new Set(tokenize(normalizedText));
+  const primaryMatches = primaryTerms.filter((term) => chunkTerms.has(term)).length;
+  const expandedMatches = queryTerms.filter((term) => chunkTerms.has(term)).length;
+  const topicMatches = queryTerms.filter((term) =>
+    new Set(tokenize(normalizeText(chunk.topicTags.join(" ")))).has(term)
+  ).length;
+
+  return vectorScore + primaryMatches * 0.34 + expandedMatches * 0.04 + topicMatches * 0.1;
+}
+
+function buildQueryVector(queryTerms: string[]) {
+  const counts = new Map<string, number>();
+
+  for (const term of queryTerms) {
+    counts.set(term, (counts.get(term) || 0) + 1);
+  }
+
+  const values = vectorVocabulary.map((term) => counts.get(term) || 0);
+  const length = Math.sqrt(values.reduce((sum, value) => sum + value * value, 0)) || 1;
+
+  return values.map((value) => value / length);
+}
+
+function cosineSimilarity(queryVector: number[], chunkVector: number[]) {
+  return queryVector.reduce((sum, value, index) => sum + value * (chunkVector[index] || 0), 0);
+}
+
+function bestExcerpt(text: string, queryTerms: string[]) {
+  const sentences = text
+    .replace(/\s+/g, " ")
+    .split(/(?<=[.!?])\s+/)
+    .filter((sentence) => sentence.length > 24);
+
+  const rankedSentences = sentences
+    .map((sentence) => ({
+      sentence,
+      score: queryTerms.filter((term) => new Set(tokenize(normalizeText(sentence))).has(term)).length
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  const excerpt = rankedSentences
+    .slice(0, 2)
+    .map(({ sentence }) => sentence)
+    .join(" ");
+
+  if (!excerpt) {
+    return "";
+  }
+
+  return excerpt.length > 540 ? `${excerpt.slice(0, 540).trim()}...` : excerpt;
+}
+
+function expandQueryTerms(terms: string[]) {
+  const expansions: Record<string, string[]> = {
+    article: ["articles", "incorporation"],
+    articles: ["article", "incorporation"],
+    assessment: ["assessments", "fees"],
+    assessments: ["assessment", "fees"],
+    bylaw: ["bylaws", "by-laws", "rules"],
+    bylaws: ["bylaw", "by-laws", "rules"],
+    covenant: ["covenants", "restriction", "restrictions"],
+    covenants: ["covenant", "restriction", "restrictions"],
+    director: ["directors", "board"],
+    directors: ["director", "board"],
+    easement: ["easements"],
+    easements: ["easement"],
+    fee: ["fees", "assessment", "assessments"],
+    fees: ["fee", "assessment", "assessments"],
+    meeting: ["meetings", "notice"],
+    meetings: ["meeting", "notice"],
+    parking: ["park", "vehicle", "vehicles"],
+    restriction: ["restrictions", "covenant", "covenants"],
+    restrictions: ["restriction", "covenant", "covenants"],
+    rule: ["rules", "bylaws", "by-laws"],
+    rules: ["rule", "bylaws", "by-laws"],
+    vote: ["votes", "voting", "member", "members"],
+    voting: ["vote", "votes", "member", "members"]
+  };
+
+  return Array.from(
+    new Set(terms.flatMap((term) => [term, ...(expansions[term] || [])]))
+  );
+}
+
+function tokenize(value: string) {
+  return value.split(" ").filter((word) => word.length > 2);
 }
 
 function normalizeText(value: string) {
