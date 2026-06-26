@@ -304,3 +304,145 @@ div.paragraph ol, div.paragraph ol li { list-style: decimal outside !important; 
 .product-grid .product-grid-image .product-grid__image-sale-banner-wrapper {background: #000;}
 #wsite-com-category-product-group .category__image-sale-banner-wrapper {background: #000;}
 #wsite-search-product-results .wsite-search-product-result .wsite-search-product-image-container .search__image-sale-banner-wrapper {background: #000;}
+
+.site-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.site-page-title,
+#wsite-content .site-page-title {
+  color: #ffffff !important;
+  font-family: "Roboto", sans-serif !important;
+  font-size: 42px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  margin: 0 0 28px !important;
+  text-align: center;
+}
+
+.wsite-page-travel-gear .site-page-title,
+.wsite-page-travel-gear #wsite-content .site-page-title {
+  color: #3f3f3f !important;
+}
+
+.site-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.site-cta-button {
+  background: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  color: #000000 !important;
+  display: inline-block;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  min-width: 150px;
+  padding: 13px 18px;
+  text-align: center;
+  text-decoration: none !important;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.site-cta-button:hover {
+  background: #d9d9d9;
+  border-color: #d9d9d9;
+  color: #000000 !important;
+  transform: translateY(-1px);
+}
+
+.explore-page {
+  padding: 34px 0 48px;
+}
+
+.explore-section {
+  margin: 0 auto 34px;
+  max-width: 980px;
+}
+
+.explore-section-title,
+#wsite-content .explore-section-title {
+  color: #ffffff !important;
+  font-size: 30px !important;
+  line-height: 1.2 !important;
+  margin: 0 0 14px !important;
+  text-align: left;
+}
+
+.explore-subtitle {
+  color: #d8d8d8;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 22px 0 10px;
+  text-transform: uppercase;
+}
+
+.project-card-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.project-card a {
+  color: #d8d8d8 !important;
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.project-card a:hover {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+.project-card p {
+  color: #f1f1f1 !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  margin: 8px 0 0 !important;
+}
+
+.affiliate-disclosure {
+  background: rgba(255, 255, 255, 0.9);
+  border-left: 5px solid #111111;
+  border-radius: 8px;
+  color: #111111;
+  font-size: 15px;
+  line-height: 1.55;
+  margin: 18px 0 24px;
+  padding: 14px 16px;
+}
+
+@media screen and (max-width: 767px) {
+  .site-page-title,
+  #wsite-content .site-page-title {
+    font-size: 34px !important;
+  }
+
+  .site-cta-button {
+    width: 100%;
+  }
+}
