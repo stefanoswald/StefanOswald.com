@@ -6,14 +6,15 @@ export const acadiaProjects: Project[] = [
     title: "Security Cameras",
     status: "Researching",
     shortDescription:
-      "Stephanie to provide an update on security camera options and current status.",
+      "Luis has assessed the current camera system and is preparing a revised proposal for updated recording equipment and access.",
     fullDescription:
-      "The HOA is reviewing options for community security cameras, including possible locations, equipment needs, installation considerations, and ongoing monitoring or maintenance responsibilities.",
+      "The HOA is reviewing improvements to the community security camera system. Luis has assessed the current system and is preparing a revised proposal focused on keeping useful existing poles and cameras where practical while modernizing the recording equipment.",
     estimatedCost: "To be determined",
-    estimatedTimeline: "Pending research update",
+    estimatedTimeline: "Revised proposal expected after system assessment",
     boardNotes:
-      "Stephanie is expected to provide the next update on available options and current status.",
-    vendorQuoteNotes: "No vendor or quote details have been finalized yet."
+      "The proposal is expected to include a modern Network Video Recorder system, secure access for multiple administrators, and reduced reliance on monthly cloud storage or monitoring costs.",
+    vendorQuoteNotes:
+      "Commercial internet service for the existing camera locations is expected to remain necessary."
   },
   {
     id: "gigapower-fiber",
@@ -33,28 +34,29 @@ export const acadiaProjects: Project[] = [
   {
     id: "landscaping-tree-removal-replacement",
     title: "Landscaping / Tree Removal and Replacement",
-    status: "Researching",
+    status: "Quoted",
     shortDescription:
-      "Ongoing review of tree removal, replacement, and landscaping needs. UCF and UF consultation options are being explored for additional tree analysis.",
+      "Tree preservation, removal, pruning, root mitigation, sod, and landscape replacement options are being compared. Multiple bids and arborist opinions are being gathered.",
     fullDescription:
-      "The HOA is reviewing community landscaping needs, including tree removal, replacement, and analysis of existing tree health and impact. Consultation options through UCF and UF are being explored for additional expert input.",
-    estimatedCost: "To be determined",
-    estimatedTimeline: "Research phase",
+      "The HOA is comparing tree preservation against full removal and replacement, along with broader landscaping, sod, shrub, and irrigation-related needs. The work is closely connected to sidewalk timing, lawn health, and long-term streetscape maintenance.",
+    estimatedCost:
+      "Tree preservation proposal: $16,653.50. Tree removal proposals currently range from approximately $66,000 to $120,000. Broader landscape estimate: $136,081.05.",
+    estimatedTimeline: "Additional proposals and arborist input being gathered",
     boardNotes:
-      "Tree decisions may affect sidewalk repair timing and other community maintenance planning.",
+      "Preserving trees could save the Association approximately $60,000 compared with complete removal and replacement, but the board is seeking additional expert input before making a recommendation.",
     vendorQuoteNotes:
-      "UCF and UF consultation options are being explored. No final vendor selection has been made."
+      "Action Environmental provided an opinion that selective root pruning and canopy management can be performed on Southern Live Oaks if properly planned and executed. Jennifer Hitchcock, an ISA Certified Arborist and TRAQ-qualified consulting arborist, is being considered for an independent opinion costing under $600."
   },
   {
     id: "road-assessment",
     title: "Road Assessment",
     status: "Researching",
     shortDescription:
-      "Roads were last sealed in 2023. Prior related costs totaled $15,737.60. Current information and quotes are being gathered.",
+      "Roads were last sealed in 2023. One asphalt resurfacing proposal has been received and additional information is being gathered.",
     fullDescription:
-      "The community roads were last sealed in 2023, with prior related costs totaling $15,737.60. The HOA is gathering current information and quotes to understand future maintenance needs and timing.",
-    estimatedCost: "Prior related costs totaled $15,737.60; current cost TBD",
-    estimatedTimeline: "Current quotes and information being gathered",
+      "The community roads were last sealed in 2023, with prior related costs totaling $15,737.60. The HOA has received one asphalt resurfacing proposal and is gathering additional information to understand future maintenance needs, timing, and coordination with other infrastructure projects.",
+    estimatedCost: "Prior related costs totaled $15,737.60; current resurfacing cost TBD",
+    estimatedTimeline: "Information gathering and quote comparison",
     boardNotes:
       "Road scope should be coordinated with any tree, sidewalk, or utility work that may affect pavement.",
     vendorQuoteNotes: "Current quotes have not been finalized."
@@ -64,42 +66,44 @@ export const acadiaProjects: Project[] = [
     title: "Sidewalk Repair",
     status: "Proposed",
     shortDescription:
-      "Sidewalk repair is deferred until tree decisions are finalized.",
+      "Sidewalk repair is deferred until tree decisions are finalized. Two concrete sidewalk proposals have been received.",
     fullDescription:
-      "Sidewalk repair remains a proposed project. The board is deferring decisions until tree removal and replacement questions are resolved, since tree work may affect sidewalk scope and timing.",
-    estimatedCost: "To be determined",
-    estimatedTimeline: "Deferred until tree decisions are finalized",
+      "Sidewalk repair remains a proposed project. The board is deferring decisions until tree preservation, root mitigation, and possible tree removal questions are resolved, since tree work may affect sidewalk scope and timing.",
+    estimatedCost: "Two concrete sidewalk proposals received; final cost TBD",
+    estimatedTimeline:
+      "Expected sequence is damaged sidewalk removal, tree/root work, then new sidewalk installation",
     boardNotes:
-      "Tree decisions should be made before sidewalk repair scope is finalized.",
-    vendorQuoteNotes: "No current vendor or quote notes are available."
+      "Tree and sidewalk decisions are linked. If tree preservation is recommended, root pruning, root mitigation, and root barriers may need to occur before replacement sidewalk work.",
+    vendorQuoteNotes: "Two concrete sidewalk proposals have been received."
   },
   {
     id: "pest-control",
     title: "Pest Control",
     status: "In Progress",
     shortDescription:
-      "Action Environmental confirmed 30 rodent bait boxes remain necessary due to active rodent activity. Trash cans were sprayed June 4 and fresh bait was added after activity was found.",
+      "Action Environmental confirmed ongoing rodent and fly-control needs and also proposed a community-wide residential pest control program.",
     fullDescription:
-      "Pest control work is active. Action Environmental confirmed that 30 rodent bait boxes remain necessary because rodent activity is still present. Trash cans were sprayed on June 4 and fresh bait was added after activity was found.",
-    estimatedCost: "Ongoing service cost",
+      "Pest control work is active. Action Environmental confirmed that 30 rodent bait boxes remain necessary because rodent activity is still present. Trash cans were sprayed on June 4 and fresh bait was added after activity was found. Action Environmental has also proposed an optional community-wide residential pest control program for all 32 properties.",
+    estimatedCost:
+      "Rodent control: $240/month. Fly control: $295/month. Proposed residential pest control: $1,344/month plus $4,448 total initial startup cost for all participating properties.",
     estimatedTimeline: "Active and ongoing",
     boardNotes:
-      "The current bait box count remains necessary based on confirmed activity.",
+      "The current bait box count remains necessary based on confirmed activity. The board can consider whether a broader community-wide residential pest program is worth pursuing.",
     vendorQuoteNotes:
-      "Action Environmental confirmed 30 rodent bait boxes remain necessary and added fresh bait after activity was found."
+      "Action Environmental proposed $42/month per property for quarterly residential pest control, with discounted one-time initial interior service of $139 per property. If residential pest control, rodent control, and fly control are all continued, the total monthly investment would be $1,879/month."
   },
   {
     id: "fence-replacement",
     title: "Fence Replacement",
     status: "Proposed",
     shortDescription:
-      "Chain link fence deterioration and vegetation encroachment from Oak Island Harbor are being monitored. Future replacement with white PVC is being considered, but timing is not established.",
+      "Chain link fence deterioration and vegetation encroachment from Oak Island Harbor are being monitored. Survey markers are in place, but timing is not established.",
     fullDescription:
-      "The HOA is monitoring chain link fence deterioration and vegetation encroachment from Oak Island Harbor. Replacement with white PVC fencing is being considered for the future, but no timing has been established.",
+      "The HOA is monitoring chain link fence deterioration and vegetation encroachment from Oak Island Harbor. Replacement with white PVC fencing is being considered for the future, survey markers are in place, and the board is holding on proceeding while funds are built and competing projects are prioritized.",
     estimatedCost: "To be determined",
     estimatedTimeline: "Timing not established",
     boardNotes:
-      "The board is monitoring deterioration and encroachment before deciding replacement scope.",
+      "The board is monitoring deterioration and encroachment before deciding replacement scope. This remains a future priority, but other infrastructure needs may come first.",
     vendorQuoteNotes: "No current vendor or quote notes are available."
   },
   {
@@ -121,13 +125,13 @@ export const acadiaProjects: Project[] = [
     title: "Gate Code Update",
     status: "In Progress",
     shortDescription:
-      "New gate code is 4052. Old code 1981 expires August 1, 2026. Emergency responder code remains unchanged. Gate signage is planned.",
+      "New gate code is 4052. Old code 1981 expires August 1, 2026. Emergency responder code remains unchanged, and code-change signage is still needed.",
     fullDescription:
-      "The gate code update is in progress. The new gate code is 4052, and the old code 1981 expires August 1, 2026. The emergency responder code remains unchanged. Gate signage is planned.",
+      "The gate code update is in progress. The new gate code is 4052, and the old code 1981 expires August 1, 2026. The emergency responder code remains unchanged. Entrance signage explaining the code change timeline is still planned.",
     estimatedCost: "Minimal signage or communication cost expected",
     estimatedTimeline: "Old code expires August 1, 2026",
     boardNotes:
-      "Emergency responder code remains unchanged. Gate signage is planned.",
+      "Emergency responder code remains unchanged. Stefan offered to create 3D-printed signage explaining the code change timeline.",
     vendorQuoteNotes: "No vendor quote is currently needed beyond signage planning."
   },
   {
@@ -135,28 +139,43 @@ export const acadiaProjects: Project[] = [
     title: "Bylaw Review",
     status: "Proposed",
     shortDescription:
-      "The board is reviewing outdated bylaws, tree requirements, design standards, covenants, and master agreement documents.",
+      "The board is reviewing outdated bylaws, tree requirements, design standards, covenants, and master agreement documents. Volunteers have not yet come forward.",
     fullDescription:
-      "The board is reviewing governing documents that may need updates, including outdated bylaws, tree requirements, design standards, covenants, and master agreement documents.",
+      "The board is reviewing governing documents that may need updates, including outdated bylaws, tree requirements, design standards, covenants, and master agreement documents. Documents are available through the AMG Enumerate portal, though not all documents may be uploaded yet.",
     estimatedCost: "To be determined",
     estimatedTimeline: "Proposed for review",
     boardNotes:
-      "Document review may require attorney input before any formal changes are considered.",
+      "Michele requested volunteers to review bylaws, covenants, and the master agreement to identify needed changes. No volunteers have come forward yet, and Michele has started notes.",
     vendorQuoteNotes: "No vendor or attorney quote notes are available yet."
   },
   {
     id: "community-website",
     title: "Community Website",
-    status: "Proposed",
+    status: "In Progress",
     shortDescription:
       "Website for project updates and homeowner voting/feedback.",
     fullDescription:
       "A public-facing website is proposed to share HOA project updates and collect informal homeowner voting and feedback so the board can better understand community priorities.",
     estimatedCost: "To be determined",
-    estimatedTimeline: "Prototype in progress",
+    estimatedTimeline: "Prototype is live for review",
     boardNotes:
       "Votes are intended as informal feedback and should not be treated as a legally binding election system.",
     vendorQuoteNotes: "No vendor or quote notes are available."
+  },
+  {
+    id: "community-signage-and-appearance",
+    title: "Community Signage and Appearance Items",
+    status: "Proposed",
+    shortDescription:
+      "Several smaller common-area appearance items were raised, including damaged gate signage and bent or leaning no-parking signs.",
+    fullDescription:
+      "Several smaller community appearance items were raised for possible future attention. These include replacing or repairing damaged gate signage, reviewing no-parking signs that are bent or leaning, and improving visible common-area conditions that affect the overall streetscape.",
+    estimatedCost: "To be determined",
+    estimatedTimeline: "Proposed for future agenda discussion",
+    boardNotes:
+      "These items are smaller than the major infrastructure projects but may still improve the appearance and consistency of the community.",
+    vendorQuoteNotes:
+      "A prior sign vendor may no longer be available, so the board may need to identify new sign vendors or a volunteer approach for smaller sign repairs."
   }
 ];
 
