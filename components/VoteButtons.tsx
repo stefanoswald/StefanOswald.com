@@ -66,10 +66,13 @@ export function VoteButtons({ projectId, projectTitle, compact = false }: VoteBu
             setPendingVote("up");
             setConfirmation("");
           }}
-          className="rounded-md bg-emerald-600 px-4 py-3 text-base font-bold text-white transition hover:bg-emerald-700"
+          className="flex items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-3 text-base font-bold text-white transition hover:bg-emerald-700"
           aria-label={`Thumbs up for ${projectTitle}`}
         >
-          Thumbs up
+          <span aria-hidden="true" className="text-2xl leading-none">
+            👍
+          </span>
+          <span>Upvote</span>
         </button>
         <button
           type="button"
@@ -77,10 +80,13 @@ export function VoteButtons({ projectId, projectTitle, compact = false }: VoteBu
             setPendingVote("down");
             setConfirmation("");
           }}
-          className="rounded-md bg-red-600 px-4 py-3 text-base font-bold text-white transition hover:bg-red-700"
+          className="flex items-center justify-center gap-2 rounded-md bg-red-600 px-4 py-3 text-base font-bold text-white transition hover:bg-red-700"
           aria-label={`Thumbs down for ${projectTitle}`}
         >
-          Thumbs down
+          <span aria-hidden="true" className="text-2xl leading-none">
+            👎
+          </span>
+          <span>Downvote</span>
         </button>
       </div>
 
