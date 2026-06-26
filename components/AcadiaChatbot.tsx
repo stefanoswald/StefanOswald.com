@@ -19,6 +19,7 @@ type ChatSource = {
   href: string;
   page: number;
   excerpt: string;
+  rawText: string;
   score: number;
 };
 
@@ -252,16 +253,12 @@ function buildDocumentAnswer(question: string) {
     .filter(({ score }) => score > 0.08)
     .sort((a, b) => b.score - a.score)
     .slice(0, 5)
-    .map(({ chunk, score }) => ({
-      id: chunk.id,
-      documentTitle: chunk.documentTitle,
-      href: chunk.href,
-      page: chunk.page,
-      excerpt: bestExcerpt(chunk.text, queryTerms) || chunk.excerpt,
-      score
-    }));
+    .map(({ chunk, score }) => mapChunkToSource(chunk, score, queryTerms));
 
-  if (scoredSources.length === 0) {
+  const prioritySources = getPriorityRuleSources(normalizedQuestion, queryTerms);
+  const mergedSources = mergeSources(prioritySources, scoredSources).slice(0, 5);
+
+  if (mergedSources.length === 0) {
     const fallbackDocuments = scoreDocumentsByTitle(normalizedQuestion).slice(0, 4);
 
     return {
@@ -273,29 +270,107 @@ function buildDocumentAnswer(question: string) {
   }
 
   return {
-    text: buildConciseAnswer(scoredSources),
+    text: buildConciseAnswer(question, mergedSources),
     documents: [],
-    sources: scoredSources
+    sources: mergedSources
   };
 }
 
-function buildConciseAnswer(sources: ChatSource[]) {
+function mapChunkToSource(chunk: OcrChunk, score: number, queryTerms: string[]) {
+  return {
+    id: chunk.id,
+    documentTitle: chunk.documentTitle,
+    href: chunk.href,
+    page: chunk.page,
+    excerpt: bestExcerpt(chunk.text, queryTerms) || chunk.excerpt,
+    rawText: chunk.text,
+    score
+  };
+}
+
+function getPriorityRuleSources(normalizedQuestion: string, queryTerms: string[]) {
+  const asksAboutRvParking =
+    includesAny(normalizedQuestion, ["rv", "recreational", "camper", "motorhome", "motor home", "trailer", "boat"]) &&
+    includesAny(normalizedQuestion, ["park", "parking", "driveway", "stored", "storage"]);
+
+  if (!asksAboutRvParking) {
+    return [];
+  }
+
+  return ocrChunks
+    .filter((chunk) => {
+      const text = normalizeText(chunk.text);
+
+      return (
+        text.includes("vehicles and recreational equipment") ||
+        text.includes("recreational vehicle") ||
+        text.includes("motor home") ||
+        (text.includes("camper") && text.includes("four consecutive hours"))
+      );
+    })
+    .map((chunk) => mapChunkToSource(chunk, 99, queryTerms));
+}
+
+function mergeSources(primarySources: ChatSource[], secondarySources: ChatSource[]) {
+  const seenSourceIds = new Set<string>();
+
+  return [...primarySources, ...secondarySources].filter((source) => {
+    if (seenSourceIds.has(source.id)) {
+      return false;
+    }
+
+    seenSourceIds.add(source.id);
+    return true;
+  });
+}
+
+function buildConciseAnswer(question: string, sources: ChatSource[]) {
+  const normalizedQuestion = normalizeText(question);
+  const directAnswer = buildDirectRuleAnswer(normalizedQuestion, sources);
+
+  if (directAnswer) {
+    return directAnswer;
+  }
+
   const bestSource = sources[0];
   const supportingCount = sources.length - 1;
-  const answer = compactAnswerText(bestSource.excerpt);
+  const answer = compactAnswerText(bestSource.excerpt) || "I found a related section, but the OCR text is not clean enough to summarize confidently.";
   const supportText =
     supportingCount > 0
       ? ` I found ${supportingCount} other related source${supportingCount === 1 ? "" : "s"} you can check.`
       : "";
 
-  return `Short answer: ${answer} This comes from ${bestSource.documentTitle}, page ${bestSource.page}.${supportText}`;
+  return `Short answer: ${answer}${supportText}`;
+}
+
+function buildDirectRuleAnswer(normalizedQuestion: string, sources: ChatSource[]) {
+  const combinedSourceText = normalizeText(sources.map((source) => source.rawText).join(" "));
+  const asksAboutParking =
+    includesAny(normalizedQuestion, ["park", "parking", "driveway", "stored", "storage"]) ||
+    includesAny(combinedSourceText, ["parked", "parking", "stored"]);
+  const asksAboutRv =
+    includesAny(normalizedQuestion, ["rv", "recreational", "camper", "motorhome", "motor home", "trailer", "boat"]) ||
+    includesAny(combinedSourceText, ["recreational vehicle", "motor home", "camper", "trailer"]);
+
+  if (asksAboutParking && asksAboutRv && combinedSourceText.includes("consecutive hours")) {
+    return "Short answer: No, not as regular driveway parking or storage. RVs and similar recreational vehicles appear to be limited to four consecutive hours unless they are inside a garage or in a specifically approved/designated space. Use Read more... to check the exact source language.";
+  }
+
+  if (
+    asksAboutParking &&
+    combinedSourceText.includes("parking of vehicles within a street is prohibited")
+  ) {
+    return "Short answer: No, street parking appears to be prohibited except for momentary parking or isolated special circumstances. Vehicles parked against the rule may be removed by the Association. Use Read more... to check the exact source language.";
+  }
+
+  return "";
 }
 
 function compactAnswerText(excerpt: string) {
-  const cleanExcerpt = excerpt.replace(/\s+/g, " ").trim();
+  const cleanExcerpt = cleanOcrExcerpt(excerpt);
   const sentences = cleanExcerpt
     .split(/(?<=[.!?])\s+/)
-    .filter((sentence) => sentence.length > 12);
+    .filter((sentence) => sentence.length > 12 && !looksLikeRecordingHeader(sentence));
   const selectedText = sentences.slice(0, 2).join(" ") || cleanExcerpt;
 
   if (selectedText.length <= 360) {
@@ -303,6 +378,31 @@ function compactAnswerText(excerpt: string) {
   }
 
   return `${selectedText.slice(0, 360).trim()}...`;
+}
+
+function cleanOcrExcerpt(excerpt: string) {
+  return excerpt
+    .replace(/\s+/g, " ")
+    .replace(/\b(CL|ORBK|ORBKI|OR|Bk|P61)\b[\w\s/.-]{0,80}/gi, " ")
+    .replace(/\bPrepared by and return to:[\w\s,.-]{0,160}/gi, " ")
+    .replace(/\bAMENDMENT TO [A-Z\s()]+DECLARATION[\w\s,.-]{0,160}/g, " ")
+    .trim();
+}
+
+function looksLikeRecordingHeader(sentence: string) {
+  const normalizedSentence = normalizeText(sentence);
+
+  return (
+    normalizedSentence.includes("prepared by") ||
+    normalizedSentence.includes("return to") ||
+    normalizedSentence.includes("file no") ||
+    normalizedSentence.includes("official records") ||
+    /^[a-z]{0,4}\s?\d{4,}/.test(normalizedSentence)
+  );
+}
+
+function includesAny(value: string, needles: string[]) {
+  return needles.some((needle) => value.includes(needle));
 }
 
 function scoreDocumentsByTitle(normalizedQuestion: string) {
@@ -428,8 +528,10 @@ function expandQueryTerms(terms: string[]) {
     parking: ["park", "vehicle", "vehicles"],
     restriction: ["restrictions", "covenant", "covenants"],
     restrictions: ["restriction", "covenant", "covenants"],
+    rv: ["recreational", "vehicle", "vehicles", "motor", "home", "camper", "trailer"],
     rule: ["rules", "bylaws", "by-laws"],
     rules: ["rule", "bylaws", "by-laws"],
+    trailer: ["recreational", "vehicle", "vehicles", "camper", "rv"],
     vote: ["votes", "voting", "member", "members"],
     voting: ["vote", "votes", "member", "members"]
   };
