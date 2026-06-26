@@ -170,6 +170,8 @@ export function AcadiaChatbot() {
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isResident = message.role === "resident";
+  const [showDetails, setShowDetails] = useState(false);
+  const hasDetails = Boolean(message.documents?.length || message.sources?.length);
 
   return (
     <div className={isResident ? "flex justify-end" : "flex justify-start"}>
@@ -181,7 +183,17 @@ function MessageBubble({ message }: { message: ChatMessage }) {
         }
       >
         <p>{message.text}</p>
-        {message.documents?.length ? (
+        {hasDetails ? (
+          <button
+            type="button"
+            onClick={() => setShowDetails((current) => !current)}
+            className="mt-3 rounded-md bg-acadia-sky px-3 py-2 text-xs font-bold text-acadia-leaf transition hover:bg-acadia-moss/20"
+            aria-expanded={showDetails}
+          >
+            {showDetails ? "Hide sources" : "Read more..."}
+          </button>
+        ) : null}
+        {showDetails && message.documents?.length ? (
           <div className="mt-3 space-y-2">
             {message.documents.map((document) => (
               <a
@@ -200,7 +212,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             ))}
           </div>
         ) : null}
-        {message.sources?.length ? (
+        {showDetails && message.sources?.length ? (
           <div className="mt-3 space-y-2">
             {message.sources.map((source) => (
               <a
@@ -261,11 +273,36 @@ function buildDocumentAnswer(question: string) {
   }
 
   return {
-    text:
-      `I found ${scoredSources.length} relevant OCR result${scoredSources.length === 1 ? "" : "s"}. Open the source pages below to review the original document language, and confirm important interpretations with the HOA board or official recorded documents.`,
+    text: buildConciseAnswer(scoredSources),
     documents: [],
     sources: scoredSources
   };
+}
+
+function buildConciseAnswer(sources: ChatSource[]) {
+  const bestSource = sources[0];
+  const supportingCount = sources.length - 1;
+  const answer = compactAnswerText(bestSource.excerpt);
+  const supportText =
+    supportingCount > 0
+      ? ` I found ${supportingCount} other related source${supportingCount === 1 ? "" : "s"} you can check.`
+      : "";
+
+  return `Short answer: ${answer} This comes from ${bestSource.documentTitle}, page ${bestSource.page}.${supportText}`;
+}
+
+function compactAnswerText(excerpt: string) {
+  const cleanExcerpt = excerpt.replace(/\s+/g, " ").trim();
+  const sentences = cleanExcerpt
+    .split(/(?<=[.!?])\s+/)
+    .filter((sentence) => sentence.length > 12);
+  const selectedText = sentences.slice(0, 2).join(" ") || cleanExcerpt;
+
+  if (selectedText.length <= 360) {
+    return selectedText;
+  }
+
+  return `${selectedText.slice(0, 360).trim()}...`;
 }
 
 function scoreDocumentsByTitle(normalizedQuestion: string) {
