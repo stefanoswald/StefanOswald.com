@@ -1,5 +1,5 @@
 export const ACADIA_EMBEDDING_MODEL =
-  process.env.ACADIA_EMBEDDING_MODEL || "text-embedding-3-large";
+  process.env.ACADIA_EMBEDDING_MODEL || "text-embedding-3-small";
 
 export const ACADIA_ANSWER_MODEL =
   process.env.ACADIA_ANSWER_MODEL || "gpt-5-mini";
