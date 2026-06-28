@@ -4,7 +4,7 @@ import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const inputPath = path.join(root, "tmp/acadia-rag/chunks.json");
-const embeddingModel = process.env.ACADIA_EMBEDDING_MODEL || "text-embedding-3-large";
+const embeddingModel = process.env.ACADIA_EMBEDDING_MODEL || "text-embedding-3-small";
 const openAiApiKey = requiredEnv("OPENAI_API_KEY");
 const supabaseUrl = requiredEnv("SUPABASE_URL").replace(/\/$/, "");
 const supabaseServiceRoleKey = requiredEnv("SUPABASE_SERVICE_ROLE_KEY");

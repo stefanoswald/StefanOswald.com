@@ -26,7 +26,7 @@ create table if not exists acadia_document_chunks (
   token_count integer not null,
   ocr_quality text not null check (ocr_quality in ('good', 'review', 'poor')),
   ocr_warnings text[] not null default '{}',
-  embedding vector(3072) not null,
+  embedding vector(1536) not null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -41,7 +41,7 @@ create index if not exists acadia_document_chunks_metadata_idx
   on acadia_document_chunks (document_id, page_number);
 
 create or replace function match_acadia_chunks(
-  query_embedding vector(3072),
+  query_embedding vector(1536),
   query_text text,
   match_count int default 20
 )

@@ -15,7 +15,7 @@ Set these locally and in Vercel:
 
 Optional overrides:
 
-- `ACADIA_EMBEDDING_MODEL`, defaults to `text-embedding-3-large`
+- `ACADIA_EMBEDDING_MODEL`, defaults to `text-embedding-3-small`
 - `ACADIA_ANSWER_MODEL`, defaults to `gpt-5-mini`
 - `ACADIA_RETRIEVAL_LIMIT`, defaults to `20`
 - `ACADIA_FINAL_CHUNK_LIMIT`, defaults to `6`
