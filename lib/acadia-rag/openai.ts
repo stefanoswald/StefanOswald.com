@@ -48,8 +48,7 @@ export async function generateGroundedAnswer(prompt: string) {
     },
     body: JSON.stringify({
       model: ACADIA_ANSWER_MODEL,
-      input: prompt,
-      temperature: 0
+      input: prompt
     })
   });
   const payload = (await response.json()) as OpenAIResponsesResponse;
