@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f5a623'/%3E%3Cstop offset='1' stop-color='%23ff8c42'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='74' font-size='60' text-anchor='middle'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23000000'/%3E%3Cpath d='M57 6 L22 56 L42 56 L40 94 L78 40 L55 40 Z' fill='%23ff8c42'/%3E%3C/svg%3E">
 <style>
 :root{
   --indigo:#1b1339; --indigo-2:#2a1d5c; --indigo-3:#3b2a80;
@@ -271,6 +271,7 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
       <button class="nav-link" data-nav="explore" onclick="go('explore')">Explore</button>
       <button class="nav-link" data-nav="workshops" onclick="go('workshops')">Workshops</button>
       <button class="nav-link" data-nav="profile" onclick="go('profile')">My Profile</button>
+      <button class="nav-link nav-wallet" onclick="openBuyEnergy()" style="color:var(--gold-2);font-weight:800">⚡ Buy Energy</button>
       <button class="btn btn-gold btn-sm" onclick="go('create')" style="margin-left:8px">＋ Offer Your Energy</button>
     </div>
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
@@ -280,6 +281,7 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
     <button class="nav-link" onclick="go('explore');toggleMenu()">Explore</button>
     <button class="nav-link" onclick="go('workshops');toggleMenu()">Workshops</button>
     <button class="nav-link" onclick="go('profile');toggleMenu()">My Profile</button>
+    <button class="nav-link nav-wallet" onclick="openBuyEnergy();toggleMenu()" style="color:var(--gold-2);font-weight:800">⚡ Buy Energy</button>
     <button class="btn btn-gold btn-sm" onclick="go('create');toggleMenu()">＋ Offer Your Energy</button>
   </div>
 </nav>
@@ -395,7 +397,7 @@ const WORKSHOPS = [
  {id:105,kind:"inperson",title:"Knife Skills with Chef Antonia",host:"Chef Antonia Russo",emoji:"🔪",grad:"var(--grad-gold)",loc:"San Diego, CA",when:"Fri, Jul 17 · 6pm",price:"2 Energy incl. dinner",desc:"Chop like a pro, then eat what you chopped. Knives provided."},
  {id:106,kind:"mastermind",title:"First-Time Founders Circle",host:"Dana Whitfield",emoji:"🚀",grad:"var(--grad-purple)",loc:"Online",when:"Biweekly · Wed 7pm",price:"Barter or 1 Energy/mo",desc:"Peer accountability for people launching their first business."},
  {id:107,kind:"inperson",title:"Juggling in the Park (Free!)",host:"Felix Arnaud",emoji:"🤹",grad:"var(--grad-teal)",loc:"New Orleans, LA",when:"Sundays · 3pm",price:"Free — pure goodwill",desc:"Drop-in circus arts. Balls provided, dignity optional."},
- {id:108,kind:"online",title:"Home Electrical Safety 101",host:"Ray Thompson",emoji:"💡",grad:"var(--grad-gold)",loc:"Online",when:"Thu, Jul 23 · 7pm CT",price:"½ Energy",desc:"What you can safely DIY and when to call a pro. Live Q&A."},
+ {id:108,kind:"online",title:"Home Electrical Safety 101",host:"Ray Thompson",emoji:"💡",grad:"var(--grad-gold)",loc:"Online",when:"Thu, Jul 23 · 7pm CT",price:"1 Energy",desc:"What you can safely DIY and when to call a pro. Live Q&A."},
  {id:109,kind:"mastermind",title:"Landlords Doing It Right",host:"Ari Goldman",emoji:"🏘️",grad:"var(--grad-teal)",loc:"Chicago, IL",when:"Last Monday monthly",price:"Pure goodwill",desc:"Small landlords sharing fair-housing practices, maintenance tips, and tenant-first ideas."},
  {id:110,kind:"inperson",title:"Desert Light Painting Retreat",host:"Sofia Reyes",emoji:"🌅",grad:"var(--grad-purple)",loc:"Santa Fe, NM",when:"Jul 25–26",price:"6 Energy or barter",desc:"Two mornings painting at golden hour. All levels, materials included."},
 ];
@@ -443,10 +445,25 @@ const PROFILE_EMOJIS = ["⚡","😀","😎","🤠","🧙","🦸","🎨","🎸","
 const app = document.getElementById('app');
 let state = {page:'home', cat:'all', type:'all', q:'', wkind:'all', viewUser:null};
 
-function myListings(){ try{return JSON.parse(localStorage.getItem('e4e_listings')||'[]')}catch(e){return []} }
-function saveMyListing(l){ const a=myListings(); a.push(l); localStorage.setItem('e4e_listings',JSON.stringify(a)); }
-function myProfile(){ try{return JSON.parse(localStorage.getItem('e4e_profile')||'null')}catch(e){return null} }
-function allListings(){ return LISTINGS.concat(myListings()); }
+/* ---- Accounts (demo auth: production swaps in Firebase/Supabase + real email delivery) ---- */
+const MAX_ENERGY_PER_USER = 500;
+const FL_SUPPLY_BASELINE = 6420; // ⚡ already sold in FL (demo figure)
+function accounts(){ try{return JSON.parse(localStorage.getItem('e4e_accounts')||'{}')}catch(e){return {}} }
+function saveAccounts(a){ localStorage.setItem('e4e_accounts', JSON.stringify(a)); }
+function session(){ return localStorage.getItem('e4e_session') || null; }
+function me(){ const s = session(); return s ? (accounts()[s] || null) : null; }
+function updateMe(fn){
+  const a = accounts(), s = session();
+  if(!s || !a[s]) return;
+  fn(a[s]); saveAccounts(a); refreshNavWallet();
+}
+function myProfile(){ const m = me(); return (m && m.name) ? m : null; }
+function myListings(){ const m = me(); return m ? (m.listings||[]) : []; }
+function saveMyListing(l){ updateMe(m => { (m.listings = m.listings||[]).push(l); }); }
+function communityListings(){
+  return Object.values(accounts()).flatMap(m => m.listings||[]);
+}
+function allListings(){ return LISTINGS.concat(communityListings()); }
 const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* For strings interpolated inside inline event-handler JS: hex-escape anything HTML- or JS-special */
 const jsq = s => String(s??'').replace(/[\\'"&<>]/g,c=>'\\x'+c.charCodeAt(0).toString(16).padStart(2,'0'));
@@ -469,7 +486,9 @@ function render(){
   const s = document.getElementById('searchInput');
   if(s){ s.value = state.q; s.addEventListener('input', e=>{ state.q=e.target.value; refreshGrid(); }); }
   if(state.page==='create'){ renderTradeGrid(); renderTradeBox(); }
+  if(state.page==='explore') initMap();
   initAutocomplete();
+  refreshNavWallet();
 }
 
 /* ===================== LOCATION AUTOCOMPLETE ===================== */
@@ -580,7 +599,7 @@ function renderHome(){
       <div class="step"><div class="n">1</div><h4>Create your profile</h4><p>List what you offer, what you rent, what you sell — and what you're looking for.</p></div>
       <div class="step"><div class="n">2</div><h4>Explore your community</h4><p>Browse people, things, and workshops near you or online.</p></div>
       <div class="step"><div class="n">3</div><h4>Make an exchange</h4><p>Pay in ⚡ Energy, barter directly, or give pure goodwill — you and your match set the terms.</p></div>
-      <div class="step"><div class="n">4</div><h4>Build your trust score</h4><p>Great exchanges earn reviews. Reviews open doors to bigger trades.</p></div>
+      <div class="step"><div class="n">4</div><h4>Review &amp; get your deposit back</h4><p>Both parties stake a 1 ⚡ deposit per transaction — returned when you leave your review. It pays to show up as your best self.</p></div>
     </div>
   </section>
 
@@ -607,7 +626,7 @@ function cardHTML(l){
   const energy = /goodwill|free|energy/i.test(l.price);
   return `
   <div class="lcard" onclick="openListing(${l.id})">
-    <div class="thumb" style="background:${l.grad}"><span>${l.emoji}</span><span class="extype">${esc(l.type)}</span></div>
+    <div class="thumb" style="background:${l.grad}"><span>${l.emoji}</span></div>
     <div class="body">
       <span class="cat">${CATS[l.cat]?CATS[l.cat].label:esc(l.cat)}</span>
       <h3>${esc(l.title)}</h3>
@@ -626,7 +645,6 @@ function filteredListings(){
   const q = state.q.trim().toLowerCase();
   return allListings().filter(l =>
     (state.cat==='all' || l.cat===state.cat) &&
-    (state.type==='all' || l.type===state.type) &&
     (!q || (l.title+' '+l.desc+' '+l.who+' '+l.loc).toLowerCase().includes(q))
   );
 }
@@ -639,10 +657,6 @@ function renderExplore(){
   <section class="section" style="padding-top:36px">
     <div class="filterbar">
       <div class="search-wrap"><span class="ic">🔎</span><input id="searchInput" type="text" placeholder="Search listings, people, places…"></div>
-      <select class="chip-select" onchange="state.type=this.value;refreshGrid()">
-        <option value="all">All exchange types</option>
-        ${EXTYPES.map(t=>`<option ${state.type===t?'selected':''}>${t}</option>`).join('')}
-      </select>
     </div>
     <div class="chips" style="margin-bottom:24px">
       <button class="chip ${state.cat==='all'?'active':''}" onclick="state.cat='all';refreshGrid(true)">All</button>
@@ -652,17 +666,18 @@ function renderExplore(){
     </div>
     <div class="map-card">
       <div class="map-head">
-        <h3>📍 Within a mile of you</h3>
-        <button class="btn btn-teal btn-sm" onclick="initMap()">Use my location</button>
+        <h3>📍 Ground Zero — one mile around Acadia Estates</h3>
+        <button class="btn btn-teal btn-sm" onclick="initMapMine()">Use my location instead</button>
       </div>
-      <div id="mapBox">Tap "Use my location" to see exchanges within a mile of where you're standing.</div>
-      <div class="hint" style="margin-top:8px">Preview mode: sample listings are placed near your location to demonstrate the experience.</div>
+      <div id="mapBox">Loading the neighborhood…</div>
+      <div class="hint" style="margin-top:8px">⚡ Energy for Energy starts here — one Kissimmee neighborhood — and expands outward. Sample listings placed for preview.</div>
     </div>
     <div id="gridWrap">${gridHTML()}</div>
   </section>`;
 }
 
 /* ===================== MAP (Leaflet, lazy-loaded) ===================== */
+const GROUND_ZERO = {lat:28.330792, lng:-81.608095, label:"⚡ Ground Zero — Acadia Estates, Kissimmee, FL"};
 let _map = null;
 function loadLeaflet(cb){
   if(window.L) return cb();
@@ -677,11 +692,14 @@ function loadLeaflet(cb){
   document.head.appendChild(js);
 }
 function initMap(){
+  loadLeaflet(()=>buildMap(GROUND_ZERO.lat, GROUND_ZERO.lng, false));
+}
+function initMapMine(){
   loadLeaflet(()=>{
-    if(!navigator.geolocation){ buildMap(27.7676,-82.6403,false); return; } // St. Petersburg, FL
+    if(!navigator.geolocation){ initMap(); return; }
     navigator.geolocation.getCurrentPosition(
       pos=>buildMap(pos.coords.latitude, pos.coords.longitude, true),
-      ()=>{ toast('📍 Location unavailable — showing our launch city, St. Petersburg, FL.'); buildMap(27.7676,-82.6403,false); }
+      ()=>{ toast('📍 Location unavailable — showing Ground Zero.'); initMap(); }
     );
   });
 }
@@ -693,7 +711,7 @@ function buildMap(lat,lng,mine){
   _map = L.map('mapBox').setView([lat,lng], 15);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(_map);
   L.circle([lat,lng],{radius:1609, color:'#3b2a80', fillColor:'#8b5cf6', fillOpacity:.08, weight:2}).addTo(_map);
-  L.marker([lat,lng]).addTo(_map).bindPopup(mine?'<b>You are here</b>':'<b>Launch city: St. Petersburg, FL</b>');
+  L.marker([lat,lng]).addTo(_map).bindPopup(mine?'<b>You are here</b>':`<b>${GROUND_ZERO.label}</b><br>Where it all starts.`).openPopup();
   // Preview: scatter current filtered listings within the mile circle (deterministic per listing id)
   filteredListings().slice(0,14).forEach(l=>{
     const ang = (l.id % 360) * 2.3998, r = 200 + (l.id * 137 % 1300); // meters
@@ -788,37 +806,144 @@ function listOr(arr,fallback){
   return (arr&&arr.length) ? `<ul>${arr.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>` : `<p style="color:var(--muted);font-size:.9rem">${fallback}</p>`;
 }
 function renderProfile(){
-  const p = myProfile();
+  const m = me();
+  if(!m) return renderAuth();
+  if(!m.name) return renderProfileSetup(m);
   const mine = myListings();
-  if(!p) return `
-    <div class="page-hero"><h1>Your Profile</h1><p>Set up your profile so neighbors know what energy you bring.</p></div>
-    <section class="section" style="padding-top:36px">
-      <div class="form-card">
-        <h2 style="margin-bottom:6px">Join the Community</h2>
-        <p style="color:var(--muted);margin-bottom:24px">Free forever. Takes about a minute.</p>
-        <form onsubmit="saveProfile(event)">
-          <div class="frow">
-            <div class="fgroup"><label>Name</label><input name="name" required placeholder="e.g. Stefan Oswald"></div>
-            <div class="fgroup"><label>Location</label><div class="ac-wrap"><input name="loc" required autocomplete="off" data-ac placeholder="Start typing a city…"><div class="ac-list"></div></div></div>
-          </div>
-          <div class="fgroup"><label>Profile emoji (your avatar for now)</label>
-            <select name="emoji">${PROFILE_EMOJIS.map(e=>`<option value="${e}">${e}</option>`).join('')}</select>
-          </div>
-          <div class="fgroup"><label>Bio</label><textarea name="bio" placeholder="Who are you, and what energy do you bring?"></textarea></div>
-          <div class="fgroup"><label>Skills you offer (comma-separated)</label><input name="offers" placeholder="e.g. Guitar lessons, dog walking, tax help"></div>
-          <div class="fgroup"><label>Things you want (comma-separated)</label><input name="wants" placeholder="e.g. Bike repair, sourdough starter, French practice"></div>
-          <button class="btn btn-gold btn-block" type="submit">Create My Profile ⚡</button>
-        </form>
-      </div>
-    </section>`;
-  const u = {emoji:p.emoji,loc:p.loc,bio:p.bio,score:p.score||'New',reviews:0,
-    offers:p.offers, wants:p.wants,
+  const u = {emoji:m.emoji,loc:m.loc,bio:m.bio,score:m.score||'New',reviews:0,
+    offers:m.offers, wants:m.wants,
     rents:mine.filter(l=>l.type==='Rent').map(l=>l.title),
     sells:mine.filter(l=>l.type==='Buy').map(l=>l.title)};
-  return `<div class="page-hero"><h1>My Profile</h1><p>This is how your community sees you.</p></div>`
-    + profileHTML(p.name,u,true)
-    + (mine.length?`<section class="section" style="padding-top:0"><div class="section-head left"><span class="kicker">My listings</span><h2>Energy you've offered</h2></div><div class="listing-grid">${mine.map(cardHTML).join('')}</div></section>`:'')
-    + `<section class="section" style="padding-top:0;text-align:center"><button class="btn btn-outline" onclick="resetProfile()">Reset my profile &amp; listings</button></section>`;
+  const remaining = MAX_ENERGY_PER_USER - (m.purchased||0);
+  return `<div class="page-hero"><h1>My Profile</h1><p>Signed in as ${esc(m.email)}${m.provider?` · via ${esc(m.provider)}`:''}</p></div>`
+    + profileHTML(m.name,u,true)
+    + `<section class="section" style="padding-top:20px;padding-bottom:0">
+        <div class="pbox">
+          <h4>⚡ Energy Wallet</h4>
+          <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center">
+            <div><div style="font-family:'Sora';font-size:1.9rem;font-weight:800;color:var(--indigo-3)">⚡ ${m.wallet||0}</div><div class="hint">Available balance</div></div>
+            <div><div style="font-family:'Sora';font-size:1.9rem;font-weight:800;color:var(--teal-2)">⚡ ${m.escrow||0}</div><div class="hint">Held as review deposits</div></div>
+            <div><div style="font-family:'Sora';font-size:1.9rem;font-weight:800;color:var(--gold-2)">${remaining}</div><div class="hint">Purchase allowance left (max ${MAX_ENERGY_PER_USER})</div></div>
+            <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
+              ${(m.escrow||0)>0?`<button class="btn btn-teal btn-sm" onclick="releaseDeposits()">I left my review — return deposits</button>`:''}
+              <button class="btn btn-gold btn-sm" onclick="openBuyEnergy()">Buy Energy</button>
+            </div>
+          </div>
+        </div>
+      </section>`
+    + (mine.length?`<section class="section" style="padding-bottom:0"><div class="section-head left"><span class="kicker">My listings</span><h2>Energy you've offered</h2></div><div class="listing-grid">${mine.map(cardHTML).join('')}</div></section>`:'')
+    + `<section class="section" style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-outline" onclick="signOut()">Sign out</button>
+        <button class="btn btn-outline" onclick="deleteAccount()" style="color:#c0392b;border-color:#e8c4bd">Delete my account</button>
+      </section>`;
+}
+
+/* ---- Auth (demo: code shown on screen; production wires an email/OAuth provider) ---- */
+let _authCode = null, _authEmail = null;
+function renderAuth(){
+  return `
+  <div class="page-hero"><h1>Sign In or Join</h1><p>Your profile, listings, and Energy wallet — attached to your email.</p></div>
+  <section class="section" style="padding-top:36px">
+    <div class="form-card">
+      <h2 style="margin-bottom:6px">Welcome back — or welcome in</h2>
+      <p style="color:var(--muted);margin-bottom:24px">Enter your email and we'll send a one-time authorization code.</p>
+      <div class="fgroup"><label>Email address</label><input id="authEmail" type="email" required placeholder="you@example.com"></div>
+      <button class="btn btn-gold btn-block" onclick="sendCode()">Email me a code</button>
+      <div id="codeRow" style="display:none;margin-top:18px">
+        <div class="fgroup"><label>Authorization code</label><input id="authCode" inputmode="numeric" maxlength="6" placeholder="6-digit code"></div>
+        <button class="btn btn-teal btn-block" onclick="verifyCode()">Verify &amp; Sign In</button>
+      </div>
+      <div class="or-divider">OR CONTINUE WITH</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px">
+        <button class="btn btn-outline" onclick="socialLogin('Google')">🇬 Google</button>
+        <button class="btn btn-outline" onclick="socialLogin('Apple')"> Apple</button>
+        <button class="btn btn-outline" onclick="socialLogin('Facebook')">ⓕ Facebook</button>
+      </div>
+      <div class="hint" style="margin-top:16px;text-align:center">Demo build: codes appear on screen and linked accounts are simulated.<br>Production connects a real email + OAuth provider.</div>
+    </div>
+  </section>`;
+}
+function sendCode(){
+  const input = document.getElementById('authEmail');
+  const email = (input.value||'').trim().toLowerCase();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ toast('⚠️ Enter a valid email address.'); return; }
+  _authEmail = email;
+  _authCode = String(Math.floor(100000 + Math.random()*900000));
+  document.getElementById('codeRow').style.display = '';
+  modalShell(`<div class="inner" style="padding-top:40px;text-align:center">
+    <h3>📬 Check your email</h3>
+    <p style="color:var(--muted);margin:10px 0 18px">In production this code is emailed to <b>${esc(email)}</b>.<br>Demo build — here it is:</p>
+    <div style="font-family:'Sora';font-size:2.2rem;font-weight:800;letter-spacing:.2em;color:var(--indigo-3);background:#f6f3fc;border-radius:14px;padding:14px">${_authCode}</div>
+    <button class="btn btn-gold btn-block" style="margin-top:18px" onclick="closeModal()">Got it</button>
+  </div>`);
+}
+function verifyCode(){
+  const code = (document.getElementById('authCode').value||'').trim();
+  if(!_authCode || code !== _authCode){ toast('⚠️ Wrong code — check and try again.'); return; }
+  loginEmail(_authEmail, null);
+}
+function socialLogin(provider){
+  modalShell(`<div class="inner" style="padding-top:40px">
+    <h3>Continue with ${esc(provider)}</h3>
+    <p style="color:var(--muted);font-size:.92rem;margin:8px 0 16px">Demo build: enter the email on your ${esc(provider)} account and we'll link it instantly. Production uses real ${esc(provider)} OAuth.</p>
+    <div class="fgroup"><label>${esc(provider)} account email</label><input id="socialEmail" type="email" placeholder="you@example.com"></div>
+    <button class="btn btn-gold btn-block" onclick="confirmSocial('${provider}')">Link &amp; Sign In</button>
+  </div>`);
+}
+function confirmSocial(provider){
+  const email = (document.getElementById('socialEmail').value||'').trim().toLowerCase();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ toast('⚠️ Enter a valid email address.'); return; }
+  closeModal();
+  loginEmail(email, provider);
+}
+function loginEmail(email, provider){
+  const a = accounts();
+  if(!a[email]){
+    a[email] = {email, provider, wallet:0, purchased:0, escrow:0, listings:[]};
+    // Adopt any profile/listings created in this browser before accounts existed
+    try{
+      const oldP = JSON.parse(localStorage.getItem('e4e_profile')||'null');
+      const oldL = JSON.parse(localStorage.getItem('e4e_listings')||'[]');
+      if(oldP) Object.assign(a[email], oldP, {email, provider});
+      if(oldL.length) a[email].listings = oldL.map(l=>({...l, who:(oldP&&oldP.name)||l.who}));
+      localStorage.removeItem('e4e_profile'); localStorage.removeItem('e4e_listings');
+    }catch(err){}
+    saveAccounts(a);
+  } else if(provider && !a[email].provider){
+    a[email].provider = provider; saveAccounts(a);
+  }
+  localStorage.setItem('e4e_session', email);
+  _authCode = null;
+  toast(a[email].name ? `⚡ Welcome back, ${a[email].name.split(' ')[0]}!` : '⚡ Signed in! Set up your profile.');
+  refreshNavWallet(); render(); window.scrollTo({top:0});
+}
+function signOut(){ localStorage.removeItem('e4e_session'); toast('Signed out. Your profile and listings are saved.'); refreshNavWallet(); render(); }
+function deleteAccount(){
+  const a = accounts(), s = session();
+  if(s){ delete a[s]; saveAccounts(a); }
+  localStorage.removeItem('e4e_session');
+  toast('Account deleted.'); refreshNavWallet(); render();
+}
+function renderProfileSetup(m){
+  return `
+  <div class="page-hero"><h1>Almost there</h1><p>Signed in as ${esc(m.email)} — now tell the community who you are.</p></div>
+  <section class="section" style="padding-top:36px">
+    <div class="form-card">
+      <form onsubmit="saveProfile(event)">
+        <div class="frow">
+          <div class="fgroup"><label>Name</label><input name="name" required placeholder="e.g. Stefan Oswald"></div>
+          <div class="fgroup"><label>Location</label><div class="ac-wrap"><input name="loc" required autocomplete="off" data-ac placeholder="Start typing a city…"><div class="ac-list"></div></div></div>
+        </div>
+        <div class="fgroup"><label>Profile emoji (your avatar for now)</label>
+          <select name="emoji">${PROFILE_EMOJIS.map(e=>`<option value="${e}">${e}</option>`).join('')}</select>
+        </div>
+        <div class="fgroup"><label>Bio</label><textarea name="bio" placeholder="Who are you, and what energy do you bring?"></textarea></div>
+        <div class="fgroup"><label>Skills you offer (comma-separated)</label><input name="offers" placeholder="e.g. Guitar lessons, dog walking, tax help"></div>
+        <div class="fgroup"><label>Things you want (comma-separated)</label><input name="wants" placeholder="e.g. Bike repair, sourdough starter, French practice"></div>
+        <button class="btn btn-gold btn-block" type="submit">Create My Profile ⚡</button>
+      </form>
+    </div>
+  </section>`;
 }
 function renderUser(){
   const name = state.viewUser;
@@ -831,21 +956,66 @@ function saveProfile(e){
   e.preventDefault();
   const f = new FormData(e.target);
   const split = s => (s||'').split(',').map(x=>x.trim()).filter(Boolean);
-  localStorage.setItem('e4e_profile', JSON.stringify({
+  updateMe(m => Object.assign(m, {
     name:f.get('name'), loc:f.get('loc'), emoji:f.get('emoji')||'⚡', bio:f.get('bio'),
     offers:split(f.get('offers')), wants:split(f.get('wants'))
   }));
   toast('⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
   render();
 }
-function resetProfile(){
-  localStorage.removeItem('e4e_profile'); localStorage.removeItem('e4e_listings');
-  toast('Profile and listings cleared.'); render();
-}
 function joinCommunity(){ go('profile'); }
 
+/* ===================== BUY ENERGY ===================== */
+const PAY_METHODS = [["₿","Bitcoin"],["💳","Credit Card"],["🅿️","PayPal"],["","Apple Pay"],["🇬","Google Pay"],["📱","Samsung Pay"]];
+let _payMethod = "Credit Card";
+function flSupplyLeft(){
+  const sold = Object.values(accounts()).reduce((n,m)=>n+(m.purchased||0), 0);
+  return 20000 - FL_SUPPLY_BASELINE - sold;
+}
+function openBuyEnergy(){
+  const m = me();
+  if(!m){ go('profile'); toast('Sign in first — your Energy needs a wallet to live in.'); return; }
+  const remaining = MAX_ENERGY_PER_USER - (m.purchased||0);
+  modalShell(`<div class="inner" style="padding-top:40px">
+    <h3>Buy ⚡ Energy</h3>
+    <p style="color:var(--muted);font-size:.9rem;margin:6px 0 16px">1 ⚡ ≈ $20 · Florida supply remaining: <b>${flSupplyLeft().toLocaleString()} ⚡</b><br>Your allowance: <b>${remaining} ⚡</b> (hard cap of ${MAX_ENERGY_PER_USER} per member)</p>
+    <div class="fgroup"><label>Amount (whole numbers)</label><input id="buyAmt" type="number" min="1" step="1" max="${remaining}" placeholder="e.g. 25"></div>
+    <div class="fgroup"><label>Payment method</label>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px">
+        ${PAY_METHODS.map(([ic,nm])=>`<button type="button" class="trade-btn ${nm===_payMethod?'sel':''}" onclick="_payMethod='${nm}';openBuyEnergy._redraw&&openBuyEnergy._redraw(this)">${ic} ${nm}</button>`).join('')}
+      </div>
+    </div>
+    <button class="btn btn-gold btn-block" onclick="purchaseEnergy()">Buy Energy ⚡</button>
+    <div class="hint" style="margin-top:10px;text-align:center">Demo checkout — no payment is processed. Production connects Stripe, Coinbase Commerce, and wallet SDKs.</div>
+  </div>`);
+  openBuyEnergy._redraw = btn => { btn.parentElement.querySelectorAll('.trade-btn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); };
+}
+function purchaseEnergy(){
+  const m = me(); if(!m) return;
+  const amt = Math.round(parseFloat(document.getElementById('buyAmt').value));
+  if(isNaN(amt) || amt < 1){ toast('⚠️ Enter a whole number of Energy.'); return; }
+  const remaining = MAX_ENERGY_PER_USER - (m.purchased||0);
+  if(amt > remaining){ toast(`⚠️ Cap reached: you can buy at most ${remaining} more ⚡ (${MAX_ENERGY_PER_USER} lifetime max).`); return; }
+  if(amt > flSupplyLeft()){ toast('⚠️ Not enough Energy left in the Florida supply.'); return; }
+  updateMe(x => { x.wallet = (x.wallet||0) + amt; x.purchased = (x.purchased||0) + amt; });
+  closeModal();
+  toast(`⚡ ${amt} Energy added via ${_payMethod}!`);
+  if(state.page==='profile') render();
+}
+function releaseDeposits(){
+  const m = me(); if(!m || !(m.escrow>0)) return;
+  updateMe(x => { x.wallet = (x.wallet||0) + x.escrow; x.escrow = 0; });
+  toast('⚡ Deposits returned — thanks for keeping the ecosystem healthy!');
+  render();
+}
+function refreshNavWallet(){
+  const m = me();
+  document.querySelectorAll('.nav-wallet').forEach(el=>{
+    el.textContent = m ? `⚡ ${m.wallet||0} · Buy` : '⚡ Buy Energy';
+  });
+}
+
 /* ===================== CREATE LISTING ===================== */
-let pickedType = 'Barter';
 let selectedTrades = [];   // {name, kind, qty}
 let tradesShown = 12;
 const EMOJIS = ['📦','🎸','🍞','🧶','🚲','📚','🎨','🐕','🔧','🌱','💻','🏄','📷','🍳','🪴','🎹','⛺','🛶','🪑','👗','🎤','🧁','🖼️','🐝'];
@@ -870,13 +1040,9 @@ function renderCreate(){
           </div>
           <div class="fgroup"><label>Location</label><div class="ac-wrap"><input name="loc" required autocomplete="off" data-ac placeholder='Start typing a city — or "Online"' value="${p?esc(p.loc):''}"><div class="ac-list"></div></div></div>
         </div>
-        <div class="fgroup"><label>Exchange type</label>
-          <div class="ex-pills">${EXTYPES.map(t=>`<button type="button" class="ex-pill ${t===pickedType?'active':''}" onclick="pickType(this,'${t}')">${t}</button>`).join('')}</div>
-        </div>
-
         <div class="fgroup"><label>Price (in ⚡ Energy)</label>
           <div class="energy-row">
-            <input name="energy" type="number" min="0" step="0.5" placeholder="e.g. 3">
+            <input name="energy" type="number" min="1" step="1" placeholder="e.g. 3">
             <select name="eunit">
               <option value="">total</option>
               <option value="/hour">per hour</option>
@@ -906,7 +1072,6 @@ function renderCreate(){
     </div>
   </section>`;
 }
-function pickType(btn,t){ pickedType=t; btn.parentElement.querySelectorAll('.ex-pill').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
 
 /* ---- Trade picker (choices are curated — no free text, no vulgarity risk) ---- */
 function renderTradeGrid(){
@@ -959,9 +1124,10 @@ function tradeSummary(){
 
 function submitListing(e){
   e.preventDefault();
-  const f = new FormData(e.target);
   const p = myProfile();
-  const energyVal = parseFloat(f.get('energy'));
+  if(!p){ go('profile'); toast('Sign in and set up your profile first — listings are saved to it.'); return; }
+  const f = new FormData(e.target);
+  const energyVal = Math.round(parseFloat(f.get('energy')));
   const hasEnergy = !isNaN(energyVal) && energyVal > 0;
   const hasTrade = selectedTrades.length > 0;
   if(!hasEnergy && !hasTrade){ toast('⚠️ Set a price in Energy or pick at least one trade.'); return; }
@@ -970,8 +1136,8 @@ function submitListing(e){
   if(hasTrade) price = price ? `${price} or barter: ${tradeSummary()}` : `Barter: ${tradeSummary()}`;
   const grads = ['var(--grad-purple)','var(--grad-teal)','var(--grad-gold)'];
   saveMyListing({
-    id: Date.now(), cat:f.get('cat'), type:pickedType, title:f.get('title'),
-    who: p ? p.name : 'You', emoji: f.get('emoji')||'📦', grad: grads[Math.floor(Math.random()*3)],
+    id: Date.now(), cat:f.get('cat'), type:({rent:'Rent',buy:'Buy'})[f.get('cat')]||'Barter', title:f.get('title'),
+    who: p.name, emoji: f.get('emoji')||'📦', grad: grads[Math.floor(Math.random()*3)],
     loc:f.get('loc'), price, desc:f.get('desc'), mine:true
   });
   toast('⚡ Listing published! Your energy is live.');
@@ -991,13 +1157,13 @@ function openListing(id){
   modalShell(`
     <div class="thumb" style="background:${l.grad}">${l.emoji}</div>
     <div class="inner">
-      <span class="cat" style="font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-2)">${CATS[l.cat]?CATS[l.cat].label:esc(l.cat)} · ${esc(l.type)}</span>
+      <span class="cat" style="font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-2)">${CATS[l.cat]?CATS[l.cat].label:esc(l.cat)}</span>
       <h3>${esc(l.title)}</h3>
       <p style="color:var(--muted);font-size:.9rem;margin-bottom:14px">📍 ${esc(l.loc)} · by <a onclick="closeModal();openUser('${jsq(l.who)}')" style="text-decoration:underline;cursor:pointer;font-weight:600">${esc(l.who)}</a></p>
       <p style="margin-bottom:18px">${esc(l.desc)}</p>
       <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#f6f3fc;border-radius:14px;margin-bottom:18px">
         <b style="color:${energy?'var(--teal-2)':'var(--indigo-3)'}">${energy?'⚡ ':''}${esc(l.price)}</b>
-        <span style="font-size:.8rem;color:var(--muted)">Exchange type: <b>${esc(l.type)}</b></span>
+        <span style="font-size:.8rem;color:var(--muted)">🛡️ 1 ⚡ review deposit</span>
       </div>
       <button class="btn btn-gold btn-block" onclick="closeModal();openContact('${jsq(l.who)}','${jsq(l.title)}')">Contact / Request Exchange</button>
     </div>`);
@@ -1024,13 +1190,19 @@ function openContact(who, about){
       <form onsubmit="sendMessage(event,'${jsq(who)}')">
         <div class="fgroup"><label>Your message</label><textarea required placeholder="Hi! I'm interested in this exchange. Here's what I can offer in return…"></textarea></div>
         <div class="fgroup"><label>What can you offer in exchange? (optional)</label><input placeholder="e.g. ⚡ Energy, guitar lessons, fresh vegetables…"></div>
+        <div class="energy-note" style="margin-bottom:16px">🛡️ <b>Review deposit:</b> both parties stake 1 ⚡ per exchange, returned when you leave your review. It pays to show up as your best self.</div>
         <button class="btn btn-teal btn-block" type="submit">Send Request ⚡</button>
       </form>
     </div>`);
 }
 function sendMessage(e, who){
-  e.preventDefault(); closeModal();
-  toast('✉️ Request sent to '+who+'! They usually reply within a day.');
+  e.preventDefault();
+  const m = me();
+  if(!m){ closeModal(); go('profile'); toast('Sign in to send requests — exchanges are tied to your profile.'); return; }
+  if((m.wallet||0) < 1){ closeModal(); toast('⚠️ You need 1 ⚡ available for the review deposit.'); openBuyEnergy(); return; }
+  updateMe(x => { x.wallet -= 1; x.escrow = (x.escrow||0) + 1; });
+  closeModal();
+  toast('✉️ Request sent to '+who+'! 1 ⚡ deposit held — returned when you leave your review.');
 }
 let toastTimer;
 function toast(msg){
