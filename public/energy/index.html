@@ -1420,16 +1420,27 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
   (async function(){
     try {
       await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js');
+      /* Surface sign-in errors delivered in the URL (expired/used links etc.) */
+      if (/error/.test(location.hash)) {
+        const p = new URLSearchParams(location.hash.slice(1));
+        const desc = (p.get('error_description') || p.get('error_code') || 'Sign-in link failed').replace(/\+/g,' ');
+        setTimeout(()=>toast('⚠️ ' + desc + ' — request a fresh link and open it in this browser.'), 600);
+        history.replaceState(null, '', location.pathname + location.search);
+      }
       sb = window.supabase.createClient(CLOUD.supabaseUrl, CLOUD.supabaseAnonKey);
-      sb.auth.onAuthStateChange((_evt, session)=>{
+      sb.auth.onAuthStateChange((evt, session)=>{
         const had = !!cache.session;
         cache.session = session;
+        if (evt === 'SIGNED_IN' && !had){ cache.freshSignIn = true; toast('⚡ Signed in!'); }
         if (cache.booted && (!!session !== had)) refreshData();
       });
       const { data: { session } } = await sb.auth.getSession();
       cache.session = session;
       await refreshData();
       cache.booted = true;
+      if (cache.freshSignIn || (session && /access_token/.test(location.hash))){
+        cache.freshSignIn = false; closeModal(); go('profile');
+      }
     } catch(err){
       console.error('Cloud boot failed, staying in demo mode:', err);
     }
