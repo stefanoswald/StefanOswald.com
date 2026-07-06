@@ -1286,8 +1286,7 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     const { error } = await sb.auth.signInWithOtp({ email,
       options: { emailRedirectTo: location.origin + location.pathname } });
     if (error){ toast('⚠️ ' + error.message); return; }
-    document.getElementById('codeRow').style.display = '';
-    toast('📬 Check your email (and spam) — click the sign-in link. If the email shows a code, you can type it below instead.');
+    toast('📬 Check your email (and spam) and click the sign-in link — this page will sign you in automatically.');
   };
   verifyCode = async function(){
     const code = (document.getElementById('authCode').value||'').trim();
