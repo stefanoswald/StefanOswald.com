@@ -315,11 +315,11 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
    Supabase + Square backend. Leave empty to run in demo mode.
    See backend/SETUP.md for the full checklist.               */
 const CLOUD = {
-  supabaseUrl: "",                       // e.g. "https://abcdefgh.supabase.co"
-  supabaseAnonKey: "",                   // Settings → API → anon public key (safe to publish)
+  supabaseUrl: "https://bwhkxgamiqkzroyoefnn.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3aGt4Z2FtaXFrenJveW9lZm5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyODU0NDgsImV4cCI6MjA5ODg2MTQ0OH0.AEAKB-xDJoUqPQUJyf1Y2-Z3RnvATAfz-FpFjCrWQjY", // anon public key (safe to publish)
   square: {
-    appId: "",                           // Square Developer → your app → Application ID
-    locationId: "",                      // Square Developer → Locations
+    appId: "sandbox-sq0idb-rly3rhgbJYhGJB9KEFu_0A",
+    locationId: "LRYA819JZFTHK",
     sandbox: true                        // set false when you go live
   }
 };
@@ -873,7 +873,7 @@ function renderAuth(){
         <button class="btn btn-outline" onclick="socialLogin('Apple')"> Apple</button>
         <button class="btn btn-outline" onclick="socialLogin('Facebook')">ⓕ Facebook</button>
       </div>
-      <div class="hint" style="margin-top:16px;text-align:center">${CLOUD.supabaseUrl?'Codes are emailed to you. Linked sign-in uses real OAuth.':'Demo build: codes appear on screen and linked accounts are simulated.<br>Production connects a real email + OAuth provider.'}</div>
+      <div class="hint" style="margin-top:16px;text-align:center">${CLOUD.supabaseUrl?'A sign-in link is emailed to you. Linked sign-in uses real OAuth.':'Demo build: codes appear on screen and linked accounts are simulated.<br>Production connects a real email + OAuth provider.'}</div>
     </div>
   </section>`;
 }
@@ -1282,10 +1282,11 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     const email = (document.getElementById('authEmail').value||'').trim().toLowerCase();
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ toast('⚠️ Enter a valid email address.'); return; }
     _authEmail = email;
-    const { error } = await sb.auth.signInWithOtp({ email });
+    const { error } = await sb.auth.signInWithOtp({ email,
+      options: { emailRedirectTo: location.origin + location.pathname } });
     if (error){ toast('⚠️ ' + error.message); return; }
     document.getElementById('codeRow').style.display = '';
-    toast('📬 Code sent — check your email (and spam).');
+    toast('📬 Check your email (and spam) — click the sign-in link. If the email shows a code, you can type it below instead.');
   };
   verifyCode = async function(){
     const code = (document.getElementById('authCode').value||'').trim();
