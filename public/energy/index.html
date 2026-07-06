@@ -433,17 +433,23 @@ const REVIEWS = [
 
 /* Trade catalog: [name, kind] — s=service(hours), r=rental(days), i=item(qty) */
 const TRADE_CATALOG = [
- ["Lawn mowing","s"],["Babysitting","s"],["Dog walking","s"],["House cleaning","s"],["Guitar lessons","s"],["Piano lessons","s"],["Math tutoring","s"],["English tutoring","s"],["Car repair","s"],["Oil change","s"],["Haircut","s"],["Photography","s"],
+ /* First 12 = the initial grid. Skills lead (bartering is the heart of the app),
+    but the most popular rentals and goods sit right beside them. */
+ ["Lawn mowing","s"],["Babysitting","s"],["Dog walking","s"],["House cleaning","s"],
+ ["Car (rental)","r"],["Bicycle (rental)","r"],["Power tools (rental)","r"],["Kayak (rental)","r"],
+ ["Home-cooked meal","i"],["Fresh eggs (dozen)","i"],["Sourdough loaf","i"],["Firewood bundle","i"],
+ /* The long tail */
+ ["Guitar lessons","s"],["Piano lessons","s"],["Math tutoring","s"],["English tutoring","s"],["Car repair","s"],["Oil change","s"],["Haircut","s"],["Photography","s"],
  ["Video editing","s"],["Web design","s"],["Graphic design","s"],["Marketing help","s"],["Social media help","s"],["Tax prep","s"],["Personal training","s"],["Yoga instruction","s"],["Massage therapy","s"],["Cooking lessons","s"],["Meal prep","s"],["House painting","s"],
  ["Plumbing help","s"],["Electrical work","s"],["Carpentry","s"],["Furniture assembly","s"],["Moving help","s"],["Gardening","s"],["Tree trimming","s"],["Pet sitting","s"],["House sitting","s"],["Errand running","s"],["Sewing & alterations","s"],["Computer repair","s"],
  ["Spanish lessons","s"],["French lessons","s"],["Surf lessons","s"],["Swim lessons","s"],["Dance lessons","s"],["Singing lessons","s"],["DJ services","s"],["Bartending","s"],["Event planning","s"],["Resume writing","s"],["Career coaching","s"],["Life coaching","s"],
  ["Coding lessons","s"],["Chess lessons","s"],["Drone photography","s"],["Notary services","s"],["Bike repair","s"],["Auto detailing","s"],["Window washing","s"],["Gutter cleaning","s"],["Pressure washing","s"],["Pool cleaning","s"],["Snow removal","s"],["Translation","s"],
  ["Proofreading","s"],["Podcast editing","s"],["Voiceover work","s"],["Airport rides","s"],["Grocery delivery","s"],["Fishing guide","s"],["Hiking guide","s"],["City tour","s"],["Horse care","s"],["Chicken coop care","s"],["Aquarium care","s"],["Boat maintenance","s"],
- ["Car (rental)","r"],["Truck (rental)","r"],["RV (rental)","r"],["Scooter (rental)","r"],["Bicycle (rental)","r"],["E-bike (rental)","r"],["Kayak (rental)","r"],["Canoe (rental)","r"],["Paddleboard (rental)","r"],["Boat (rental)","r"],["Jet ski (rental)","r"],["Trailer (rental)","r"],
+ ["Truck (rental)","r"],["RV (rental)","r"],["Scooter (rental)","r"],["E-bike (rental)","r"],["Canoe (rental)","r"],["Paddleboard (rental)","r"],["Boat (rental)","r"],["Jet ski (rental)","r"],["Trailer (rental)","r"],
  ["Camping gear (rental)","r"],["Tent (rental)","r"],["Projector (rental)","r"],["PA system (rental)","r"],["Party tent (rental)","r"],["Tables & chairs (rental)","r"],["Bounce house (rental)","r"],["Drone (rental)","r"],["Camera (rental)","r"],["Camera lenses (rental)","r"],["VR headset (rental)","r"],["Gaming console (rental)","r"],
- ["Power tools (rental)","r"],["Ladder (rental)","r"],["Generator (rental)","r"],["Lawn mower (rental)","r"],["Chainsaw (rental)","r"],["Formal dress (rental)","r"],["Tuxedo (rental)","r"],["Photo booth (rental)","r"],["Spare room (rental)","r"],["Parking spot (rental)","r"],["Storage space (rental)","r"],["Art studio (rental)","r"],
- ["Fresh eggs (dozen)","i"],["Sourdough loaf","i"],["Homemade jam","i"],["Vegetable box","i"],["Honey jar","i"],["Firewood bundle","i"],["Houseplant","i"],["Succulent","i"],["Original painting","i"],["Pottery piece","i"],["Knit scarf","i"],["Handmade candles","i"],
- ["Soap bars","i"],["Coffee beans (bag)","i"],["Hot sauce bottle","i"],["Home-cooked meal","i"],["Baked pie","i"],["Cookies (dozen)","i"],["Used books","i"],["Vinyl records","i"],["Board game","i"],["Tool set","i"],["Fishing rod","i"],["Skateboard","i"],
+ ["Ladder (rental)","r"],["Generator (rental)","r"],["Lawn mower (rental)","r"],["Chainsaw (rental)","r"],["Formal dress (rental)","r"],["Tuxedo (rental)","r"],["Photo booth (rental)","r"],["Spare room (rental)","r"],["Parking spot (rental)","r"],["Storage space (rental)","r"],["Art studio (rental)","r"],
+ ["Homemade jam","i"],["Vegetable box","i"],["Honey jar","i"],["Houseplant","i"],["Succulent","i"],["Original painting","i"],["Pottery piece","i"],["Knit scarf","i"],["Handmade candles","i"],
+ ["Soap bars","i"],["Coffee beans (bag)","i"],["Hot sauce bottle","i"],["Baked pie","i"],["Cookies (dozen)","i"],["Used books","i"],["Vinyl records","i"],["Board game","i"],["Tool set","i"],["Fishing rod","i"],["Skateboard","i"],
  ["Acoustic guitar","i"],["Music keyboard","i"],["Microphone","i"],["Desk","i"],["Office chair","i"],["Bookshelf","i"],["Area rug","i"],["Table lamp","i"],["Bike helmet","i"],["Backpack","i"],["Sleeping bag","i"],["Cooler","i"],
 ];
 const TRADE_UNITS = {s:"hrs", r:"days", i:"qty"};
@@ -802,8 +808,8 @@ function profileHTML(name, u, editable){
         <span class="trust"><span class="stars">${starStr(u.score||5)}</span> ${u.score||'New'} · ${u.reviews||0} reviews</span>
         <p style="margin-top:14px;color:#e6e1f5;max-width:520px">${esc(u.bio||'')}</p>
       </div>
-      <div style="position:relative;z-index:1">${editable
-        ? `<button class="btn btn-ghost" onclick="go('create')">＋ New Listing</button>`
+      <div style="position:relative;z-index:1;display:flex;gap:10px;flex-wrap:wrap">${editable
+        ? `<button class="btn btn-ghost" onclick="editProfile()">✏️ Edit Profile</button><button class="btn btn-ghost" onclick="go('create')">＋ New Listing</button>`
         : `<button class="btn btn-gold" onclick="openContact('${jsq(name)}','a direct exchange')">Contact ${esc(name.split(' ')[0])}</button>`}</div>
     </div>
     <div class="profile-cols">
@@ -823,7 +829,7 @@ function listOr(arr,fallback){
 function renderProfile(){
   const m = me();
   if(!m) return renderAuth();
-  if(!m.name) return renderProfileSetup(m);
+  if(!m.name || state.editProfile) return renderProfileSetup(m);
   const mine = myListings();
   const u = {emoji:m.emoji,loc:m.loc,bio:m.bio,score:m.score||'New',reviews:0,
     offers:m.offers, wants:m.wants,
@@ -842,14 +848,16 @@ function renderProfile(){
             <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
               ${(m.escrow||0)>0?`<button class="btn btn-teal btn-sm" onclick="releaseDeposits()">I left my review — return deposits</button>`:''}
               <button class="btn btn-gold btn-sm" onclick="openBuyEnergy()">Buy Energy</button>
+              ${(m.wallet||0)>1?`<button class="btn btn-outline btn-sm" onclick="openCashOut()">Cash Out</button>`:''}
             </div>
           </div>
+          <div class="hint" style="margin-top:10px">Buy at $20/⚡ · cash out at $19/⚡. Your first ⚡ is a review credit — it stays in your wallet to back your exchange requests.</div>
         </div>
       </section>`
     + (mine.length?`<section class="section" style="padding-bottom:0"><div class="section-head left"><span class="kicker">My listings</span><h2>Energy you've offered</h2></div><div class="listing-grid">${mine.map(cardHTML).join('')}</div></section>`:'')
     + `<section class="section" style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
         <button class="btn btn-outline" onclick="signOut()">Sign out</button>
-        <button class="btn btn-outline" onclick="deleteAccount()" style="color:#c0392b;border-color:#e8c4bd">Delete my account</button>
+        <button class="btn btn-outline" onclick="openDeleteAccount()" style="color:#c0392b;border-color:#e8c4bd">Delete my account</button>
       </section>`;
 }
 
@@ -933,33 +941,68 @@ function loginEmail(email, provider){
   refreshNavWallet(); render(); window.scrollTo({top:0});
 }
 function signOut(){ localStorage.removeItem('e4e_session'); toast('Signed out. Your profile and listings are saved.'); refreshNavWallet(); render(); }
-function deleteAccount(){
+/* ---- Account deletion: reason → hard confirm → delete ---- */
+const DELETE_REASONS = ["I'm not using it enough","I couldn't find good exchanges near me","I had a bad experience","Privacy concerns","I'm moving away","Something else"];
+let _delReq = null;
+function openDeleteAccount(){
+  modalShell(`<div class="inner" style="padding-top:40px">
+    <h3>Delete your account</h3>
+    <p style="color:var(--muted);font-size:.92rem;margin:8px 0 14px">We're sorry to see you go. Before you do — mind telling us why? It genuinely helps the community improve.</p>
+    <div class="fgroup"><label>Reason</label><select id="delReason">${DELETE_REASONS.map(r=>`<option>${r}</option>`).join('')}</select></div>
+    <div class="fgroup"><label>Anything else? (optional)</label><textarea id="delDetails" maxlength="500" placeholder="Tell us more…"></textarea></div>
+    <button class="btn btn-block" style="background:#c0392b;color:#fff" onclick="confirmDeleteAccount()">Continue</button>
+    <button class="btn btn-outline btn-block" style="margin-top:10px" onclick="closeModal()">Never mind — keep my account</button>
+  </div>`);
+}
+function confirmDeleteAccount(){
+  _delReq = { reason: document.getElementById('delReason').value,
+              details: (document.getElementById('delDetails').value||'').trim() };
+  const m = me();
+  modalShell(`<div class="inner" style="padding-top:40px">
+    <h3>Are you absolutely sure?</h3>
+    <p style="color:var(--muted);font-size:.92rem;margin:10px 0 6px">This permanently deletes your profile, listings, and wallet${m&&(m.wallet||0)>0?` — <b>including your ${m.wallet} ⚡</b>${(m.escrow||0)>0?` and ${m.escrow} ⚡ in deposits`:''}`:''}. It cannot be undone.</p>
+    ${m&&(m.wallet||0)>1?`<p style="color:var(--muted);font-size:.92rem;margin:0 0 6px">💡 Tip: you can <b>cash out</b> your Energy at $19/⚡ before deleting.</p>`:''}
+    <div class="fgroup" style="margin-top:14px"><label>Type <b>DELETE</b> to confirm</label><input id="delConfirm" autocomplete="off" placeholder="DELETE"></div>
+    <button class="btn btn-block" style="background:#c0392b;color:#fff" onclick="reallyDeleteAccount()">Permanently delete my account</button>
+    <button class="btn btn-outline btn-block" style="margin-top:10px" onclick="closeModal()">Cancel</button>
+  </div>`);
+}
+function reallyDeleteAccount(){
+  if((document.getElementById('delConfirm').value||'').trim() !== 'DELETE'){
+    toast('⚠️ Type DELETE (all caps) to confirm.'); return;
+  }
+  doDeleteAccount(_delReq?.reason, _delReq?.details);
+}
+function doDeleteAccount(){
   const a = accounts(), s = session();
   if(s){ delete a[s]; saveAccounts(a); }
   localStorage.removeItem('e4e_session');
-  toast('Account deleted.'); refreshNavWallet(); render();
+  closeModal(); toast('Account deleted.'); refreshNavWallet(); render();
 }
 function renderProfileSetup(m){
+  const editing = !!m.name;
   return `
-  <div class="page-hero"><h1>Almost there</h1><p>Signed in as ${esc(m.email)} — now tell the community who you are.</p></div>
+  <div class="page-hero"><h1>${editing?'Edit your profile':'Almost there'}</h1><p>${editing?'Update how the community sees you.':'Signed in as '+esc(m.email)+' — now tell the community who you are.'}</p></div>
   <section class="section" style="padding-top:36px">
     <div class="form-card">
       <form onsubmit="saveProfile(event)">
         <div class="frow">
-          <div class="fgroup"><label>Name</label><input name="name" required maxlength="60" placeholder="e.g. Stefan Oswald"></div>
-          <div class="fgroup"><label>Location</label><div class="ac-wrap"><input name="loc" required autocomplete="off" data-ac placeholder="Start typing a city…"><div class="ac-list"></div></div></div>
+          <div class="fgroup"><label>Name</label><input name="name" required maxlength="60" placeholder="e.g. Stefan Oswald" value="${esc(m.name||'')}"></div>
+          <div class="fgroup"><label>Location</label><div class="ac-wrap"><input name="loc" required autocomplete="off" data-ac placeholder="Start typing a city…" value="${esc(m.loc||'')}"><div class="ac-list"></div></div></div>
         </div>
         <div class="fgroup"><label>Profile emoji (your avatar for now)</label>
-          <select name="emoji">${PROFILE_EMOJIS.map(e=>`<option value="${e}">${e}</option>`).join('')}</select>
+          <select name="emoji">${PROFILE_EMOJIS.map(e=>`<option value="${e}" ${e===m.emoji?'selected':''}>${e}</option>`).join('')}</select>
         </div>
-        <div class="fgroup"><label>Bio (up to 400 characters)</label><textarea name="bio" maxlength="400" placeholder="Who are you, and what energy do you bring?"></textarea></div>
-        <div class="fgroup"><label>Skills you offer (comma-separated)</label><input name="offers" placeholder="e.g. Guitar lessons, dog walking, tax help"></div>
-        <div class="fgroup"><label>Things you want (comma-separated)</label><input name="wants" placeholder="e.g. Bike repair, sourdough starter, French practice"></div>
-        <button class="btn btn-gold btn-block" type="submit">Create My Profile ⚡</button>
+        <div class="fgroup"><label>Bio (up to 400 characters)</label><textarea name="bio" maxlength="400" placeholder="Who are you, and what energy do you bring?">${esc(m.bio||'')}</textarea></div>
+        <div class="fgroup"><label>Skills you offer (comma-separated)</label><input name="offers" placeholder="e.g. Guitar lessons, dog walking, tax help" value="${esc((m.offers||[]).join(', '))}"></div>
+        <div class="fgroup"><label>Things you want (comma-separated)</label><input name="wants" placeholder="e.g. Bike repair, sourdough starter, French practice" value="${esc((m.wants||[]).join(', '))}"></div>
+        <button class="btn btn-gold btn-block" type="submit">${editing?'Save Changes ⚡':'Create My Profile ⚡'}</button>
+        ${editing?`<button type="button" class="btn btn-outline btn-block" style="margin-top:10px" onclick="state.editProfile=false;render();window.scrollTo({top:0})">Cancel</button>`:''}
       </form>
     </div>
   </section>`;
 }
+function editProfile(){ state.editProfile = true; render(); window.scrollTo({top:0}); }
 function renderUser(){
   const name = state.viewUser;
   const u = USERS[name] || {emoji:'🙂',loc:'Community member',score:4.8,reviews:7,bio:'An active member of the Energy for Energy community.',offers:allListings().filter(l=>l.who===name).map(l=>l.title),rents:[],sells:[],wants:['Open to interesting trades']};
@@ -975,7 +1018,8 @@ function saveProfile(e){
     name:f.get('name'), loc:f.get('loc'), emoji:f.get('emoji')||'⚡', bio:f.get('bio'),
     offers:split(f.get('offers')), wants:split(f.get('wants'))
   }));
-  toast('⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
+  toast(state.editProfile ? '✅ Profile updated!' : '⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
+  state.editProfile = false;
   render();
 }
 function joinCommunity(){ go('profile'); }
@@ -993,7 +1037,7 @@ function openBuyEnergy(){
   const remaining = MAX_ENERGY_PER_USER - (m.purchased||0);
   modalShell(`<div class="inner" style="padding-top:40px">
     <h3>Buy ⚡ Energy</h3>
-    <p style="color:var(--muted);font-size:.9rem;margin:6px 0 16px">1 ⚡ ≈ $20 · Florida supply remaining: <b>${flSupplyLeft().toLocaleString()} ⚡</b><br>Your allowance: <b>${remaining} ⚡</b> (hard cap of ${MAX_ENERGY_PER_USER} per member)</p>
+    <p style="color:var(--muted);font-size:.9rem;margin:6px 0 16px">1 ⚡ = $20 to buy · <b>$19 buyback</b> when you cash out · Florida supply remaining: <b>${flSupplyLeft().toLocaleString()} ⚡</b><br>Your allowance: <b>${remaining} ⚡</b> (hard cap of ${MAX_ENERGY_PER_USER} per member)</p>
     <div class="fgroup"><label>Amount (whole numbers)</label><input id="buyAmt" type="number" min="1" step="1" max="${remaining}" placeholder="e.g. 25"></div>
     <div class="fgroup"><label>Payment method</label>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px">
@@ -1016,6 +1060,36 @@ function purchaseEnergy(){
   closeModal();
   toast(`⚡ ${amt} Energy added via ${_payMethod}!`);
   if(state.page==='profile') render();
+}
+/* ---- Cash out: $19/⚡ buyback; the 1 ⚡ review credit always stays ---- */
+function openCashOut(){
+  const m = me(); if(!m) return;
+  const avail = Math.max(0, (m.wallet||0) - 1);
+  modalShell(`<div class="inner" style="padding-top:40px">
+    <h3>Cash Out ⚡</h3>
+    <p style="color:var(--muted);font-size:.92rem;margin:8px 0 14px">Energy costs <b>$20</b> to buy — the buyback rate is <b>$19</b> per ⚡. The $1 difference keeps the community running. Your <b>1 ⚡ review credit always stays</b> in your wallet.</p>
+    <div class="fgroup"><label>Amount to cash out (up to ${avail} ⚡)</label><input id="cashAmt" type="number" min="1" step="1" max="${avail}" placeholder="e.g. 3" oninput="updateCashPreview()"></div>
+    <div class="hint" id="cashPreview" style="margin-bottom:12px">You'll receive: —</div>
+    <button class="btn btn-gold btn-block" ${avail<1?'disabled':''} onclick="requestCashOut()">Request Cash Out</button>
+    <div class="hint" style="margin-top:10px;text-align:center">${avail<1?'Nothing to cash out yet beyond your review credit.':'Cash-outs are handled personally by the Energy for Energy team (Venmo, Zelle, or check) — usually within a few days.'}</div>
+  </div>`);
+}
+function updateCashPreview(){
+  const n = Math.round(parseFloat(document.getElementById('cashAmt').value));
+  document.getElementById('cashPreview').innerHTML =
+    (isNaN(n)||n<1) ? "You'll receive: —" : `You'll receive: <b>$${(n*19).toLocaleString()}</b> (${n} ⚡ × $19)`;
+}
+function requestCashOut(){
+  const m = me(); if(!m) return;
+  const n = Math.round(parseFloat(document.getElementById('cashAmt').value));
+  const avail = Math.max(0, (m.wallet||0) - 1);
+  if(isNaN(n) || n < 1){ toast('⚠️ Enter a whole number of Energy.'); return; }
+  if(n > avail){ toast(`⚠️ You can cash out at most ${avail} ⚡ — your 1 ⚡ review credit stays.`); return; }
+  doCashOut(n);
+}
+function doCashOut(n){
+  updateMe(x => { x.wallet = (x.wallet||0) - n; });
+  closeModal(); toast(`💵 Cash-out requested: $${(n*19).toLocaleString()} for ${n} ⚡. (Demo mode)`); render();
 }
 function releaseDeposits(){
   const m = me(); if(!m || !(m.escrow>0)) return;
@@ -1273,8 +1347,8 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
         ...(prof||{}),
         wallet: wal?.wallet ?? 0, purchased: wal?.purchased ?? 0, escrow: wal?.escrow ?? 0 };
     } else cache.me = null;
-    const { data: sup } = await sb.from('e4e_energy_supply').select('*').maybeSingle();
-    cache.supplySold = sup?.total_sold || 0;
+    const { data: sup } = await sb.rpc('e4e_total_sold');
+    cache.supplySold = sup || 0;
     render();
   }
 
@@ -1306,12 +1380,12 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     await sb.auth.signOut();
     toast('Signed out. Everything is saved to your account.');
   };
-  deleteAccount = async function(){
-    if(!confirm('Delete your account, profile, listings, and wallet? This cannot be undone.')) return;
-    const { error } = await sb.rpc('e4e_delete_my_account');
+  doDeleteAccount = async function(reason, details){
+    const { error } = await sb.rpc('e4e_delete_my_account', { p_reason: reason||null, p_details: details||null });
     if (error){ toast('⚠️ Could not delete: '+error.message); return; }
+    closeModal();
     await sb.auth.signOut();
-    toast('Account deleted.');
+    toast('Account deleted. Take care out there.');
   };
   saveProfile = async function(e){
     e.preventDefault();
@@ -1322,7 +1396,8 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
       bio:(f.get('bio')||'').slice(0,400), offers:split(f.get('offers')), wants:split(f.get('wants'))
     });
     if (error){ toast('⚠️ '+error.message); return; }
-    toast('⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
+    toast(state.editProfile ? '✅ Profile updated!' : '⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'! Your 1 ⚡ review credit is in your wallet.');
+    state.editProfile = false;
     await refreshData();
   };
 
@@ -1358,6 +1433,18 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     render();
   };
 
+  /* ---- cash out ($19 buyback, recorded server-side, paid manually) ---- */
+  doCashOut = async function(n){
+    const { data, error } = await sb.rpc('e4e_request_cashout', { p_amount: n });
+    if (error){
+      toast('⚠️ '+(error.message.includes('KEEP_REVIEW') ? 'Your 1 ⚡ review credit must stay in your wallet.' : error.message));
+      return;
+    }
+    cache.me.wallet -= n;
+    closeModal(); refreshNavWallet(); render();
+    toast(`💵 Cash-out requested: $${((data||n*1900)/100).toLocaleString()} for ${n} ⚡ — we'll send it within a few days.`);
+  };
+
   /* ---- Square checkout ---- */
   async function ensureSquare(){
     if (!window.Square){
@@ -1373,9 +1460,11 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     const remaining = MAX_ENERGY_PER_USER - (cache.me.purchased||0);
     modalShell(`<div class="inner" style="padding-top:40px">
       <h3>Buy ⚡ Energy</h3>
-      <p style="color:var(--muted);font-size:.9rem;margin:6px 0 16px">1 ⚡ = $20 · Florida supply remaining: <b>${flSupplyLeft().toLocaleString()} ⚡</b><br>Your allowance: <b>${remaining} ⚡</b> (hard cap of ${MAX_ENERGY_PER_USER} per member)</p>
+      <p style="color:var(--muted);font-size:.9rem;margin:6px 0 16px">1 ⚡ = $20 to buy · <b>$19 buyback</b> when you cash out · Florida supply remaining: <b>${flSupplyLeft().toLocaleString()} ⚡</b><br>Your allowance: <b>${remaining} ⚡</b> (hard cap of ${MAX_ENERGY_PER_USER} per member)</p>
       <div class="fgroup"><label>Amount (whole numbers)</label><input id="buyAmt" type="number" min="1" step="1" max="${remaining}" placeholder="e.g. 25"></div>
-      <div class="fgroup"><label>Card details</label><div id="card-container" style="border:1.5px solid #ddd6ee;border-radius:12px;padding:10px;background:#fff"></div></div>
+      <div id="apay-button" style="display:none;-webkit-appearance:-apple-pay-button;apple-pay-button-type:plain;apple-pay-button-style:black;height:44px;border-radius:10px;margin-bottom:10px;cursor:pointer"></div>
+      <div id="gpay-button" style="display:none;margin-bottom:10px;cursor:pointer"></div>
+      <div class="fgroup"><label>Or pay by card</label><div id="card-container" style="border:1.5px solid #ddd6ee;border-radius:12px;padding:10px;background:#fff"></div></div>
       <button class="btn btn-gold btn-block" id="payBtn" onclick="purchaseEnergy()">Pay with Square ⚡</button>
       <div class="hint" style="margin-top:10px;text-align:center">Card · Apple Pay · Google Pay — powered by Square${CLOUD.square.sandbox?' (SANDBOX — test card 4111 1111 1111 1111)':''}</div>
     </div>`);
@@ -1385,32 +1474,68 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
       await _sqCard.attach('#card-container');
     } catch(err){
       toast('⚠️ Could not load Square: '+err.message);
+      return;
     }
+    /* Wallet buttons (Apple Pay / Google Pay) — shown only where the device supports them */
+    try {
+      const req = _sqPayments.paymentRequest({ countryCode:'US', currencyCode:'USD',
+        total:{ amount:'20.00', label:'Energy for Energy' } });
+      document.getElementById('buyAmt').addEventListener('input', e=>{
+        const n = Math.round(parseFloat(e.target.value));
+        if(n>=1) req.update({ total:{ amount:(n*20).toFixed(2)+'', label:`Energy for Energy — ${n} ⚡` } });
+      });
+      const walletPay = async (method)=>{
+        const amt = validBuyAmt(); if(amt===null) return;
+        try {
+          const tok = await method.tokenize();
+          if (tok.status !== 'OK') throw new Error(tok.errors?.[0]?.message || 'Payment was not completed.');
+          await completePurchase(amt, tok.token);
+        } catch(err){ toast('⚠️ '+err.message); }
+      };
+      try {
+        const gp = await _sqPayments.googlePay(req);
+        const gbtn = document.getElementById('gpay-button');
+        await gp.attach('#gpay-button', { buttonSizeMode:'fill', buttonType:'short' });
+        gbtn.style.display=''; gbtn.addEventListener('click', ()=>walletPay(gp));
+      } catch(e){ /* Google Pay unavailable on this device/browser */ }
+      try {
+        const ap = await _sqPayments.applePay(req);
+        const abtn = document.getElementById('apay-button');
+        abtn.style.display=''; abtn.addEventListener('click', ()=>walletPay(ap));
+      } catch(e){ /* Apple Pay unavailable (needs Safari + verified domain) */ }
+    } catch(e){ /* wallet setup is optional; card flow still works */ }
   };
-  purchaseEnergy = async function(){
+  function validBuyAmt(){
     const amtRaw = document.getElementById('buyAmt').value;
     const amt = Math.round(parseFloat(amtRaw));
-    if(isNaN(amt) || amt < 1 || String(amt) !== String(amtRaw).trim()){ toast('⚠️ Enter a whole number of Energy.'); return; }
+    if(isNaN(amt) || amt < 1 || String(amt) !== String(amtRaw).trim()){ toast('⚠️ Enter a whole number of Energy.'); return null; }
     const remaining = MAX_ENERGY_PER_USER - (cache.me.purchased||0);
-    if(amt > remaining){ toast(`⚠️ Cap reached: you can buy at most ${remaining} more ⚡.`); return; }
+    if(amt > remaining){ toast(`⚠️ Cap reached: you can buy at most ${remaining} more ⚡.`); return null; }
+    return amt;
+  }
+  async function completePurchase(amt, sourceId){
+    const res = await fetch(`${CLOUD.supabaseUrl}/functions/v1/buy-energy`, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json',
+        'Authorization':'Bearer '+cache.session.access_token,
+        'apikey': CLOUD.supabaseAnonKey },
+      body: JSON.stringify({ amount:amt, sourceId })
+    });
+    const body = await res.json();
+    if (!res.ok || !body.ok) throw new Error(body.error==='CAP_EXCEEDED' ? `Cap: only ${body.remaining} ⚡ left to buy.` : (body.error||'Payment failed.'));
+    cache.me.wallet = body.wallet; cache.me.purchased = body.purchased; cache.me.escrow = body.escrow;
+    closeModal(); refreshNavWallet();
+    toast(`⚡ ${amt} Energy added — payment confirmed!`);
+    if(state.page==='profile') render();
+  }
+  purchaseEnergy = async function(){
+    const amt = validBuyAmt(); if(amt===null) return;
     const btn = document.getElementById('payBtn');
     btn.disabled = true; btn.textContent = 'Processing…';
     try {
       const tok = await _sqCard.tokenize();
       if (tok.status !== 'OK') throw new Error(tok.errors?.[0]?.message || 'Card was not accepted.');
-      const res = await fetch(`${CLOUD.supabaseUrl}/functions/v1/buy-energy`, {
-        method:'POST',
-        headers:{ 'Content-Type':'application/json',
-          'Authorization':'Bearer '+cache.session.access_token,
-          'apikey': CLOUD.supabaseAnonKey },
-        body: JSON.stringify({ amount:amt, sourceId:tok.token })
-      });
-      const body = await res.json();
-      if (!res.ok || !body.ok) throw new Error(body.error==='CAP_EXCEEDED' ? `Cap: only ${body.remaining} ⚡ left to buy.` : (body.error||'Payment failed.'));
-      cache.me.wallet = body.wallet; cache.me.purchased = body.purchased; cache.me.escrow = body.escrow;
-      closeModal(); refreshNavWallet();
-      toast(`⚡ ${amt} Energy added — payment confirmed!`);
-      if(state.page==='profile') render();
+      await completePurchase(amt, tok.token);
     } catch(err){
       toast('⚠️ '+err.message);
       btn.disabled = false; btn.textContent = 'Pay with Square ⚡';
