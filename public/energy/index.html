@@ -874,7 +874,7 @@ function renderAuth(){
         <button class="btn btn-outline" onclick="socialLogin('Apple')"> Apple</button>
         <button class="btn btn-outline" onclick="socialLogin('Facebook')">ⓕ Facebook</button>
       </div>
-      <div class="hint" style="margin-top:16px;text-align:center">${CLOUD.supabaseUrl?'A sign-in link is emailed to you. Linked sign-in uses real OAuth.':'Demo build: codes appear on screen and linked accounts are simulated.<br>Production connects a real email + OAuth provider.'}</div>
+      <div class="hint" style="margin-top:16px;text-align:center">${CLOUD.supabaseUrl?'We email you a 6-digit code (or a one-click sign-in link). Linked sign-in uses real OAuth.':'Demo build: codes appear on screen and linked accounts are simulated.<br>Production connects a real email + OAuth provider.'}</div>
     </div>
   </section>`;
 }
@@ -1286,7 +1286,8 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     const { error } = await sb.auth.signInWithOtp({ email,
       options: { emailRedirectTo: location.origin + location.pathname } });
     if (error){ toast('⚠️ ' + error.message); return; }
-    toast('📬 Check your email (and spam) and click the sign-in link — this page will sign you in automatically.');
+    document.getElementById('codeRow').style.display = '';
+    toast('📬 Check your email (and spam) — enter the 6-digit code here, or click the link in the email.');
   };
   verifyCode = async function(){
     const code = (document.getElementById('authCode').value||'').trim();
