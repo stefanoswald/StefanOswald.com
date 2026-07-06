@@ -865,7 +865,7 @@ function renderAuth(){
       <div class="fgroup"><label>Email address</label><input id="authEmail" type="email" required placeholder="you@example.com"></div>
       <button class="btn btn-gold btn-block" onclick="sendCode()">Email me a code</button>
       <div id="codeRow" style="display:none;margin-top:18px">
-        <div class="fgroup"><label>Authorization code</label><input id="authCode" inputmode="numeric" maxlength="6" placeholder="6-digit code"></div>
+        <div class="fgroup"><label>Authorization code</label><input id="authCode" inputmode="numeric" maxlength="8" placeholder="Code from your email"></div>
         <button class="btn btn-teal btn-block" onclick="verifyCode()">Verify &amp; Sign In</button>
       </div>
       <div class="or-divider">OR CONTINUE WITH</div>
@@ -946,13 +946,13 @@ function renderProfileSetup(m){
     <div class="form-card">
       <form onsubmit="saveProfile(event)">
         <div class="frow">
-          <div class="fgroup"><label>Name</label><input name="name" required placeholder="e.g. Stefan Oswald"></div>
+          <div class="fgroup"><label>Name</label><input name="name" required maxlength="60" placeholder="e.g. Stefan Oswald"></div>
           <div class="fgroup"><label>Location</label><div class="ac-wrap"><input name="loc" required autocomplete="off" data-ac placeholder="Start typing a city…"><div class="ac-list"></div></div></div>
         </div>
         <div class="fgroup"><label>Profile emoji (your avatar for now)</label>
           <select name="emoji">${PROFILE_EMOJIS.map(e=>`<option value="${e}">${e}</option>`).join('')}</select>
         </div>
-        <div class="fgroup"><label>Bio</label><textarea name="bio" placeholder="Who are you, and what energy do you bring?"></textarea></div>
+        <div class="fgroup"><label>Bio (up to 400 characters)</label><textarea name="bio" maxlength="400" placeholder="Who are you, and what energy do you bring?"></textarea></div>
         <div class="fgroup"><label>Skills you offer (comma-separated)</label><input name="offers" placeholder="e.g. Guitar lessons, dog walking, tax help"></div>
         <div class="fgroup"><label>Things you want (comma-separated)</label><input name="wants" placeholder="e.g. Bike repair, sourdough starter, French practice"></div>
         <button class="btn btn-gold btn-block" type="submit">Create My Profile ⚡</button>
@@ -1318,8 +1318,8 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     const f = new FormData(e.target);
     const split = s => (s||'').split(',').map(x=>x.trim()).filter(Boolean);
     const { error } = await sb.from('e4e_profiles').upsert({
-      id: uid(), name:f.get('name'), loc:f.get('loc'), emoji:f.get('emoji')||'⚡',
-      bio:f.get('bio'), offers:split(f.get('offers')), wants:split(f.get('wants'))
+      id: uid(), name:(f.get('name')||'').slice(0,60), loc:f.get('loc'), emoji:f.get('emoji')||'⚡',
+      bio:(f.get('bio')||'').slice(0,400), offers:split(f.get('offers')), wants:split(f.get('wants'))
     });
     if (error){ toast('⚠️ '+error.message); return; }
     toast('⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
