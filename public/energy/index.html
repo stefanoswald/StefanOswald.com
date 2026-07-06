@@ -36,7 +36,8 @@ button{font-family:inherit;cursor:pointer}
 .nav{position:sticky;top:0;z-index:50;background:rgba(250,248,244,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:24px;padding:14px 24px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;letter-spacing:-.02em;cursor:pointer}
-.brand .bolt{width:38px;height:38px;border-radius:12px;background:var(--grad-gold);display:grid;place-items:center;font-size:1.2rem;box-shadow:0 4px 14px rgba(245,166,35,.4)}
+.brand .bolt{width:38px;height:38px;border-radius:12px;background:#000;display:grid;place-items:center;box-shadow:0 4px 14px rgba(255,140,66,.4)}
+.brand .bolt svg{width:38px;height:38px;display:block}
 .nav-links{display:flex;gap:4px;margin-left:auto;align-items:center}
 .nav-link{padding:8px 14px;border-radius:10px;font-weight:600;font-size:.92rem;color:var(--muted);transition:.18s;cursor:pointer;background:none;border:none}
 .nav-link:hover{color:var(--ink);background:#f0edf7}
@@ -265,7 +266,7 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
 
 <nav class="nav">
   <div class="nav-inner">
-    <div class="brand" onclick="go('home')"><span class="bolt">⚡</span>Energy for Energy</div>
+    <div class="brand" onclick="go('home')"><span class="bolt"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M57 6 L22 56 L42 56 L40 94 L78 40 L55 40 Z" fill="#ff8c42"/></svg></span>Energy for Energy</div>
     <div class="nav-links">
       <button class="nav-link" data-nav="home" onclick="go('home')">Home</button>
       <button class="nav-link" data-nav="explore" onclick="go('explore')">Explore</button>
@@ -291,7 +292,7 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
 <footer>
   <div class="foot-inner">
     <div>
-      <div class="brand" style="margin-bottom:10px"><span class="bolt">⚡</span>Energy for Energy</div>
+      <div class="brand" style="margin-bottom:10px"><span class="bolt"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M57 6 L22 56 L42 56 L40 94 L78 40 L55 40 Z" fill="#ff8c42"/></svg></span>Energy for Energy</div>
       <div style="font-size:.9rem;max-width:300px">The app you can't live without. Exchange what you have, teach what you know, borrow what you need.</div>
     </div>
     <div class="foot-links">
@@ -310,6 +311,20 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
 <div id="toastRoot"></div>
 
 <script>
+/* ===================== CLOUD CONFIG =====================
+   Paste your values here to switch from demo mode to the real
+   Supabase + Square backend. Leave empty to run in demo mode.
+   See backend/SETUP.md for the full checklist.               */
+const CLOUD = {
+  supabaseUrl: "https://bwhkxgamiqkzroyoefnn.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3aGt4Z2FtaXFrenJveW9lZm5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyODU0NDgsImV4cCI6MjA5ODg2MTQ0OH0.AEAKB-xDJoUqPQUJyf1Y2-Z3RnvATAfz-FpFjCrWQjY", // anon public key (safe to publish)
+  square: {
+    appId: "sandbox-sq0idb-rly3rhgbJYhGJB9KEFu_0A",
+    locationId: "LRYA819JZFTHK",
+    sandbox: true                        // set false when you go live
+  }
+};
+
 /* ===================== DATA ===================== */
 const CATS = {
   skills:{label:"People & Skills", icon:"🧑‍🎨", grad:"var(--grad-purple)"},
@@ -625,7 +640,7 @@ function renderHome(){
 function cardHTML(l){
   const energy = /goodwill|free|energy/i.test(l.price);
   return `
-  <div class="lcard" onclick="openListing(${l.id})">
+  <div class="lcard" onclick="openListing('${jsq(String(l.id))}')">
     <div class="thumb" style="background:${l.grad}"><span>${l.emoji}</span></div>
     <div class="body">
       <span class="cat">${CATS[l.cat]?CATS[l.cat].label:esc(l.cat)}</span>
@@ -717,7 +732,7 @@ function buildMap(lat,lng,mine){
     const ang = (l.id % 360) * 2.3998, r = 200 + (l.id * 137 % 1300); // meters
     const dLat = (r*Math.cos(ang))/111320, dLng = (r*Math.sin(ang))/(111320*Math.cos(lat*Math.PI/180));
     L.marker([lat+dLat, lng+dLng]).addTo(_map)
-     .bindPopup(`<b>${esc(l.title)}</b><br>${esc(l.price)}<br><a href="#" onclick="openListing(${l.id});return false" style="font-weight:700;color:#3b2a80">View listing →</a>`);
+     .bindPopup(`<b>${esc(l.title)}</b><br>${esc(l.price)}<br><a href="#" onclick="openListing('${jsq(String(l.id))}');return false" style="font-weight:700;color:#3b2a80">View listing →</a>`);
   });
 }
 
@@ -859,7 +874,7 @@ function renderAuth(){
         <button class="btn btn-outline" onclick="socialLogin('Apple')"> Apple</button>
         <button class="btn btn-outline" onclick="socialLogin('Facebook')">ⓕ Facebook</button>
       </div>
-      <div class="hint" style="margin-top:16px;text-align:center">Demo build: codes appear on screen and linked accounts are simulated.<br>Production connects a real email + OAuth provider.</div>
+      <div class="hint" style="margin-top:16px;text-align:center">${CLOUD.supabaseUrl?'A sign-in link is emailed to you. Linked sign-in uses real OAuth.':'Demo build: codes appear on screen and linked accounts are simulated.<br>Production connects a real email + OAuth provider.'}</div>
     </div>
   </section>`;
 }
@@ -1152,7 +1167,7 @@ function modalShell(inner){
   modalRoot.innerHTML = `<div class="modal-back" onclick="if(event.target===this)closeModal()"><div class="modal" style="position:relative"><button class="close" onclick="closeModal()">✕</button>${inner}</div></div>`;
 }
 function openListing(id){
-  const l = allListings().find(x=>x.id===id); if(!l) return;
+  const l = allListings().find(x=>String(x.id)===String(id)); if(!l) return;
   const energy = /goodwill|free|energy/i.test(l.price);
   modalShell(`
     <div class="thumb" style="background:${l.grad}">${l.emoji}</div>
@@ -1188,8 +1203,8 @@ function openContact(who, about){
       <h3>Message ${esc(who)}</h3>
       <p style="color:var(--muted);font-size:.92rem;margin-bottom:18px">About: <b>${esc(about)}</b></p>
       <form onsubmit="sendMessage(event,'${jsq(who)}')">
-        <div class="fgroup"><label>Your message</label><textarea required placeholder="Hi! I'm interested in this exchange. Here's what I can offer in return…"></textarea></div>
-        <div class="fgroup"><label>What can you offer in exchange? (optional)</label><input placeholder="e.g. ⚡ Energy, guitar lessons, fresh vegetables…"></div>
+        <div class="fgroup"><label>Your message</label><textarea id="reqMsg" required placeholder="Hi! I'm interested in this exchange. Here's what I can offer in return…"></textarea></div>
+        <div class="fgroup"><label>What can you offer in exchange? (optional)</label><input id="reqOffer" placeholder="e.g. ⚡ Energy, guitar lessons, fresh vegetables…"></div>
         <div class="energy-note" style="margin-bottom:16px">🛡️ <b>Review deposit:</b> both parties stake 1 ⚡ per exchange, returned when you leave your review. It pays to show up as your best self.</div>
         <button class="btn btn-teal btn-block" type="submit">Send Request ⚡</button>
       </form>
@@ -1214,6 +1229,213 @@ function toast(msg){
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
 
 render();
+</script>
+
+<script id="cloudMode">
+/* ===================== CLOUD MODE (Supabase + Square) =====================
+   Activates only when CLOUD config is filled in. Overrides the demo
+   data layer with the real backend. Wallet math is enforced server-side. */
+if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
+  const cache = { session:null, me:null, listings:[], supplySold:0, booted:false };
+  let sb = null, _sqCard = null, _sqPayments = null;
+
+  function loadScript(src){
+    return new Promise((res, rej)=>{
+      const s = document.createElement('script');
+      s.src = src; s.onload = res; s.onerror = ()=>rej(new Error('load failed: '+src));
+      document.head.appendChild(s);
+    });
+  }
+  const uid = ()=>cache.session?.user?.id || null;
+  const grads = ['var(--grad-purple)','var(--grad-teal)','var(--grad-gold)'];
+  const rowToListing = r => ({ id:r.id, owner:r.owner, cat:r.cat, type:r.type, title:r.title,
+    who:r.who||'Member', emoji:r.emoji||'📦',
+    grad:grads[Math.abs(String(r.id).split('').reduce((n,c)=>n+c.charCodeAt(0),0))%3],
+    loc:r.loc||'', price:r.price||'', desc:r.description||'', mine:r.owner===uid() });
+
+  /* ---- data layer overrides (sync reads from cache) ---- */
+  me = function(){ return cache.me; };
+  myProfile = function(){ return (cache.me && cache.me.name) ? cache.me : null; };
+  myListings = function(){ return cache.listings.filter(l=>l.owner===uid()); };
+  communityListings = function(){ return cache.listings; };
+  flSupplyLeft = function(){ return 20000 - FL_SUPPLY_BASELINE - cache.supplySold; };
+
+  async function refreshData(){
+    const { data: ls } = await sb.from('e4e_listings').select('*').order('created_at', {ascending:false});
+    cache.listings = (ls||[]).map(rowToListing);
+    if (cache.session){
+      const [{ data: prof }, { data: wal }] = await Promise.all([
+        sb.from('e4e_profiles').select('*').eq('id', uid()).maybeSingle(),
+        sb.from('e4e_wallets').select('*').eq('user_id', uid()).maybeSingle()
+      ]);
+      cache.me = { email: cache.session.user.email,
+        provider: cache.session.user.app_metadata?.provider !== 'email' ? cache.session.user.app_metadata?.provider : null,
+        ...(prof||{}),
+        wallet: wal?.wallet ?? 0, purchased: wal?.purchased ?? 0, escrow: wal?.escrow ?? 0 };
+    } else cache.me = null;
+    const { data: sup } = await sb.from('e4e_energy_supply').select('*').maybeSingle();
+    cache.supplySold = sup?.total_sold || 0;
+    render();
+  }
+
+  /* ---- auth overrides ---- */
+  sendCode = async function(){
+    const email = (document.getElementById('authEmail').value||'').trim().toLowerCase();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ toast('⚠️ Enter a valid email address.'); return; }
+    _authEmail = email;
+    const { error } = await sb.auth.signInWithOtp({ email,
+      options: { emailRedirectTo: location.origin + location.pathname } });
+    if (error){ toast('⚠️ ' + error.message); return; }
+    document.getElementById('codeRow').style.display = '';
+    toast('📬 Check your email (and spam) — click the sign-in link. If the email shows a code, you can type it below instead.');
+  };
+  verifyCode = async function(){
+    const code = (document.getElementById('authCode').value||'').trim();
+    const { error } = await sb.auth.verifyOtp({ email:_authEmail, token:code, type:'email' });
+    if (error){ toast('⚠️ Wrong or expired code — try again.'); return; }
+    toast('⚡ Signed in!');
+  };
+  socialLogin = async function(provider){
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: provider.toLowerCase(),
+      options: { redirectTo: location.origin + location.pathname }
+    });
+    if (error) toast('⚠️ ' + provider + ' sign-in is not configured yet.');
+  };
+  signOut = async function(){
+    await sb.auth.signOut();
+    toast('Signed out. Everything is saved to your account.');
+  };
+  deleteAccount = async function(){
+    if(!confirm('Delete your account, profile, listings, and wallet? This cannot be undone.')) return;
+    const { error } = await sb.rpc('e4e_delete_my_account');
+    if (error){ toast('⚠️ Could not delete: '+error.message); return; }
+    await sb.auth.signOut();
+    toast('Account deleted.');
+  };
+  saveProfile = async function(e){
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const split = s => (s||'').split(',').map(x=>x.trim()).filter(Boolean);
+    const { error } = await sb.from('e4e_profiles').upsert({
+      id: uid(), name:f.get('name'), loc:f.get('loc'), emoji:f.get('emoji')||'⚡',
+      bio:f.get('bio'), offers:split(f.get('offers')), wants:split(f.get('wants'))
+    });
+    if (error){ toast('⚠️ '+error.message); return; }
+    toast('⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
+    await refreshData();
+  };
+
+  /* ---- listings ---- */
+  saveMyListing = async function(l){
+    const { data, error } = await sb.from('e4e_listings').insert({
+      owner: uid(), who: cache.me.name, cat:l.cat, type:l.type, title:l.title,
+      emoji:l.emoji, loc:l.loc, price:l.price, description:l.desc
+    }).select().single();
+    if (error){ toast('⚠️ '+error.message); return; }
+    cache.listings.unshift(rowToListing(data));
+    if (state.page === 'explore' || state.page === 'profile') render();
+  };
+
+  /* ---- review deposit ---- */
+  sendMessage = async function(e, who){
+    e.preventDefault();
+    if(!cache.me){ closeModal(); go('profile'); toast('Sign in to send requests.'); return; }
+    if((cache.me.wallet||0) < 1){ closeModal(); toast('⚠️ You need 1 ⚡ available for the review deposit.'); openBuyEnergy(); return; }
+    const msg = document.getElementById('reqMsg')?.value || '';
+    const offer = document.getElementById('reqOffer')?.value || '';
+    const { error } = await sb.rpc('e4e_request_exchange', { p_about: who, p_message: msg, p_offer: offer });
+    if (error){ toast('⚠️ '+(error.message.includes('INSUFFICIENT')?'Not enough Energy for the deposit.':error.message)); return; }
+    cache.me.wallet -= 1; cache.me.escrow += 1;
+    closeModal(); refreshNavWallet();
+    toast('✉️ Request sent to '+who+'! 1 ⚡ deposit held — returned when you leave your review.');
+  };
+  releaseDeposits = async function(){
+    const { data, error } = await sb.rpc('e4e_release_my_deposits');
+    if (error){ toast('⚠️ '+error.message); return; }
+    if (data > 0){ cache.me.wallet += data; cache.me.escrow = 0; }
+    toast('⚡ Deposits returned — thanks for keeping the ecosystem healthy!');
+    render();
+  };
+
+  /* ---- Square checkout ---- */
+  async function ensureSquare(){
+    if (!window.Square){
+      await loadScript(CLOUD.square.sandbox
+        ? 'https://sandbox.web.squarecdn.com/v1/square.js'
+        : 'https://web.squarecdn.com/v1/square.js');
+    }
+    if (!_sqPayments) _sqPayments = window.Square.payments(CLOUD.square.appId, CLOUD.square.locationId);
+  }
+  openBuyEnergy = async function(){
+    if(!cache.me){ go('profile'); toast('Sign in first — your Energy needs a wallet to live in.'); return; }
+    if(!CLOUD.square.appId){ toast('⚠️ Square is not configured yet — see backend/SETUP.md.'); return; }
+    const remaining = MAX_ENERGY_PER_USER - (cache.me.purchased||0);
+    modalShell(`<div class="inner" style="padding-top:40px">
+      <h3>Buy ⚡ Energy</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin:6px 0 16px">1 ⚡ = $20 · Florida supply remaining: <b>${flSupplyLeft().toLocaleString()} ⚡</b><br>Your allowance: <b>${remaining} ⚡</b> (hard cap of ${MAX_ENERGY_PER_USER} per member)</p>
+      <div class="fgroup"><label>Amount (whole numbers)</label><input id="buyAmt" type="number" min="1" step="1" max="${remaining}" placeholder="e.g. 25"></div>
+      <div class="fgroup"><label>Card details</label><div id="card-container" style="border:1.5px solid #ddd6ee;border-radius:12px;padding:10px;background:#fff"></div></div>
+      <button class="btn btn-gold btn-block" id="payBtn" onclick="purchaseEnergy()">Pay with Square ⚡</button>
+      <div class="hint" style="margin-top:10px;text-align:center">Card · Apple Pay · Google Pay — powered by Square${CLOUD.square.sandbox?' (SANDBOX — test card 4111 1111 1111 1111)':''}</div>
+    </div>`);
+    try {
+      await ensureSquare();
+      _sqCard = await _sqPayments.card();
+      await _sqCard.attach('#card-container');
+    } catch(err){
+      toast('⚠️ Could not load Square: '+err.message);
+    }
+  };
+  purchaseEnergy = async function(){
+    const amtRaw = document.getElementById('buyAmt').value;
+    const amt = Math.round(parseFloat(amtRaw));
+    if(isNaN(amt) || amt < 1 || String(amt) !== String(amtRaw).trim()){ toast('⚠️ Enter a whole number of Energy.'); return; }
+    const remaining = MAX_ENERGY_PER_USER - (cache.me.purchased||0);
+    if(amt > remaining){ toast(`⚠️ Cap reached: you can buy at most ${remaining} more ⚡.`); return; }
+    const btn = document.getElementById('payBtn');
+    btn.disabled = true; btn.textContent = 'Processing…';
+    try {
+      const tok = await _sqCard.tokenize();
+      if (tok.status !== 'OK') throw new Error(tok.errors?.[0]?.message || 'Card was not accepted.');
+      const res = await fetch(`${CLOUD.supabaseUrl}/functions/v1/buy-energy`, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json',
+          'Authorization':'Bearer '+cache.session.access_token,
+          'apikey': CLOUD.supabaseAnonKey },
+        body: JSON.stringify({ amount:amt, sourceId:tok.token })
+      });
+      const body = await res.json();
+      if (!res.ok || !body.ok) throw new Error(body.error==='CAP_EXCEEDED' ? `Cap: only ${body.remaining} ⚡ left to buy.` : (body.error||'Payment failed.'));
+      cache.me.wallet = body.wallet; cache.me.purchased = body.purchased; cache.me.escrow = body.escrow;
+      closeModal(); refreshNavWallet();
+      toast(`⚡ ${amt} Energy added — payment confirmed!`);
+      if(state.page==='profile') render();
+    } catch(err){
+      toast('⚠️ '+err.message);
+      btn.disabled = false; btn.textContent = 'Pay with Square ⚡';
+    }
+  };
+
+  /* ---- boot ---- */
+  (async function(){
+    try {
+      await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js');
+      sb = window.supabase.createClient(CLOUD.supabaseUrl, CLOUD.supabaseAnonKey);
+      sb.auth.onAuthStateChange((_evt, session)=>{
+        const had = !!cache.session;
+        cache.session = session;
+        if (cache.booted && (!!session !== had)) refreshData();
+      });
+      const { data: { session } } = await sb.auth.getSession();
+      cache.session = session;
+      await refreshData();
+      cache.booted = true;
+    } catch(err){
+      console.error('Cloud boot failed, staying in demo mode:', err);
+    }
+  })();
+})();
 </script>
 </body>
 </html>
