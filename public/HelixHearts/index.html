@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Helix Hearts: Date for marriage. Match on values.</title>
+<meta name="description" content="The marriage-focused matchmaker with reproductive health compatibility built in. Match on values, maturity, and future family goals.">
+<link rel="manifest" href="/HelixHearts/manifest.webmanifest">
+<meta name="theme-color" content="#B94A63">
+<link rel="icon" type="image/png" sizes="192x192" href="/HelixHearts/icon-192.png">
+<link rel="apple-touch-icon" href="/HelixHearts/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Helix Hearts">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1829,6 +1838,11 @@ function render(){
   navHighlight();
 }
 render();
+
+/* PWA: register the service worker when served over https */
+if('serviceWorker' in navigator && location.protocol==='https:'){
+  navigator.serviceWorker.register('/HelixHearts/sw.js',{scope:'/HelixHearts/'}).catch(()=>{});
+}
 
 /* Session restore: if a Neon Auth cookie is present, everything the
    user saved (profile, answers, photo, reports) comes right back. */
