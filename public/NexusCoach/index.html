@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus Coach — One-on-One Magic Mentoring</title>
+<style>
+  :root{
+    --bg:#0d0a1a; --panel:#171230; --panel2:#1f1840; --line:#2e2560;
+    --gold:#f5c542; --purple:#8b5cf6; --purple2:#a78bfa; --green:#34d399;
+    --red:#f87171; --amber:#fbbf24; --text:#ede9fe; --dim:#9d94c4;
+    --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:radial-gradient(1200px 700px at 70% -10%, #241a4d 0%, var(--bg) 60%);
+    color:var(--text); min-height:100vh;
+  }
+  button{font-family:inherit; cursor:pointer; border:none;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex; align-items:center; gap:18px; padding:14px 22px;
+    border-bottom:1px solid var(--line); position:sticky; top:0;
+    background:rgba(13,10,26,.85); backdrop-filter:blur(8px); z-index:50;
+  }
+  .logo{font-size:20px; font-weight:800; letter-spacing:.5px;}
+  .logo span{color:var(--gold);}
+  .stat{display:flex; align-items:center; gap:6px; font-weight:700; font-size:14px;}
+  .stat .ico{font-size:17px;}
+  .xpbar{flex:1; max-width:260px; height:12px; background:var(--panel2); border-radius:99px; overflow:hidden; border:1px solid var(--line);}
+  .xpbar>div{height:100%; width:0%; background:linear-gradient(90deg,var(--purple),var(--gold)); transition:width .6s ease; border-radius:99px;}
+  .lvl-chip{background:var(--panel2); border:1px solid var(--line); padding:4px 12px; border-radius:99px; font-size:13px; font-weight:700; color:var(--purple2);}
+
+  /* ===== Screens ===== */
+  .screen{display:none; max-width:1100px; margin:0 auto; padding:26px 22px 80px;}
+  .screen.active{display:block;}
+
+  /* ===== Path screen ===== */
+  .hero{margin-bottom:26px;}
+  .hero h1{font-size:26px; margin-bottom:6px;}
+  .hero p{color:var(--dim); max-width:640px; line-height:1.5;}
+  .module{margin-bottom:14px; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); overflow:hidden;}
+  .module-head{display:flex; align-items:center; gap:14px; padding:16px 18px;}
+  .module-head .m-ico{font-size:26px; width:48px; height:48px; display:grid; place-items:center; background:var(--panel2); border-radius:12px;}
+  .module-head h2{font-size:17px;}
+  .module-head .m-sub{color:var(--dim); font-size:13px; margin-top:2px;}
+  .module-head .m-badge{margin-left:auto; font-size:22px;}
+  .module.locked{opacity:.45; filter:grayscale(.6);}
+  .lesson-row{display:flex; flex-wrap:wrap; gap:12px; padding:0 18px 18px;}
+  .node{
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    background:var(--panel2); border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; min-width:150px; color:var(--text); transition:transform .15s, border-color .15s;
+  }
+  .node:not(.locked):hover{transform:translateY(-3px); border-color:var(--purple);}
+  .node .n-ico{font-size:26px;}
+  .node .n-name{font-size:13px; font-weight:700; text-align:center;}
+  .node .n-state{font-size:11px; color:var(--dim);}
+  .node.done{border-color:var(--green);}
+  .node.done .n-state{color:var(--green);}
+  .node.locked{opacity:.45; cursor:not-allowed;}
+  .node.next{border-color:var(--gold); box-shadow:0 0 18px rgba(245,197,66,.25); animation:pulse 2s infinite;}
+  @keyframes pulse{50%{box-shadow:0 0 26px rgba(245,197,66,.45);}}
+
+  /* ===== Call screen ===== */
+  .call-wrap{display:grid; grid-template-columns:1fr 340px; gap:18px;}
+  @media(max-width:900px){.call-wrap{grid-template-columns:1fr;}}
+  .stage{
+    position:relative; border-radius:var(--radius); border:1px solid var(--line);
+    background:linear-gradient(160deg,#1b1440,#0f0b22); min-height:430px;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .live-tag{
+    position:absolute; top:14px; left:14px; background:rgba(248,113,113,.15);
+    color:var(--red); border:1px solid var(--red); font-size:11px; font-weight:800;
+    padding:4px 10px; border-radius:99px; letter-spacing:1px;
+  }
+  .live-tag::before{content:"●"; margin-right:6px; animation:blink 1.4s infinite;}
+  @keyframes blink{50%{opacity:.2;}}
+  .step-tag{position:absolute; top:14px; right:14px; background:var(--panel2); border:1px solid var(--line); color:var(--purple2); font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px;}
+
+  /* Mentor avatar */
+  .mentor{display:flex; flex-direction:column; align-items:center; gap:14px;}
+  .orb{
+    width:150px; height:150px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #c4b5fd, var(--purple) 45%, #4c1d95 80%);
+    box-shadow:0 0 60px rgba(139,92,246,.55), inset 0 0 30px rgba(255,255,255,.15);
+    position:relative; animation:float 4s ease-in-out infinite;
+  }
+  .orb.talking{animation:float 4s ease-in-out infinite, glowPulse .5s ease-in-out infinite alternate;}
+  @keyframes float{50%{transform:translateY(-10px);}}
+  @keyframes glowPulse{to{box-shadow:0 0 90px rgba(245,197,66,.6), inset 0 0 40px rgba(255,255,255,.25);}}
+  .orb .eye{position:absolute; top:56px; width:16px; height:22px; background:#0d0a1a; border-radius:50%;}
+  .orb .eye.l{left:44px;} .orb .eye.r{right:44px;}
+  .orb.talking .eye{height:8px; top:64px; border-radius:99px;}
+  .mentor-name{font-weight:800; letter-spacing:1px; color:var(--purple2); font-size:14px;}
+
+  .caption{
+    position:absolute; bottom:88px; left:50%; transform:translateX(-50%);
+    max-width:82%; background:rgba(13,10,26,.88); border:1px solid var(--line);
+    padding:12px 18px; border-radius:12px; font-size:15px; line-height:1.5; text-align:center;
+  }
+  .cam{
+    position:absolute; bottom:14px; right:14px; width:150px; height:100px;
+    border-radius:10px; border:1px solid var(--line); background:#000;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .cam video{width:100%; height:100%; object-fit:cover; transform:scaleX(-1);}
+  .cam .cam-off{color:var(--dim); font-size:11px; text-align:center; padding:6px;}
+  .stage-controls{position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:10px;}
+  .ctl{
+    width:44px; height:44px; border-radius:50%; background:var(--panel2);
+    border:1px solid var(--line); color:var(--text); font-size:18px;
+  }
+  .ctl:hover{background:var(--line);}
+  .ctl.end{background:var(--red); color:#fff; border:none;}
+
+  /* Side panel */
+  .side{display:flex; flex-direction:column; gap:14px;}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:16px;}
+  .card h3{font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); margin-bottom:10px;}
+  .steps{display:flex; flex-direction:column; gap:8px;}
+  .step-item{display:flex; gap:10px; align-items:center; font-size:14px; padding:8px 10px; border-radius:10px;}
+  .step-item .dot{width:22px; height:22px; border-radius:50%; display:grid; place-items:center; font-size:12px; background:var(--panel2); border:1px solid var(--line); flex-shrink:0;}
+  .step-item.now{background:rgba(139,92,246,.12); border:1px solid var(--purple); font-weight:700;}
+  .step-item.done .dot{background:var(--green); color:#0d0a1a; border:none;}
+  .step-item.done{color:var(--dim); text-decoration:line-through;}
+
+  .actions{display:flex; flex-direction:column; gap:10px;}
+  .btn{
+    padding:13px 16px; border-radius:12px; font-size:15px; font-weight:700;
+    background:var(--panel2); border:1px solid var(--line); color:var(--text);
+    transition:transform .12s, filter .12s;
+  }
+  .btn:hover{transform:translateY(-2px); filter:brightness(1.15);}
+  .btn.primary{background:linear-gradient(90deg,var(--purple),#7c3aed); border:none; color:#fff;}
+  .btn.gold{background:linear-gradient(90deg,var(--gold),#eab308); border:none; color:#1c1400;}
+  .btn.good{background:rgba(52,211,153,.15); border-color:var(--green); color:var(--green);}
+  .btn.meh{background:rgba(251,191,36,.12); border-color:var(--amber); color:var(--amber);}
+  .btn.bad{background:rgba(248,113,113,.12); border-color:var(--red); color:var(--red);}
+  .btn:disabled{opacity:.4; cursor:not-allowed; transform:none;}
+  .hint{font-size:12px; color:var(--dim); text-align:center;}
+
+  /* Chat */
+  .chat-log{max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:10px;}
+  .msg{font-size:13px; line-height:1.45; padding:8px 12px; border-radius:10px; max-width:92%;}
+  .msg.ai{background:var(--panel2); align-self:flex-start;}
+  .msg.me{background:rgba(139,92,246,.25); align-self:flex-end;}
+  .chat-in{display:flex; gap:8px;}
+  .chat-in input{
+    flex:1; background:var(--panel2); border:1px solid var(--line); border-radius:10px;
+    padding:10px 12px; color:var(--text); font-size:13px; font-family:inherit;
+  }
+  .chat-in button{padding:0 14px; border-radius:10px; background:var(--purple); color:#fff; font-weight:700;}
+
+  /* Quiz */
+  .quiz-q{font-size:17px; font-weight:700; margin-bottom:14px; line-height:1.4;}
+  .quiz-opt{display:block; width:100%; text-align:left; margin-bottom:10px;}
+  .quiz-opt.correct{background:rgba(52,211,153,.2); border-color:var(--green);}
+  .quiz-opt.wrong{background:rgba(248,113,113,.2); border-color:var(--red);}
+
+  /* Toast + confetti */
+  .toast{
+    position:fixed; top:74px; left:50%; transform:translateX(-50%) translateY(-20px);
+    background:var(--panel); border:1px solid var(--gold); color:var(--gold);
+    padding:10px 22px; border-radius:99px; font-weight:800; opacity:0;
+    transition:.35s; z-index:99; pointer-events:none;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .confetti{position:fixed; top:-12px; font-size:20px; z-index:98; animation:fall linear forwards; pointer-events:none;}
+  @keyframes fall{to{transform:translateY(105vh) rotate(720deg); opacity:.6;}}
+
+  /* Celebration */
+  .celebrate{text-align:center; padding:60px 20px;}
+  .celebrate .big{font-size:64px; margin-bottom:12px;}
+  .celebrate h2{font-size:28px; margin-bottom:8px;}
+  .celebrate p{color:var(--dim); margin-bottom:24px;}
+  .badge-row{display:flex; gap:10px; justify-content:center; margin-bottom:26px; flex-wrap:wrap;}
+  .badge-pill{background:var(--panel2); border:1px solid var(--gold); border-radius:99px; padding:8px 16px; font-size:14px; font-weight:700; color:var(--gold);}
+
+  .back-link{background:none; color:var(--dim); font-size:13px; margin-bottom:14px; text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Nexus<span>Coach</span> 🎩</div>
+  <div class="lvl-chip" id="lvlChip">Level 1 · Apprentice</div>
+  <div class="xpbar"><div id="xpFill"></div></div>
+  <div class="stat"><span class="ico">⚡</span><span id="xpNum">0 XP</span></div>
+  <div class="stat"><span class="ico">🔥</span><span id="streakNum">1</span></div>
+  <div class="stat"><span class="ico">🏅</span><span id="badgeNum">0</span></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===== PATH ===== -->
+<div class="screen active" id="screen-path">
+  <div class="hero">
+    <h1>Your journey to mastering Nexus</h1>
+    <p>One move at a time, with your personal mentor <b style="color:var(--purple2)">Vega</b> in a live coaching session. No overwhelm — each lesson is a micro-skill you can nail in minutes.</p>
+  </div>
+  <div id="pathList"></div>
+</div>
+
+<!-- ===== CALL ===== -->
+<div class="screen" id="screen-call">
+  <button class="back-link" onclick="leaveCall()">← Back to journey</button>
+  <div class="call-wrap">
+    <div class="stage">
+      <div class="live-tag">LIVE SESSION</div>
+      <div class="step-tag" id="stepTag">Step 1</div>
+      <div class="mentor">
+        <div class="orb" id="orb"><div class="eye l"></div><div class="eye r"></div></div>
+        <div class="mentor-name">VEGA · AI MENTOR</div>
+      </div>
+      <div class="caption" id="caption">…</div>
+      <div class="cam" id="camBox"><div class="cam-off">📷 Camera off<br>(tap 🎥 to enable)</div></div>
+      <div class="stage-controls">
+        <button class="ctl" id="camBtn" title="Toggle camera" onclick="toggleCam()">🎥</button>
+        <button class="ctl" title="Repeat that" onclick="repeatLine()">🔁</button>
+        <button class="ctl end" title="End session" onclick="leaveCall()">✕</button>
+      </div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <h3 id="lessonTitle">Lesson</h3>
+        <div class="steps" id="stepList"></div>
+      </div>
+      <div class="card">
+        <h3>Practice</h3>
+        <div class="actions" id="actionBox"></div>
+      </div>
+      <div class="card">
+        <h3>Ask Vega</h3>
+        <div class="chat-log" id="chatLog"></div>
+        <div class="chat-in">
+          <input id="chatInput" placeholder="e.g. why does this matter?" onkeydown="if(event.key==='Enter')sendChat()">
+          <button onclick="sendChat()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="screen" id="screen-quiz">
+  <button class="back-link" onclick="leaveCall()">← Back to journey</button>
+  <div class="card" style="max-width:620px; margin:0 auto;">
+    <h3 id="quizModName">Checkpoint</h3>
+    <div class="quiz-q" id="quizQ"></div>
+    <div id="quizOpts"></div>
+    <div class="hint" id="quizHint"></div>
+  </div>
+</div>
+
+<!-- ===== CELEBRATE ===== -->
+<div class="screen" id="screen-done">
+  <div class="celebrate">
+    <div class="big" id="celeIco">🏆</div>
+    <h2 id="celeTitle">Module complete!</h2>
+    <p id="celeSub"></p>
+    <div class="badge-row" id="celeBadges"></div>
+    <button class="btn gold" onclick="leaveCall()">Continue your journey →</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   CURRICULUM — EDIT THIS.
+   Placeholder structure for Nexus (Jonathan Levit). Replace demo text,
+   coaching lines, micro-steps and quizzes with the real Nexus material
+   you own. Everything else (gamification, mentor, adaptivity) adjusts
+   automatically.
+   ===================================================================== */
+const CURRICULUM = [
+  {
+    id:"foundations", icon:"🧭", name:"Foundations",
+    sub:"What Nexus is and how a routine flows",
+    badge:"Pathfinder",
+    lessons:[
+      { id:"f1", icon:"🗺️", name:"The Big Picture",
+        demo:"Here's the shape of every Nexus routine: gather input naturally, let the system work invisibly, then reveal like it's pure mindreading. Watch how I keep attention on the *conversation*, never the device.",
+        practice:"Your turn: describe out loud (to yourself or a mirror) the three phases of the routine — input, process, reveal. Say it like you're teaching a friend.",
+        micro:["Phase 1: how the input gets gathered without suspicion.","Phase 2: what happens invisibly while you keep talking.","Phase 3: the reveal — and why you pause before it."],
+        tip:"Most beginners rush phase 2. The magic dies when you go quiet — keep the patter flowing."
+      },
+      { id:"f2", icon:"🤝", name:"Natural Handling",
+        demo:"Notice my hands: everything looks like normal phone/prop behavior an ordinary person does. Nothing 'technique-y'. I'll demo the neutral resting position twice — once slow, once at performance speed.",
+        practice:"Practice the neutral handling for 60 seconds. It should feel boring. Boring = invisible.",
+        micro:["Just the grip: hold it like you'd hold it texting a friend.","Add the glance: eyes on your spectator, never the prop.","Add movement: gesture while holding, keep it loose."],
+        tip:"Film yourself for 10 seconds. If YOU can't spot anything unusual, neither can they."
+      },
+      { id:"f3", icon:"🎭", name:"Attention Off The Tech",
+        demo:"The core misdirection principle: attention goes where YOU look and what YOU care about. I'll show the same moment twice — once staring at the device (busted), once locked on the spectator (invisible).",
+        practice:"Run the handling again, but narrate a fake conversation and keep your eyes up the whole time.",
+        micro:["Eyes only: do the handling while reading a poster across the room.","Add one question you'd ask a spectator out loud.","Full pass: handling + eyes up + continuous talk."],
+        tip:"If your eyes drop to the tech for even half a second at the wrong moment, the whole illusion collapses. Eyes up is 80% of this."
+      },
+    ],
+    quiz:{
+      q:"A spectator starts staring at your prop mid-routine. Best response?",
+      opts:["Speed up the secret move to get it over with",
+            "Keep your own eyes on them, ask an engaging question, and let the prop go 'boring'",
+            "Hide the prop behind your back immediately"],
+      correct:1,
+      why:"Attention follows your attention. Make the prop uninteresting by being more interesting yourself."
+    }
+  },
+  {
+    id:"input", icon:"📡", name:"The Invisible Input",
+    sub:"Getting information in without a trace",
+    badge:"Ghost Hands",
+    lessons:[
+      { id:"i1", icon:"⌨️", name:"The Core Input Move",
+        demo:"[PLACEHOLDER — record your friend demoing the actual Nexus input technique here] I'll break it into three beats and show each at half speed.",
+        practice:"Do just beat one, ten times in a row. Slow is smooth, smooth is fast.",
+        micro:["Beat 1 only, eyes closed, until it's muscle memory.","Beats 1–2 chained, half speed.","All three beats at half speed, then full speed once."],
+        tip:"Never practice the full move sloppily. Ten perfect slow reps beat a hundred rushed ones."
+      },
+      { id:"i2", icon:"🗣️", name:"Cover Patter",
+        demo:"Every secret action needs a spoken 'reason to exist'. Here are three patter lines that justify the exact moment the input happens — pick the one that fits your persona.",
+        practice:"Say your chosen patter line while doing the input move. The words and the move must end at the same time.",
+        micro:["Say the line alone, no move, three times.","Do the move alone, no line, three times.","Combine at half speed — sync the endings."],
+        tip:"If the move takes 3 seconds, the sentence should take 3 seconds. Mismatched timing is what feels 'off' to spectators."
+      },
+      { id:"i3", icon:"🧊", name:"Under Pressure",
+        demo:"Now the hard part: doing it while someone burns your hands. I'll simulate a suspicious spectator and show how the routine survives.",
+        practice:"Do the full input sequence while watching a video of someone staring at you — or better, in front of a friend told to catch you.",
+        micro:["Full sequence alone, but count backwards from 20 out loud while doing it.","Full sequence while keeping eye contact with yourself in a mirror.","Full sequence with a real observer."],
+        tip:"Stress rehearsal is what separates 'works at home' from 'works anywhere'. If you can do it under a burn, you can do it anywhere."
+      },
+    ],
+    quiz:{
+      q:"Your patter line ends but the secret input needs two more seconds. What went wrong?",
+      opts:["The spectator is too suspicious",
+            "The move is impossible at that speed",
+            "Words and action weren't choreographed to the same length"],
+      correct:2,
+      why:"Sync is rehearsable. Time the sentence to the move (or the move to the sentence) so they resolve together."
+    }
+  },
+  {
+    id:"reveal", icon:"🔮", name:"The Reveal",
+    sub:"Turning data into a moment of astonishment",
+    badge:"Mind Reader",
+    lessons:[
+      { id:"r1", icon:"⏸️", name:"The Pause That Kills",
+        demo:"The reveal is 90% pacing. Watch: instant reveal (feels like an app) versus a struggled, human reveal (feels like mindreading). Same information, totally different magic.",
+        practice:"Reveal a pretend piece of information three ways: instantly, with a 3-second struggle, and with a wrong-then-right correction.",
+        micro:["Just the pause: silently count 'one-magician-two-magician' before speaking.","Add the struggle face: get *part* of it first ('...it's something with an M?').","Full reveal with correction: almost wrong, then dead-on."],
+        tip:"The moment they think you might FAIL is the moment they start believing it's real."
+      },
+      { id:"r2", icon:"🎯", name:"Personalizing The Hit",
+        demo:"Nexus gives you specifics — the amateur reads them out, the pro weaves them into a story about the spectator. I'll show both versions of the same reveal.",
+        practice:"Take a fake data point ('their first pet was a rabbit named Biscuit') and reveal it as a 40-second emotional story, not a fact.",
+        micro:["State the fact plainly. Feel how flat it is.","Add one sensory detail you invent ('I'm seeing something small... soft...').","Full story arc: sense → struggle → emotional hit → the name."],
+        tip:"Facts inform. Stories astonish. Never say the thing — arrive at the thing."
+      },
+      { id:"r3", icon:"🎪", name:"The Full Routine",
+        demo:"Everything chained: natural handling, invisible input, cover patter, the pause, the personalized hit. One clean run at performance speed. This is the mountaintop.",
+        practice:"Run the entire routine start to finish. Film it. Watch it once as yourself, once pretending you're a suspicious spectator.",
+        micro:["Chain input + reveal only, skip patter, half speed.","Full routine, half speed, with patter.","Full routine, performance speed, on camera."],
+        tip:"Your first full run will feel clumsy. That's normal — the chain is a skill of its own, separate from the links."
+      },
+    ],
+    quiz:{
+      q:"Why reveal 'almost wrong, then right' instead of instantly correct?",
+      opts:["It hides technical delays in the system",
+            "Struggle reads as human effort, which makes the hit feel like real mindreading instead of a lookup",
+            "It gives you time to plan an escape if the trick fails"],
+      correct:1,
+      why:"Perfection feels digital. Effort feels psychic. The struggle IS the performance."
+    }
+  },
+];
+
+/* Vega's chat brain — keyword → reply. Extend freely, or wire a real
+   model in askRealAI() below. */
+const CHAT_BRAIN = [
+  {k:["why","matter","point"], r:"Great question. Every micro-skill here exists so the audience's brain files what they see under 'normal'. Anything that doesn't read as normal becomes evidence. We're removing evidence, one habit at a time."},
+  {k:["hard","difficult","can't","cant","stuck"], r:"That's a completely normal wall — everyone hits it. Tap 'Struggling' below and I'll shrink the move into a tiny piece you CAN do. We build from there. 💜"},
+  {k:["fast","speed","slow"], r:"Slow practice wires clean movement into muscle memory; speed comes free later. Rushing wires in mistakes you'll have to un-learn. Half speed until it's boring — then earn full speed."},
+  {k:["nervous","scared","anxious","perform"], r:"Nerves mean you care. Two fixes: over-rehearse until the moves survive shaking hands, and remember the audience wants to be amazed — they're rooting for you."},
+  {k:["camera","film","record"], r:"Filming yourself is the single highest-value practice tool. The camera is an honest spectator with perfect memory. 10 seconds of footage teaches more than 10 minutes of mirror time."},
+  {k:["xp","level","badge","point"], r:"You earn XP for every step, big bonuses for nailing moves and checkpoints. Levels unlock bragging rights; badges mark real skill milestones. But the real prize is the look on someone's face at your first reveal. ✨"},
+  {k:["hello","hi","hey"], r:"Hey! I'm Vega, your mentor. Ready when you are — hit Watch Demo and let's make some magic."},
+];
+const CHAT_FALLBACK = "Good thought. Here's my honest take: focus on the current micro-step, do it slower than feels necessary, and tell me 'got it' or 'struggling' — I calibrate everything around that. (In the full version, I'd answer this with live AI. 🔧)";
+
+/* Stub for real AI — wire your Claude API key + fetch call here later. */
+async function askRealAI(userMessage, lessonContext){ return null; }
+
+/* =====================================================================
+   ENGINE — no need to edit below
+   ===================================================================== */
+const LEVELS = ["Apprentice","Conjurer","Illusionist","Mentalist","Nexus Master"];
+const XP_PER_LEVEL = 120;
+let S = load() || { xp:0, done:{}, quizDone:{}, streak:1, badges:[] };
+
+let cur = { mod:null, les:null, step:0, microMode:false, microIdx:0 };
+let camStream = null;
+
+function load(){ try{ return JSON.parse(localStorage.getItem("nexusCoach")); }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem("nexusCoach", JSON.stringify(S)); }catch(e){} }
+
+/* ---------- topbar ---------- */
+function renderTop(){
+  const lvl = Math.min(Math.floor(S.xp / XP_PER_LEVEL), LEVELS.length-1);
+  document.getElementById("lvlChip").textContent = `Level ${lvl+1} · ${LEVELS[lvl]}`;
+  document.getElementById("xpFill").style.width = `${(S.xp % XP_PER_LEVEL)/XP_PER_LEVEL*100}%`;
+  document.getElementById("xpNum").textContent = `${S.xp} XP`;
+  document.getElementById("streakNum").textContent = S.streak;
+  document.getElementById("badgeNum").textContent = S.badges.length;
+}
+function gainXP(n, label){
+  S.xp += n; save(); renderTop();
+  toast(`+${n} XP ${label||""}`);
+}
+function toast(txt){
+  const t = document.getElementById("toast");
+  t.textContent = txt; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1800);
+}
+function confetti(){
+  const emo = ["✨","🎉","⭐","💜","🃏","🎩"];
+  for(let i=0;i<28;i++){
+    const c = document.createElement("div");
+    c.className="confetti"; c.textContent = emo[Math.floor(Math.random()*emo.length)];
+    c.style.left = Math.random()*100+"vw";
+    c.style.animationDuration = (2+Math.random()*2)+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4200);
+  }
+}
+
+/* ---------- path ---------- */
+function isModUnlocked(mi){
+  if(mi===0) return true;
+  return !!S.quizDone[CURRICULUM[mi-1].id];
+}
+function isLesUnlocked(mi, li){
+  if(!isModUnlocked(mi)) return false;
+  if(li===0) return true;
+  return !!S.done[CURRICULUM[mi].lessons[li-1].id];
+}
+function renderPath(){
+  const box = document.getElementById("pathList");
+  box.innerHTML = "";
+  let nextMarked = false;
+  CURRICULUM.forEach((m, mi)=>{
+    const unlocked = isModUnlocked(mi);
+    const div = document.createElement("div");
+    div.className = "module" + (unlocked?"":" locked");
+    const badgeEarned = S.badges.includes(m.badge);
+    let nodes = "";
+    m.lessons.forEach((l, li)=>{
+      const done = !!S.done[l.id];
+      const open = isLesUnlocked(mi, li);
+      let cls = "node" + (done?" done":"") + (!open?" locked":"");
+      let state = done ? "Complete ✓" : open ? "Ready" : "Locked 🔒";
+      if(open && !done && !nextMarked){ cls += " next"; state = "▶ Up next"; nextMarked = true; }
+      nodes += `<button class="${cls}" ${open?`onclick="startLesson(${mi},${li})"`:"disabled"}>
+        <span class="n-ico">${l.icon}</span><span class="n-name">${l.name}</span><span class="n-state">${state}</span></button>`;
+    });
+    const allDone = m.lessons.every(l=>S.done[l.id]);
+    const quizDone = !!S.quizDone[m.id];
+    let quizCls = "node" + (quizDone?" done":"") + (!(allDone&&unlocked)?" locked":"");
+    let quizState = quizDone ? "Passed ✓" : allDone ? "▶ Take it!" : "Finish lessons";
+    if(allDone && !quizDone && !nextMarked){ quizCls+=" next"; nextMarked=true; }
+    nodes += `<button class="${quizCls}" ${allDone&&unlocked&&!quizDone?`onclick="startQuiz(${mi})"`:"disabled"}>
+      <span class="n-ico">🏁</span><span class="n-name">Checkpoint</span><span class="n-state">${quizState}</span></button>`;
+    div.innerHTML = `
+      <div class="module-head">
+        <div class="m-ico">${m.icon}</div>
+        <div><h2>${m.name}</h2><div class="m-sub">${m.sub}</div></div>
+        <div class="m-badge" title="${m.badge}">${badgeEarned?"🏅":"⬜"}</div>
+      </div>
+      <div class="lesson-row">${nodes}</div>`;
+    box.appendChild(div);
+  });
+}
+
+/* ---------- screens ---------- */
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+function leaveCall(){
+  stopCam();
+  renderPath(); renderTop();
+  show("screen-path");
+}
+
+/* ---------- mentor speech ---------- */
+let lastLine = "";
+function say(txt, ms){
+  lastLine = txt;
+  const cap = document.getElementById("caption");
+  const orb = document.getElementById("orb");
+  cap.textContent = "";
+  orb.classList.add("talking");
+  let i = 0;
+  clearInterval(say._t);
+  say._t = setInterval(()=>{
+    cap.textContent = txt.slice(0, i+=3);
+    if(i >= txt.length){
+      clearInterval(say._t);
+      orb.classList.remove("talking");
+    }
+  }, 24);
+}
+function repeatLine(){ if(lastLine) say(lastLine); }
+
+/* ---------- lesson flow ---------- */
+const STEP_NAMES = ["Watch the demo","Try it yourself","Check in with Vega"];
+function startLesson(mi, li){
+  cur = { mod:mi, les:li, step:0, microMode:false, microIdx:0 };
+  const l = CURRICULUM[mi].lessons[li];
+  document.getElementById("lessonTitle").textContent = `${l.icon} ${l.name}`;
+  document.getElementById("chatLog").innerHTML = "";
+  chatAdd("ai", `Welcome to “${l.name}”. Ask me anything, any time.`);
+  show("screen-call");
+  renderStep();
+}
+function lesson(){ return CURRICULUM[cur.mod].lessons[cur.les]; }
+function renderStep(){
+  const l = lesson();
+  document.getElementById("stepTag").textContent =
+    cur.microMode ? `Micro-step ${cur.microIdx+1}/${l.micro.length}` : `Step ${cur.step+1} of 3`;
+  // step list
+  const sl = document.getElementById("stepList");
+  sl.innerHTML = STEP_NAMES.map((n,i)=>`
+    <div class="step-item ${i<cur.step?"done":""} ${i===cur.step?"now":""}">
+      <span class="dot">${i<cur.step?"✓":i+1}</span>${n}</div>`).join("");
+  // actions + speech
+  const box = document.getElementById("actionBox");
+  if(cur.microMode){
+    say(`Tiny piece, zero pressure: ${l.micro[cur.microIdx]}`);
+    box.innerHTML = `
+      <button class="btn good" onclick="microDone()">✅ Did it!</button>
+      <button class="btn meh" onclick="say('No rush at all. Do it even slower — half the speed you think is slow. I\\'ll wait right here. 💜')">🐢 Need a moment</button>
+      <div class="hint">Micro-steps earn +5 XP each</div>`;
+    return;
+  }
+  if(cur.step===0){
+    say(l.demo);
+    box.innerHTML = `
+      <button class="btn primary" onclick="nextStep()">▶ Watched it — my turn</button>
+      <button class="btn" onclick="repeatLine()">🔁 Show me again</button>
+      <div class="hint">In the full app, a real demo video plays here</div>`;
+  } else if(cur.step===1){
+    say(l.practice);
+    box.innerHTML = `
+      <button class="btn primary" onclick="nextStep()">I practiced it →</button>
+      <div class="hint">Take your time — Vega isn't going anywhere</div>`;
+  } else {
+    say("Moment of truth — how did that feel? Be honest, it only helps me coach you better.");
+    box.innerHTML = `
+      <button class="btn good" onclick="selfReport('good')">😎 Nailed it</button>
+      <button class="btn meh" onclick="selfReport('meh')">🤏 Almost there</button>
+      <button class="btn bad" onclick="selfReport('bad')">😵 Struggling</button>`;
+  }
+}
+function nextStep(){
+  if(cur.step===0) gainXP(5,"· demo watched");
+  cur.step++; renderStep();
+}
+function selfReport(how){
+  const l = lesson();
+  if(how==="good"){
+    completeLesson(20, "Beautiful. That's exactly the kind of clean rep that builds real skill. Lesson complete! ✨");
+  } else if(how==="meh"){
+    say(`So close. Here's the pro tip that usually unlocks it: ${l.tip} — run it once more with that in mind.`);
+    document.getElementById("actionBox").innerHTML = `
+      <button class="btn good" onclick="completeLesson(15, 'THERE it is. One good tip plus one honest rep — that\\'s how magicians are made. ✨')">✅ That fixed it</button>
+      <button class="btn bad" onclick="enterMicro()">Still shaky — break it down</button>`;
+  } else {
+    say("Perfect — struggling is DATA, not failure. Let's shrink this until it's easy. Tiny pieces, one at a time.");
+    setTimeout(enterMicro, 1600);
+  }
+}
+function enterMicro(){
+  cur.microMode = true; cur.microIdx = 0;
+  renderStep();
+}
+function microDone(){
+  gainXP(5,"· micro-step");
+  const l = lesson();
+  cur.microIdx++;
+  if(cur.microIdx >= l.micro.length){
+    cur.microMode = false;
+    completeLesson(15, "Look at that — you just climbed the whole move one small stone at a time. That's real mastery, not luck. ✨");
+  } else {
+    renderStep();
+  }
+}
+function completeLesson(xp, praise){
+  const l = lesson();
+  const first = !S.done[l.id];
+  S.done[l.id] = true; save();
+  if(first) gainXP(xp, "· lesson complete");
+  say(praise);
+  confetti();
+  document.getElementById("actionBox").innerHTML = `
+    <button class="btn gold" onclick="afterLesson()">Continue →</button>`;
+  document.getElementById("stepList").innerHTML = STEP_NAMES.map((n,i)=>`
+    <div class="step-item done"><span class="dot">✓</span>${n}</div>`).join("");
+}
+function afterLesson(){
+  const mi = cur.mod, li = cur.les;
+  const m = CURRICULUM[mi];
+  if(li+1 < m.lessons.length){ startLesson(mi, li+1); return; }
+  if(!S.quizDone[m.id]){ startQuiz(mi); return; }
+  leaveCall();
+}
+
+/* ---------- quiz ---------- */
+let quizMod = 0;
+function startQuiz(mi){
+  quizMod = mi;
+  const m = CURRICULUM[mi];
+  document.getElementById("quizModName").textContent = `🏁 Checkpoint — ${m.name}`;
+  document.getElementById("quizQ").textContent = m.quiz.q;
+  document.getElementById("quizHint").textContent = "";
+  const box = document.getElementById("quizOpts");
+  box.innerHTML = m.quiz.opts.map((o,i)=>
+    `<button class="btn quiz-opt" onclick="answerQuiz(${i}, this)">${o}</button>`).join("");
+  show("screen-quiz");
+}
+function answerQuiz(i, el){
+  const m = CURRICULUM[quizMod];
+  if(i === m.quiz.correct){
+    el.classList.add("correct");
+    document.querySelectorAll(".quiz-opt").forEach(b=>b.disabled=true);
+    S.quizDone[m.id] = true;
+    if(!S.badges.includes(m.badge)) S.badges.push(m.badge);
+    save();
+    gainXP(30,"· checkpoint passed");
+    setTimeout(()=>celebrate(m), 900);
+  } else {
+    el.classList.add("wrong"); el.disabled = true;
+    document.getElementById("quizHint").textContent = "Not quite — think about where the audience's attention goes. Try again!";
+  }
+}
+function celebrate(m){
+  confetti(); confetti();
+  const allMods = CURRICULUM.every(mm=>S.quizDone[mm.id]);
+  document.getElementById("celeIco").textContent = allMods ? "🏆" : "🏅";
+  document.getElementById("celeTitle").textContent = allMods ? "You've mastered the Nexus journey!" : `${m.name} — complete!`;
+  document.getElementById("celeSub").textContent = m.quiz.why + (allMods ? " Now go melt some minds. 🔮" : "");
+  document.getElementById("celeBadges").innerHTML =
+    S.badges.map(b=>`<div class="badge-pill">🏅 ${b}</div>`).join("");
+  show("screen-done");
+}
+
+/* ---------- chat ---------- */
+function chatAdd(who, txt){
+  const log = document.getElementById("chatLog");
+  const d = document.createElement("div");
+  d.className = "msg "+who; d.textContent = txt;
+  log.appendChild(d); log.scrollTop = log.scrollHeight;
+}
+async function sendChat(){
+  const inp = document.getElementById("chatInput");
+  const q = inp.value.trim();
+  if(!q) return;
+  inp.value = "";
+  chatAdd("me", q);
+  const real = await askRealAI(q, lesson());
+  if(real){ chatAdd("ai", real); say(real); return; }
+  const lc = q.toLowerCase();
+  const hit = CHAT_BRAIN.find(c=>c.k.some(k=>lc.includes(k)));
+  const reply = hit ? hit.r : CHAT_FALLBACK;
+  setTimeout(()=>{ chatAdd("ai", reply); say(reply); }, 500);
+}
+
+/* ---------- camera ---------- */
+async function toggleCam(){
+  const box = document.getElementById("camBox");
+  if(camStream){ stopCam(); return; }
+  try{
+    camStream = await navigator.mediaDevices.getUserMedia({video:true});
+    box.innerHTML = "";
+    const v = document.createElement("video");
+    v.autoplay = true; v.muted = true; v.playsInline = true;
+    v.srcObject = camStream;
+    box.appendChild(v);
+  }catch(e){
+    box.innerHTML = `<div class="cam-off">Camera unavailable<br>(${e.name})</div>`;
+  }
+}
+function stopCam(){
+  if(camStream){ camStream.getTracks().forEach(t=>t.stop()); camStream = null; }
+  document.getElementById("camBox").innerHTML = `<div class="cam-off">📷 Camera off<br>(tap 🎥 to enable)</div>`;
+}
+
+/* ---------- boot ---------- */
+renderTop();
+renderPath();
+</script>
+</body>
+</html>
