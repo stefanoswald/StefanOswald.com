@@ -272,7 +272,6 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
       <button class="nav-link" data-nav="explore" onclick="go('explore')">Explore</button>
       <button class="nav-link" data-nav="workshops" onclick="go('workshops')">Workshops</button>
       <button class="nav-link" data-nav="profile" onclick="go('profile')">My Profile</button>
-      <button class="nav-link nav-wallet" onclick="openBuyEnergy()" style="color:var(--gold-2);font-weight:800">⚡ Buy Energy</button>
       <button class="btn btn-gold btn-sm" onclick="go('create')" style="margin-left:8px">＋ Offer Your Energy</button>
     </div>
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
@@ -282,7 +281,6 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
     <button class="nav-link" onclick="go('explore');toggleMenu()">Explore</button>
     <button class="nav-link" onclick="go('workshops');toggleMenu()">Workshops</button>
     <button class="nav-link" onclick="go('profile');toggleMenu()">My Profile</button>
-    <button class="nav-link nav-wallet" onclick="openBuyEnergy();toggleMenu()" style="color:var(--gold-2);font-weight:800">⚡ Buy Energy</button>
     <button class="btn btn-gold btn-sm" onclick="go('create');toggleMenu()">＋ Offer Your Energy</button>
   </div>
 </nav>
@@ -312,17 +310,11 @@ footer{background:var(--indigo);color:#b7ade0;margin-top:72px}
 
 <script>
 /* ===================== CLOUD CONFIG =====================
-   Paste your values here to switch from demo mode to the real
-   Supabase + Square backend. Leave empty to run in demo mode.
-   See backend/SETUP.md for the full checklist.               */
+   Supabase backend (accounts, profiles, listings, requests).
+   Leave empty to run in demo mode. See backend/SETUP.md.     */
 const CLOUD = {
   supabaseUrl: "https://bwhkxgamiqkzroyoefnn.supabase.co",
-  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3aGt4Z2FtaXFrenJveW9lZm5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyODU0NDgsImV4cCI6MjA5ODg2MTQ0OH0.AEAKB-xDJoUqPQUJyf1Y2-Z3RnvATAfz-FpFjCrWQjY", // anon public key (safe to publish)
-  square: {
-    appId: "sandbox-sq0idb-rly3rhgbJYhGJB9KEFu_0A",
-    locationId: "LRYA819JZFTHK",
-    sandbox: true                        // set false when you go live
-  }
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3aGt4Z2FtaXFrenJveW9lZm5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyODU0NDgsImV4cCI6MjA5ODg2MTQ0OH0.AEAKB-xDJoUqPQUJyf1Y2-Z3RnvATAfz-FpFjCrWQjY" // anon public key (safe to publish)
 };
 
 /* ===================== DATA ===================== */
@@ -333,96 +325,95 @@ const CATS = {
   workshops:{label:"Workshops & Masterminds", icon:"🎓", grad:"linear-gradient(135deg,#f5a623,#ec4899)"}
 };
 const EXTYPES = ["Barter","Teach","Rent","Buy"];
-const ENERGY_USD = 20; // 1 ⚡ Energy ≈ $20
 
 const LISTINGS = [
  // People & Skills
  {id:1,cat:"skills",type:"Teach",title:"Close-Up Magic for Events",who:"Marco Delgado",emoji:"🎩",grad:"var(--grad-purple)",loc:"Austin, TX",price:"Pure goodwill",desc:"Professional magician with 12 years of experience. Will perform at your event in exchange for home-cooked meals or garden help."},
  {id:2,cat:"skills",type:"Barter",title:"Stand-Up Comedy Coaching",who:"Priya Nair",emoji:"🎤",grad:"var(--grad-gold)",loc:"Online",price:"Barter: marketing help",desc:"Touring comedian offering joke-writing and stage-presence coaching. Looking to trade for social media marketing."},
- {id:3,cat:"skills",type:"Barter",title:"Mobile Auto Mechanic",who:"Dave Kowalski",emoji:"🔧",grad:"var(--grad-teal)",loc:"Denver, CO",price:"Barter or 3 Energy/hr",desc:"Brakes, oil changes, diagnostics at your driveway. Happy to barter for carpentry or electrical work."},
+ {id:3,cat:"skills",type:"Barter",title:"Mobile Auto Mechanic",who:"Dave Kowalski",emoji:"🔧",grad:"var(--grad-teal)",loc:"Denver, CO",price:"Barter or $60/hr",desc:"Brakes, oil changes, diagnostics at your driveway. Happy to barter for carpentry or electrical work."},
  {id:4,cat:"skills",type:"Barter",title:"Portrait & Mural Painter",who:"Sofia Reyes",emoji:"🎨",grad:"var(--grad-purple)",loc:"Santa Fe, NM",price:"Pure goodwill",desc:"Custom portraits and murals. Open to trading art for photography lessons or bike repair."},
- {id:5,cat:"skills",type:"Teach",title:"Growth Marketing Mentor",who:"James Chen",emoji:"📈",grad:"var(--grad-gold)",loc:"Online",price:"2 Energy/session or barter",desc:"Ex-startup CMO. One-on-one sessions on SEO, ads, and funnels. Will trade for Spanish lessons."},
+ {id:5,cat:"skills",type:"Teach",title:"Growth Marketing Mentor",who:"James Chen",emoji:"📈",grad:"var(--grad-gold)",loc:"Online",price:"$40/session or barter",desc:"Ex-startup CMO. One-on-one sessions on SEO, ads, and funnels. Will trade for Spanish lessons."},
  {id:6,cat:"skills",type:"Barter",title:"Wedding & Event Videographer",who:"Lena Okafor",emoji:"🎥",grad:"var(--grad-teal)",loc:"Portland, OR",price:"Barter welcome",desc:"Cinematic event films. Open to bartering for catering, floral work, or venue credits."},
- {id:7,cat:"skills",type:"Barter",title:"Evening & Weekend Babysitter",who:"Hannah Bloom",emoji:"🧸",grad:"var(--grad-purple)",loc:"Madison, WI",price:"1 Energy/hr or barter",desc:"CPR-certified sitter, great with toddlers. Will trade sitting hours for guitar lessons."},
+ {id:7,cat:"skills",type:"Barter",title:"Evening & Weekend Babysitter",who:"Hannah Bloom",emoji:"🧸",grad:"var(--grad-purple)",loc:"Madison, WI",price:"$20/hr or barter",desc:"CPR-certified sitter, great with toddlers. Will trade sitting hours for guitar lessons."},
  {id:8,cat:"skills",type:"Barter",title:"Dental Checkups & Advice",who:"Dr. Amir Hassan",emoji:"🦷",grad:"var(--grad-teal)",loc:"Chicago, IL",price:"Sliding scale",desc:"Community dentist offering checkups and consultations on a sliding scale. Trades considered for practice landscaping."},
  {id:9,cat:"skills",type:"Teach",title:"Family Doctor Q&A Sessions",who:"Dr. Emily Watts",emoji:"🩺",grad:"var(--grad-gold)",loc:"Online",price:"Pure goodwill",desc:"Group health-literacy sessions: reading lab results, preventive care basics. Educational only."},
- {id:10,cat:"skills",type:"Barter",title:"Skincare Consults — Dermatologist",who:"Dr. Nina Park",emoji:"✨",grad:"var(--grad-purple)",loc:"Los Angeles, CA",price:"4 Energy or barter",desc:"Personalized skincare routines and product audits. Open to bartering for web design."},
- {id:11,cat:"skills",type:"Barter",title:"Licensed Electrician",who:"Ray Thompson",emoji:"⚡",grad:"var(--grad-gold)",loc:"Nashville, TN",price:"Barter or 4 Energy/hr",desc:"Panels, outlets, EV chargers. Will trade for plumbing work or fresh eggs from your coop. Seriously."},
+ {id:10,cat:"skills",type:"Barter",title:"Skincare Consults — Dermatologist",who:"Dr. Nina Park",emoji:"✨",grad:"var(--grad-purple)",loc:"Los Angeles, CA",price:"$80 or barter",desc:"Personalized skincare routines and product audits. Open to bartering for web design."},
+ {id:11,cat:"skills",type:"Barter",title:"Licensed Electrician",who:"Ray Thompson",emoji:"⚡",grad:"var(--grad-gold)",loc:"Nashville, TN",price:"Barter or $80/hr",desc:"Panels, outlets, EV chargers. Will trade for plumbing work or fresh eggs from your coop. Seriously."},
  {id:12,cat:"skills",type:"Barter",title:"Eye Exams & Frame Styling",who:"Dr. Ken Ito",emoji:"👓",grad:"var(--grad-teal)",loc:"Seattle, WA",price:"Sliding scale",desc:"Optometrist offering community-rate exams and honest frame advice."},
  {id:13,cat:"skills",type:"Barter",title:"Custom Carpentry & Built-Ins",who:"Big Sal Moretti",emoji:"🪚",grad:"var(--grad-gold)",loc:"Providence, RI",price:"Barter welcome",desc:"Shelves, decks, built-ins. Dream trade: someone teaches my kid piano."},
  {id:14,cat:"skills",type:"Teach",title:"Juggling & Circus Skills",who:"Felix Arnaud",emoji:"🤹",grad:"var(--grad-purple)",loc:"New Orleans, LA",price:"Pure goodwill",desc:"Learn 3-ball juggling in one afternoon, guaranteed. Trades for coffee beans enthusiastically accepted."},
- {id:15,cat:"skills",type:"Barter",title:"Lawn Mowing & Yard Care",who:"Tyler Brooks",emoji:"🌱",grad:"var(--grad-teal)",loc:"Boise, ID",price:"2 Energy/yard or barter",desc:"Reliable weekly mowing, edging, and cleanup. Will trade for home-baked bread or car detailing."},
+ {id:15,cat:"skills",type:"Barter",title:"Lawn Mowing & Yard Care",who:"Tyler Brooks",emoji:"🌱",grad:"var(--grad-teal)",loc:"Boise, ID",price:"$40/yard or barter",desc:"Reliable weekly mowing, edging, and cleanup. Will trade for home-baked bread or car detailing."},
  {id:16,cat:"skills",type:"Barter",title:"Bush Sculpture / Topiary Artist",who:"Vera Lindqvist",emoji:"🌳",grad:"var(--grad-purple)",loc:"Savannah, GA",price:"Barter or quote",desc:"I turn hedges into elephants. Topiary design and maintenance. Trades for pottery welcome."},
- {id:17,cat:"skills",type:"Barter",title:"Daily Dog Walking",who:"Maya Johnson",emoji:"🐕",grad:"var(--grad-gold)",loc:"Brooklyn, NY",price:"1 Energy/walk or barter",desc:"Midday pack walks, GPS-tracked with photo updates. Will trade for yoga classes."},
+ {id:17,cat:"skills",type:"Barter",title:"Daily Dog Walking",who:"Maya Johnson",emoji:"🐕",grad:"var(--grad-gold)",loc:"Brooklyn, NY",price:"$20/walk or barter",desc:"Midday pack walks, GPS-tracked with photo updates. Will trade for yoga classes."},
  {id:18,cat:"skills",type:"Barter",title:"Pet Sitting — Your Place or Mine",who:"Carlos Vega",emoji:"🐈",grad:"var(--grad-teal)",loc:"Tucson, AZ",price:"Pure goodwill",desc:"Overnight pet sitting with daily updates. Open to trading for house-plant care lessons."},
  {id:19,cat:"skills",type:"Barter",title:"House Sitting & Plant Care",who:"June Palmer",emoji:"🏡",grad:"var(--grad-purple)",loc:"Asheville, NC",price:"Free stay exchange",desc:"Retired teacher, immaculate references. I keep homes safe and plants alive while you travel."},
- {id:20,cat:"skills",type:"Barter",title:"Handy Person — Small Jobs Fast",who:"Omar Farouk",emoji:"🛠️",grad:"var(--grad-gold)",loc:"Minneapolis, MN",price:"3 Energy/hr or barter",desc:"Furniture assembly, drywall patches, leaky faucets. Two-hour minimum, endless goodwill."},
- {id:21,cat:"skills",type:"Barter",title:"Private Chef Nights",who:"Chef Antonia Russo",emoji:"👩‍🍳",grad:"var(--grad-teal)",loc:"San Diego, CA",price:"Barter or 6 Energy/night",desc:"Five-course dinners in your kitchen. Will trade for surf lessons or wine-country lifts."},
- {id:22,cat:"skills",type:"Barter",title:"Deep Cleaning Specialist",who:"Rosa Mendes",emoji:"🧽",grad:"var(--grad-purple)",loc:"Houston, TX",price:"2 Energy/hr or barter",desc:"Move-in/move-out and deep cleans. Trades for tailoring or kids' tutoring welcome."},
+ {id:20,cat:"skills",type:"Barter",title:"Handy Person — Small Jobs Fast",who:"Omar Farouk",emoji:"🛠️",grad:"var(--grad-gold)",loc:"Minneapolis, MN",price:"$60/hr or barter",desc:"Furniture assembly, drywall patches, leaky faucets. Two-hour minimum, endless goodwill."},
+ {id:21,cat:"skills",type:"Barter",title:"Private Chef Nights",who:"Chef Antonia Russo",emoji:"👩‍🍳",grad:"var(--grad-teal)",loc:"San Diego, CA",price:"Barter or $120/night",desc:"Five-course dinners in your kitchen. Will trade for surf lessons or wine-country lifts."},
+ {id:22,cat:"skills",type:"Barter",title:"Deep Cleaning Specialist",who:"Rosa Mendes",emoji:"🧽",grad:"var(--grad-purple)",loc:"Houston, TX",price:"$40/hr or barter",desc:"Move-in/move-out and deep cleans. Trades for tailoring or kids' tutoring welcome."},
  {id:23,cat:"skills",type:"Teach",title:"Therapy-Informed Life Skills",who:"Dr. Sam Ellis",emoji:"🧠",grad:"var(--grad-gold)",loc:"Online",price:"Sliding scale",desc:"Licensed psychologist running group workshops on stress, boundaries, and habits."},
- {id:24,cat:"skills",type:"Teach",title:"Life Coaching — 90-Day Reset",who:"Dana Whitfield",emoji:"🧭",grad:"var(--grad-teal)",loc:"Online",price:"Barter or 3 Energy/session",desc:"Accountability coaching for career pivots. Will trade for meal-prep services."},
- {id:25,cat:"skills",type:"Teach",title:"Personal Training in the Park",who:"Andre Silva",emoji:"💪",grad:"var(--grad-gold)",loc:"Miami, FL",price:"2 Energy/session or barter",desc:"Outdoor strength and conditioning. Trades for meal prep or massage therapy considered."},
+ {id:24,cat:"skills",type:"Teach",title:"Life Coaching — 90-Day Reset",who:"Dana Whitfield",emoji:"🧭",grad:"var(--grad-teal)",loc:"Online",price:"Barter or $60/session",desc:"Accountability coaching for career pivots. Will trade for meal-prep services."},
+ {id:25,cat:"skills",type:"Teach",title:"Personal Training in the Park",who:"Andre Silva",emoji:"💪",grad:"var(--grad-gold)",loc:"Miami, FL",price:"$40/session or barter",desc:"Outdoor strength and conditioning. Trades for meal prep or massage therapy considered."},
  // Things for Rent
- {id:26,cat:"rent",type:"Rent",title:"2022 Camry — Weekend Rental",who:"Nate Ogden",emoji:"🚗",grad:"var(--grad-teal)",loc:"Phoenix, AZ",price:"2 Energy/day",desc:"Clean, reliable sedan. Perfect for weekend trips. Flexible pickup."},
- {id:27,cat:"rent",type:"Rent",title:"27ft RV — Sleeps Six",who:"The Hendersons",emoji:"🚐",grad:"var(--grad-gold)",loc:"Salt Lake City, UT",price:"7 Energy/day",desc:"Fully stocked family RV. We include camp chairs, grill, and a national-parks guidebook."},
- {id:28,cat:"rent",type:"Rent",title:"Electric Scooter Pair",who:"Zip Collective",emoji:"🛴",grad:"var(--grad-purple)",loc:"San Francisco, CA",price:"1 Energy/day each",desc:"Two long-range e-scooters with helmets. Rent both for date night."},
- {id:29,cat:"rent",type:"Rent",title:"Touring Bicycles + Panniers",who:"Wheelhouse Co-op",emoji:"🚲",grad:"var(--grad-teal)",loc:"Portland, OR",price:"1 Energy/day or barter",desc:"Steel touring bikes, fitted and tuned. Trade option: help at our repair nights."},
- {id:30,cat:"rent",type:"Rent",title:"18ft Fishing Boat",who:"Captain Lou",emoji:"🛥️",grad:"var(--grad-gold)",loc:"Tampa, FL",price:"9 Energy/day",desc:"Center console with fish finder. Licensed captain add-on available."},
- {id:31,cat:"rent",type:"Rent",title:"42ft Sailing Yacht + Skipper",who:"Marina Blue Charters",emoji:"⛵",grad:"var(--grad-purple)",loc:"Newport, RI",price:"33 Energy/day",desc:"Sunset sails and day charters, skipper included. Group up to 8."},
- {id:32,cat:"rent",type:"Rent",title:"Cessna 172 — Wet Rental",who:"Skyward Flying Club",emoji:"🛩️",grad:"var(--grad-teal)",loc:"Boulder, CO",price:"8 Energy/hr",desc:"Well-maintained 172 for licensed pilots. Club checkout required."},
- {id:33,cat:"rent",type:"Rent",title:"Light Jet Charter — Split Seats",who:"AeroShare",emoji:"✈️",grad:"var(--grad-gold)",loc:"Dallas, TX",price:"From 45 Energy/seat",desc:"Share empty-leg charter flights. Post your route, split the cost."},
- {id:34,cat:"rent",type:"Rent",title:"Helicopter Photo Flights",who:"Vista Rotors",emoji:"🚁",grad:"var(--grad-purple)",loc:"Las Vegas, NV",price:"21 Energy/hr",desc:"Doors-off photography flights over the canyon. Pilot included, obviously."},
- {id:35,cat:"rent",type:"Rent",title:"Full PA & Stage Lighting Kit",who:"Backline Bros",emoji:"🎛️",grad:"var(--grad-teal)",loc:"Atlanta, GA",price:"6 Energy/day or barter",desc:"PA for 300-person events plus lighting rig. Trade for event photography."},
- {id:36,cat:"rent",type:"Rent",title:"Cinema Drone w/ Operator",who:"Aria Flightworks",emoji:"🛸",grad:"var(--grad-gold)",loc:"Denver, CO",price:"10 Energy/half-day",desc:"Licensed drone pilot with 5K cinema drone. Real estate, events, films."},
- {id:37,cat:"rent",type:"Rent",title:"VR Party Setup — 4 Headsets",who:"Pixel & Pals",emoji:"🥽",grad:"var(--grad-purple)",loc:"Columbus, OH",price:"5 Energy/day",desc:"Four headsets, party games loaded, we handle setup. Birthdays love this."},
- {id:38,cat:"rent",type:"Rent",title:"Designer Dress Library",who:"Closet Share ATX",emoji:"👗",grad:"var(--grad-teal)",loc:"Austin, TX",price:"1–3 Energy/event",desc:"Rotating rack of 200+ designer pieces. Swap credits if you lend yours."},
- {id:39,cat:"rent",type:"Rent",title:"Tuxedos & Formal Attire",who:"Second Suit",emoji:"🤵",grad:"var(--grad-gold)",loc:"Boston, MA",price:"2 Energy/weekend",desc:"Sharp tuxes and suits, tailored fit, pressed and ready."},
- {id:40,cat:"rent",type:"Rent",title:"Party Pack: Tables, Tents, Games",who:"Block Party Box",emoji:"🎉",grad:"var(--grad-purple)",loc:"Kansas City, MO",price:"4 Energy/weekend",desc:"Everything for a backyard bash: canopy, folding tables, yard games, cooler."},
- {id:41,cat:"rent",type:"Rent",title:"Barn Wedding Venue",who:"Willow Creek Farm",emoji:"💒",grad:"var(--grad-teal)",loc:"Hudson Valley, NY",price:"90 Energy/weekend",desc:"Restored barn, string lights, 120 guests. Trade discounts for event help."},
- {id:42,cat:"rent",type:"Rent",title:"Lakeside House — Monthly",who:"The Moraleses",emoji:"🏠",grad:"var(--grad-gold)",loc:"Lake Tahoe, CA",price:"120 Energy/mo",desc:"Two-bed lakeside house, winter availability. Caretaking trade considered."},
- {id:43,cat:"rent",type:"Rent",title:"Downtown Condo — Short Stays",who:"Ari Goldman",emoji:"🏢",grad:"var(--grad-purple)",loc:"Chicago, IL",price:"5 Energy/night",desc:"Walkable one-bed condo with skyline views. Long-stay discounts."},
- {id:44,cat:"rent",type:"Rent",title:"Spare Room — Artists Welcome",who:"Frida & Tom",emoji:"🚪",grad:"var(--grad-teal)",loc:"Taos, NM",price:"20 Energy/mo or barter",desc:"Sunny room in an adobe house. Trade option: studio help and firewood splitting."},
+ {id:26,cat:"rent",type:"Rent",title:"2022 Camry — Weekend Rental",who:"Nate Ogden",emoji:"🚗",grad:"var(--grad-teal)",loc:"Phoenix, AZ",price:"$40/day",desc:"Clean, reliable sedan. Perfect for weekend trips. Flexible pickup."},
+ {id:27,cat:"rent",type:"Rent",title:"27ft RV — Sleeps Six",who:"The Hendersons",emoji:"🚐",grad:"var(--grad-gold)",loc:"Salt Lake City, UT",price:"$140/day",desc:"Fully stocked family RV. We include camp chairs, grill, and a national-parks guidebook."},
+ {id:28,cat:"rent",type:"Rent",title:"Electric Scooter Pair",who:"Zip Collective",emoji:"🛴",grad:"var(--grad-purple)",loc:"San Francisco, CA",price:"$20/day each",desc:"Two long-range e-scooters with helmets. Rent both for date night."},
+ {id:29,cat:"rent",type:"Rent",title:"Touring Bicycles + Panniers",who:"Wheelhouse Co-op",emoji:"🚲",grad:"var(--grad-teal)",loc:"Portland, OR",price:"$20/day or barter",desc:"Steel touring bikes, fitted and tuned. Trade option: help at our repair nights."},
+ {id:30,cat:"rent",type:"Rent",title:"18ft Fishing Boat",who:"Captain Lou",emoji:"🛥️",grad:"var(--grad-gold)",loc:"Tampa, FL",price:"$180/day",desc:"Center console with fish finder. Licensed captain add-on available."},
+ {id:31,cat:"rent",type:"Rent",title:"42ft Sailing Yacht + Skipper",who:"Marina Blue Charters",emoji:"⛵",grad:"var(--grad-purple)",loc:"Newport, RI",price:"$660/day",desc:"Sunset sails and day charters, skipper included. Group up to 8."},
+ {id:32,cat:"rent",type:"Rent",title:"Cessna 172 — Wet Rental",who:"Skyward Flying Club",emoji:"🛩️",grad:"var(--grad-teal)",loc:"Boulder, CO",price:"$160/hr",desc:"Well-maintained 172 for licensed pilots. Club checkout required."},
+ {id:33,cat:"rent",type:"Rent",title:"Light Jet Charter — Split Seats",who:"AeroShare",emoji:"✈️",grad:"var(--grad-gold)",loc:"Dallas, TX",price:"From $900/seat",desc:"Share empty-leg charter flights. Post your route, split the cost."},
+ {id:34,cat:"rent",type:"Rent",title:"Helicopter Photo Flights",who:"Vista Rotors",emoji:"🚁",grad:"var(--grad-purple)",loc:"Las Vegas, NV",price:"$420/hr",desc:"Doors-off photography flights over the canyon. Pilot included, obviously."},
+ {id:35,cat:"rent",type:"Rent",title:"Full PA & Stage Lighting Kit",who:"Backline Bros",emoji:"🎛️",grad:"var(--grad-teal)",loc:"Atlanta, GA",price:"$120/day or barter",desc:"PA for 300-person events plus lighting rig. Trade for event photography."},
+ {id:36,cat:"rent",type:"Rent",title:"Cinema Drone w/ Operator",who:"Aria Flightworks",emoji:"🛸",grad:"var(--grad-gold)",loc:"Denver, CO",price:"$200/half-day",desc:"Licensed drone pilot with 5K cinema drone. Real estate, events, films."},
+ {id:37,cat:"rent",type:"Rent",title:"VR Party Setup — 4 Headsets",who:"Pixel & Pals",emoji:"🥽",grad:"var(--grad-purple)",loc:"Columbus, OH",price:"$100/day",desc:"Four headsets, party games loaded, we handle setup. Birthdays love this."},
+ {id:38,cat:"rent",type:"Rent",title:"Designer Dress Library",who:"Closet Share ATX",emoji:"👗",grad:"var(--grad-teal)",loc:"Austin, TX",price:"$20–$60/event",desc:"Rotating rack of 200+ designer pieces. Swap credits if you lend yours."},
+ {id:39,cat:"rent",type:"Rent",title:"Tuxedos & Formal Attire",who:"Second Suit",emoji:"🤵",grad:"var(--grad-gold)",loc:"Boston, MA",price:"$40/weekend",desc:"Sharp tuxes and suits, tailored fit, pressed and ready."},
+ {id:40,cat:"rent",type:"Rent",title:"Party Pack: Tables, Tents, Games",who:"Block Party Box",emoji:"🎉",grad:"var(--grad-purple)",loc:"Kansas City, MO",price:"$80/weekend",desc:"Everything for a backyard bash: canopy, folding tables, yard games, cooler."},
+ {id:41,cat:"rent",type:"Rent",title:"Barn Wedding Venue",who:"Willow Creek Farm",emoji:"💒",grad:"var(--grad-teal)",loc:"Hudson Valley, NY",price:"$1,800/weekend",desc:"Restored barn, string lights, 120 guests. Trade discounts for event help."},
+ {id:42,cat:"rent",type:"Rent",title:"Lakeside House — Monthly",who:"The Moraleses",emoji:"🏠",grad:"var(--grad-gold)",loc:"Lake Tahoe, CA",price:"$2,400/mo",desc:"Two-bed lakeside house, winter availability. Caretaking trade considered."},
+ {id:43,cat:"rent",type:"Rent",title:"Downtown Condo — Short Stays",who:"Ari Goldman",emoji:"🏢",grad:"var(--grad-purple)",loc:"Chicago, IL",price:"$100/night",desc:"Walkable one-bed condo with skyline views. Long-stay discounts."},
+ {id:44,cat:"rent",type:"Rent",title:"Spare Room — Artists Welcome",who:"Frida & Tom",emoji:"🚪",grad:"var(--grad-teal)",loc:"Taos, NM",price:"$400/mo or barter",desc:"Sunny room in an adobe house. Trade option: studio help and firewood splitting."},
  {id:45,cat:"rent",type:"Rent",title:"Sofa Surfing — Two Nights Max",who:"Backpacker Ben",emoji:"🛋️",grad:"var(--grad-gold)",loc:"Nashville, TN",price:"Pure goodwill",desc:"Crash on my couch, tell me a good story, do the dishes. That's the whole deal."},
- {id:46,cat:"rent",type:"Rent",title:"Air Mattress + Camp Bundle",who:"Gear Neighbor",emoji:"🛏️",grad:"var(--grad-purple)",loc:"Missoula, MT",price:"1 Energy/night",desc:"Queen air mattress, pump, sleeping bags. For when in-laws visit."},
+ {id:46,cat:"rent",type:"Rent",title:"Air Mattress + Camp Bundle",who:"Gear Neighbor",emoji:"🛏️",grad:"var(--grad-purple)",loc:"Missoula, MT",price:"$20/night",desc:"Queen air mattress, pump, sleeping bags. For when in-laws visit."},
  // Things to Buy
- {id:47,cat:"buy",type:"Buy",title:"2018 Subaru Outback",who:"Kelly Tran",emoji:"🚙",grad:"var(--grad-gold)",loc:"Bend, OR",price:"825 Energy",desc:"One owner, 82k miles, new tires. Partial trade for a camper van considered."},
- {id:48,cat:"buy",type:"Buy",title:"Vintage Airstream — Project",who:"Rust & Dreams",emoji:"🚐",grad:"var(--grad-teal)",loc:"Marfa, TX",price:"490 Energy OBO",desc:"1972 Airstream shell, solid bones. Bring a vision and a trailer hitch."},
- {id:49,cat:"buy",type:"Buy",title:"Vespa Scooter — Mint",who:"Gio Bellini",emoji:"🛵",grad:"var(--grad-purple)",loc:"San Jose, CA",price:"160 Energy",desc:"2021 Vespa Primavera, garage kept, 1,400 miles. Helmet included."},
- {id:50,cat:"buy",type:"Buy",title:"Gravel Bike — 54cm",who:"Wheelhouse Co-op",emoji:"🚴",grad:"var(--grad-gold)",loc:"Portland, OR",price:"58 Energy or barter",desc:"Carbon fork, tubeless, barely ridden. Barter option: 20 hours of your trade skills."},
- {id:51,cat:"buy",type:"Buy",title:"14ft Sailboat w/ Trailer",who:"Captain Lou",emoji:"⛵",grad:"var(--grad-teal)",loc:"Tampa, FL",price:"145 Energy",desc:"Great starter sailboat. I'll throw in two free lessons."},
- {id:52,cat:"buy",type:"Buy",title:"Pro AV Equipment Lot",who:"Backline Bros",emoji:"🎚️",grad:"var(--grad-purple)",loc:"Atlanta, GA",price:"225 Energy (lot)",desc:"Retiring gear: mixers, mics, monitors, cases. Itemized list on request."},
- {id:53,cat:"buy",type:"Buy",title:"FPV Drone Kit + Goggles",who:"Aria Flightworks",emoji:"🛸",grad:"var(--grad-gold)",loc:"Denver, CO",price:"39 Energy",desc:"Complete FPV kit with two batteries and a hard case. Crash-free, mostly."},
- {id:54,cat:"buy",type:"Buy",title:"VR Headset + 12 Games",who:"Pixel & Pals",emoji:"🥽",grad:"var(--grad-teal)",loc:"Columbus, OH",price:"16 Energy",desc:"Latest-gen headset, barely used, full game library transfers."},
- {id:55,cat:"buy",type:"Buy",title:"Curated Vintage Clothing Box",who:"Closet Share ATX",emoji:"👕",grad:"var(--grad-purple)",loc:"Austin, TX",price:"4 Energy/box",desc:"Ten hand-picked vintage pieces in your size and style. Tell us your vibe."},
- {id:56,cat:"buy",type:"Buy",title:"Wedding Dress — Size 8",who:"Elena Petrov",emoji:"👰",grad:"var(--grad-gold)",loc:"Boston, MA",price:"33 Energy (was 105)",desc:"Worn once, professionally cleaned. Comes with veil and a happy marriage's blessing."},
- {id:57,cat:"buy",type:"Buy",title:"Party Equipment Bundle",who:"Block Party Box",emoji:"🎪",grad:"var(--grad-teal)",loc:"Kansas City, MO",price:"27 Energy bundle",desc:"Selling our older set: 20ft canopy, 6 tables, 40 chairs, drink dispensers."},
+ {id:47,cat:"buy",type:"Buy",title:"2018 Subaru Outback",who:"Kelly Tran",emoji:"🚙",grad:"var(--grad-gold)",loc:"Bend, OR",price:"$16,500",desc:"One owner, 82k miles, new tires. Partial trade for a camper van considered."},
+ {id:48,cat:"buy",type:"Buy",title:"Vintage Airstream — Project",who:"Rust & Dreams",emoji:"🚐",grad:"var(--grad-teal)",loc:"Marfa, TX",price:"$9,800 OBO",desc:"1972 Airstream shell, solid bones. Bring a vision and a trailer hitch."},
+ {id:49,cat:"buy",type:"Buy",title:"Vespa Scooter — Mint",who:"Gio Bellini",emoji:"🛵",grad:"var(--grad-purple)",loc:"San Jose, CA",price:"$3,200",desc:"2021 Vespa Primavera, garage kept, 1,400 miles. Helmet included."},
+ {id:50,cat:"buy",type:"Buy",title:"Gravel Bike — 54cm",who:"Wheelhouse Co-op",emoji:"🚴",grad:"var(--grad-gold)",loc:"Portland, OR",price:"$1,160 or barter",desc:"Carbon fork, tubeless, barely ridden. Barter option: 20 hours of your trade skills."},
+ {id:51,cat:"buy",type:"Buy",title:"14ft Sailboat w/ Trailer",who:"Captain Lou",emoji:"⛵",grad:"var(--grad-teal)",loc:"Tampa, FL",price:"$2,900",desc:"Great starter sailboat. I'll throw in two free lessons."},
+ {id:52,cat:"buy",type:"Buy",title:"Pro AV Equipment Lot",who:"Backline Bros",emoji:"🎚️",grad:"var(--grad-purple)",loc:"Atlanta, GA",price:"$4,500 (lot)",desc:"Retiring gear: mixers, mics, monitors, cases. Itemized list on request."},
+ {id:53,cat:"buy",type:"Buy",title:"FPV Drone Kit + Goggles",who:"Aria Flightworks",emoji:"🛸",grad:"var(--grad-gold)",loc:"Denver, CO",price:"$780",desc:"Complete FPV kit with two batteries and a hard case. Crash-free, mostly."},
+ {id:54,cat:"buy",type:"Buy",title:"VR Headset + 12 Games",who:"Pixel & Pals",emoji:"🥽",grad:"var(--grad-teal)",loc:"Columbus, OH",price:"$320",desc:"Latest-gen headset, barely used, full game library transfers."},
+ {id:55,cat:"buy",type:"Buy",title:"Curated Vintage Clothing Box",who:"Closet Share ATX",emoji:"👕",grad:"var(--grad-purple)",loc:"Austin, TX",price:"$80/box",desc:"Ten hand-picked vintage pieces in your size and style. Tell us your vibe."},
+ {id:56,cat:"buy",type:"Buy",title:"Wedding Dress — Size 8",who:"Elena Petrov",emoji:"👰",grad:"var(--grad-gold)",loc:"Boston, MA",price:"$660 (was $2,100)",desc:"Worn once, professionally cleaned. Comes with veil and a happy marriage's blessing."},
+ {id:57,cat:"buy",type:"Buy",title:"Party Equipment Bundle",who:"Block Party Box",emoji:"🎪",grad:"var(--grad-teal)",loc:"Kansas City, MO",price:"$540 bundle",desc:"Selling our older set: 20ft canopy, 6 tables, 40 chairs, drink dispensers."},
  {id:58,cat:"buy",type:"Buy",title:"Micro Wedding Venue Business",who:"Willow Creek Farm",emoji:"💍",grad:"var(--grad-purple)",loc:"Hudson Valley, NY",price:"Inquire",desc:"Turnkey micro-venue side business: bookings, decor inventory, vendor list."},
- {id:59,cat:"buy",type:"Buy",title:"Tiny House on Wheels",who:"Nomad Builds",emoji:"🏠",grad:"var(--grad-gold)",loc:"Asheville, NC",price:"2,900 Energy",desc:"260 sq ft, solar-ready, composting toilet. Tow it home."},
- {id:60,cat:"buy",type:"Buy",title:"Studio Condo — For Sale by Owner",who:"Ari Goldman",emoji:"🏢",grad:"var(--grad-teal)",loc:"Chicago, IL",price:"9,450 Energy",desc:"Bright studio near the lake. Buyer agents welcome."},
- {id:61,cat:"buy",type:"Buy",title:"Mid-Century Sofa — Emerald",who:"Frida & Tom",emoji:"🛋️",grad:"var(--grad-purple)",loc:"Taos, NM",price:"21 Energy or barter",desc:"Velvet three-seater, no pets, no smoke. Barter: original artwork considered."},
- {id:62,cat:"buy",type:"Buy",title:"Original Oil Paintings — Desert Series",who:"Sofia Reyes",emoji:"🖼️",grad:"var(--grad-gold)",loc:"Santa Fe, NM",price:"8–45 Energy",desc:"Twelve originals from my desert light series. Studio visits welcome."},
- {id:63,cat:"buy",type:"Buy",title:"Welded Steel Garden Sculptures",who:"Iron Petal Studio",emoji:"🗿",grad:"var(--grad-teal)",loc:"Detroit, MI",price:"From 15 Energy",desc:"Hand-welded sculptures that rust beautifully. Commissions open."},
+ {id:59,cat:"buy",type:"Buy",title:"Tiny House on Wheels",who:"Nomad Builds",emoji:"🏠",grad:"var(--grad-gold)",loc:"Asheville, NC",price:"$58,000",desc:"260 sq ft, solar-ready, composting toilet. Tow it home."},
+ {id:60,cat:"buy",type:"Buy",title:"Studio Condo — For Sale by Owner",who:"Ari Goldman",emoji:"🏢",grad:"var(--grad-teal)",loc:"Chicago, IL",price:"$189,000",desc:"Bright studio near the lake. Buyer agents welcome."},
+ {id:61,cat:"buy",type:"Buy",title:"Mid-Century Sofa — Emerald",who:"Frida & Tom",emoji:"🛋️",grad:"var(--grad-purple)",loc:"Taos, NM",price:"$420 or barter",desc:"Velvet three-seater, no pets, no smoke. Barter: original artwork considered."},
+ {id:62,cat:"buy",type:"Buy",title:"Original Oil Paintings — Desert Series",who:"Sofia Reyes",emoji:"🖼️",grad:"var(--grad-gold)",loc:"Santa Fe, NM",price:"$160–$900",desc:"Twelve originals from my desert light series. Studio visits welcome."},
+ {id:63,cat:"buy",type:"Buy",title:"Welded Steel Garden Sculptures",who:"Iron Petal Studio",emoji:"🗿",grad:"var(--grad-teal)",loc:"Detroit, MI",price:"From $300",desc:"Hand-welded sculptures that rust beautifully. Commissions open."},
 ];
 
 const WORKSHOPS = [
- {id:101,kind:"inperson",title:"Intro to Woodworking — Build a Stool",host:"Big Sal Moretti",emoji:"🪑",grad:"var(--grad-gold)",loc:"Providence, RI",when:"Sat, Jul 11 · 10am",price:"2 Energy or barter",desc:"Hands-on morning in the shop. Leave with a stool you built and all ten fingers."},
- {id:102,kind:"online",title:"SEO Fundamentals Bootcamp",host:"James Chen",emoji:"🔍",grad:"var(--grad-teal)",loc:"Online",when:"Tuesdays · 6pm CT",price:"1 Energy/session",desc:"Four-week live series: keywords, content, links, and analytics."},
+ {id:101,kind:"inperson",title:"Intro to Woodworking — Build a Stool",host:"Big Sal Moretti",emoji:"🪑",grad:"var(--grad-gold)",loc:"Providence, RI",when:"Sat, Jul 11 · 10am",price:"$40 or barter",desc:"Hands-on morning in the shop. Leave with a stool you built and all ten fingers."},
+ {id:102,kind:"online",title:"SEO Fundamentals Bootcamp",host:"James Chen",emoji:"🔍",grad:"var(--grad-teal)",loc:"Online",when:"Tuesdays · 6pm CT",price:"$20/session",desc:"Four-week live series: keywords, content, links, and analytics."},
  {id:103,kind:"mastermind",title:"Local Makers Mastermind",host:"Vera Lindqvist",emoji:"🧵",grad:"var(--grad-purple)",loc:"Savannah, GA",when:"1st Thursday monthly",price:"Pure goodwill",desc:"Eight makers, monthly hot-seat sessions. Bring a challenge, leave with a plan."},
  {id:104,kind:"online",title:"Stress & Boundaries Workshop",host:"Dr. Sam Ellis",emoji:"🧘",grad:"var(--grad-teal)",loc:"Online",when:"Sun, Jul 19 · 4pm ET",price:"Sliding scale",desc:"Evidence-based tools for saying no and meaning it. Group format, 90 minutes."},
- {id:105,kind:"inperson",title:"Knife Skills with Chef Antonia",host:"Chef Antonia Russo",emoji:"🔪",grad:"var(--grad-gold)",loc:"San Diego, CA",when:"Fri, Jul 17 · 6pm",price:"2 Energy incl. dinner",desc:"Chop like a pro, then eat what you chopped. Knives provided."},
- {id:106,kind:"mastermind",title:"First-Time Founders Circle",host:"Dana Whitfield",emoji:"🚀",grad:"var(--grad-purple)",loc:"Online",when:"Biweekly · Wed 7pm",price:"Barter or 1 Energy/mo",desc:"Peer accountability for people launching their first business."},
+ {id:105,kind:"inperson",title:"Knife Skills with Chef Antonia",host:"Chef Antonia Russo",emoji:"🔪",grad:"var(--grad-gold)",loc:"San Diego, CA",when:"Fri, Jul 17 · 6pm",price:"$40 incl. dinner",desc:"Chop like a pro, then eat what you chopped. Knives provided."},
+ {id:106,kind:"mastermind",title:"First-Time Founders Circle",host:"Dana Whitfield",emoji:"🚀",grad:"var(--grad-purple)",loc:"Online",when:"Biweekly · Wed 7pm",price:"Barter or $20/mo",desc:"Peer accountability for people launching their first business."},
  {id:107,kind:"inperson",title:"Juggling in the Park (Free!)",host:"Felix Arnaud",emoji:"🤹",grad:"var(--grad-teal)",loc:"New Orleans, LA",when:"Sundays · 3pm",price:"Free — pure goodwill",desc:"Drop-in circus arts. Balls provided, dignity optional."},
- {id:108,kind:"online",title:"Home Electrical Safety 101",host:"Ray Thompson",emoji:"💡",grad:"var(--grad-gold)",loc:"Online",when:"Thu, Jul 23 · 7pm CT",price:"1 Energy",desc:"What you can safely DIY and when to call a pro. Live Q&A."},
+ {id:108,kind:"online",title:"Home Electrical Safety 101",host:"Ray Thompson",emoji:"💡",grad:"var(--grad-gold)",loc:"Online",when:"Thu, Jul 23 · 7pm CT",price:"$20",desc:"What you can safely DIY and when to call a pro. Live Q&A."},
  {id:109,kind:"mastermind",title:"Landlords Doing It Right",host:"Ari Goldman",emoji:"🏘️",grad:"var(--grad-teal)",loc:"Chicago, IL",when:"Last Monday monthly",price:"Pure goodwill",desc:"Small landlords sharing fair-housing practices, maintenance tips, and tenant-first ideas."},
- {id:110,kind:"inperson",title:"Desert Light Painting Retreat",host:"Sofia Reyes",emoji:"🌅",grad:"var(--grad-purple)",loc:"Santa Fe, NM",when:"Jul 25–26",price:"6 Energy or barter",desc:"Two mornings painting at golden hour. All levels, materials included."},
+ {id:110,kind:"inperson",title:"Desert Light Painting Retreat",host:"Sofia Reyes",emoji:"🌅",grad:"var(--grad-purple)",loc:"Santa Fe, NM",when:"Jul 25–26",price:"$120 or barter",desc:"Two mornings painting at golden hour. All levels, materials included."},
 ];
 
 const USERS = {
  "Marco Delgado":{emoji:"🎩",loc:"Austin, TX",score:4.9,reviews:34,bio:"Magician, dad, believer that wonder is a renewable resource. I trade tricks for tacos.",offers:["Close-up magic for events","Card trick lessons"],rents:[],sells:[],wants:["Home-cooked meals","Garden help","Kids' bike (20\")"]},
- "Sofia Reyes":{emoji:"🎨",loc:"Santa Fe, NM",score:5.0,reviews:28,bio:"Painter chasing desert light. My studio runs on bartered coffee and good conversation.",offers:["Portraits & murals","Painting retreat (Jul 25–26)"],rents:[],sells:["Original oil paintings (8–45 Energy)"],wants:["Photography lessons","Bike repair","Frame-building help"]},
+ "Sofia Reyes":{emoji:"🎨",loc:"Santa Fe, NM",score:5.0,reviews:28,bio:"Painter chasing desert light. My studio runs on bartered coffee and good conversation.",offers:["Portraits & murals","Painting retreat (Jul 25–26)"],rents:[],sells:["Original oil paintings ($160–$900)"],wants:["Photography lessons","Bike repair","Frame-building help"]},
  "Ray Thompson":{emoji:"⚡",loc:"Nashville, TN",score:4.8,reviews:52,bio:"Licensed electrician, 15 years. I will genuinely trade panel work for farm eggs.",offers:["Electrical work","EV charger installs","Safety workshops"],rents:[],sells:[],wants:["Plumbing help","Fresh eggs","Smoked brisket lessons"]},
  "Chef Antonia Russo":{emoji:"👩‍🍳",loc:"San Diego, CA",score:4.9,reviews:41,bio:"Private chef. Food is energy — literally. Teach me to surf and I'll feed you for a month.",offers:["Private chef nights","Knife skills classes"],rents:[],sells:[],wants:["Surf lessons","Wine-country rides"]},
- "Ari Goldman":{emoji:"🏢",loc:"Chicago, IL",score:4.7,reviews:19,bio:"Small landlord trying to do it right. I host a monthly circle for fair-minded landlords.",offers:["Rental advice","Landlords mastermind"],rents:["Downtown condo (5 Energy/night)"],sells:["Studio condo (9,450 Energy)"],wants:["Handyman hours","Snow removal (winter)"]},
+ "Ari Goldman":{emoji:"🏢",loc:"Chicago, IL",score:4.7,reviews:19,bio:"Small landlord trying to do it right. I host a monthly circle for fair-minded landlords.",offers:["Rental advice","Landlords mastermind"],rents:["Downtown condo ($100/night)"],sells:["Studio condo ($189,000)"],wants:["Handyman hours","Snow removal (winter)"]},
 };
 
 const REVIEWS = [
@@ -466,9 +457,7 @@ const PROFILE_EMOJIS = ["⚡","😀","😎","🤠","🧙","🦸","🎨","🎸","
 const app = document.getElementById('app');
 let state = {page:'home', cat:'all', type:'all', q:'', wkind:'all', viewUser:null};
 
-/* ---- Accounts (demo auth: production swaps in Firebase/Supabase + real email delivery) ---- */
-const MAX_ENERGY_PER_USER = 500;
-const FL_SUPPLY_BASELINE = 6420; // ⚡ already sold in FL (demo figure)
+/* ---- Accounts (demo auth: production swaps in Supabase + real email delivery) ---- */
 function accounts(){ try{return JSON.parse(localStorage.getItem('e4e_accounts')||'{}')}catch(e){return {}} }
 function saveAccounts(a){ localStorage.setItem('e4e_accounts', JSON.stringify(a)); }
 function session(){ return localStorage.getItem('e4e_session') || null; }
@@ -543,16 +532,15 @@ function renderHome(){
     <div class="hero-inner">
       <div class="hero-badge">⚡ A community-powered reciprocity platform</div>
       <h1>Energy for Energy.<br><span class="grad">The app you can't live without.</span></h1>
-      <p class="sub">Exchange skills, resources, and knowledge with your community. Teach what you know. Borrow what you need. Trade what you have.</p>
+      <p class="sub">Connect with the people around you. Trade what you have, teach what you know, borrow what you need — cash optional, connection guaranteed.</p>
       <div class="hero-ctas">
-        <button class="btn btn-gold" onclick="joinCommunity()">Join the Community</button>
+        <button class="btn btn-gold" onclick="joinCommunity()">Join the Community — Free</button>
         <button class="btn btn-ghost" onclick="go('explore')">Explore Exchanges</button>
         <button class="btn btn-ghost" onclick="go('create')">Offer Your Energy</button>
       </div>
       <div class="hero-stats">
-        <div class="hero-stat"><div class="num">2,400+</div><div class="lbl">Exchanges Made</div></div>
-        <div class="hero-stat"><div class="num">870</div><div class="lbl">Active Members</div></div>
-        <div class="hero-stat"><div class="num">1⚡ ≈ $20</div><div class="lbl">Energy Value</div></div>
+        <div class="hero-stat"><div class="num">🤝</div><div class="lbl">Barter First</div></div>
+        <div class="hero-stat"><div class="num">$0</div><div class="lbl">To Join &amp; List</div></div>
         <div class="hero-stat"><div class="num">FL</div><div class="lbl">First State Live</div></div>
       </div>
     </div>
@@ -580,7 +568,7 @@ function renderHome(){
       <div class="cat-card" onclick="go('explore','buy')">
         <div class="icon" style="background:var(--grad-gold)">🤝</div>
         <h3>Bartering &amp; Purchasing</h3>
-        <p>Buy, sell, or trade outright — priced in Energy or pure barter. Swap your electrical skills for fresh eggs. No cash required.</p>
+        <p>Buy, sell, or trade outright. Swap your electrical skills for fresh eggs. Cash works too — but around here it's the last resort.</p>
         <span class="link">Start trading →</span>
       </div>
     </div>
@@ -588,25 +576,25 @@ function renderHome(){
 
   <section class="section" style="padding-top:0">
     <div class="section-head">
-      <span class="kicker">The currency of community</span>
-      <h2>What is ⚡ Energy?</h2>
-      <p>A community currency that keeps value circulating between neighbors instead of leaking out.</p>
+      <span class="kicker">The Energy for Energy way</span>
+      <h2>Barter first. Cash last.</h2>
+      <p>Every listing says what its owner will accept — and you propose what you can offer. Most exchanges never need a dollar.</p>
     </div>
     <div class="cat-grid">
       <div class="cat-card">
-        <div class="icon" style="background:var(--grad-gold)">⚡</div>
-        <h3>1 Energy ≈ $20 of value</h3>
-        <p>Mowing a lawn? About 3 Energy. Babysitting? Around 2 Energy per hour. Simple, human-scale pricing everyone can feel.</p>
+        <div class="icon" style="background:var(--grad-gold)">🤝</div>
+        <h3>Trade what you're rich in</h3>
+        <p>Everyone's rich in something — time, tools, skills, sourdough. Swap your electrical work for babysitting. Your spare kayak for math tutoring.</p>
       </div>
       <div class="cat-card">
-        <div class="icon" style="background:var(--grad-teal)">🌴</div>
-        <h3>20,000 Energy per state</h3>
-        <p>To kick things off, only 20,000 Energy will be sold per state — starting with Florida. Use it for rentals, goods, and services.</p>
+        <div class="icon" style="background:var(--grad-teal)">⚡</div>
+        <h3>Barter-friendly rises to the top</h3>
+        <p>Listings open to bartering get the 🤝 badge and priority placement. Around here, flexibility is the flex.</p>
       </div>
       <div class="cat-card">
-        <div class="icon" style="background:var(--grad-purple)">🔄</div>
-        <h3>No fees inside the ecosystem</h3>
-        <p>Keep your Energy circulating and pay nothing. The only fee is when you cash out — and that Energy goes back on sale for the community.</p>
+        <div class="icon" style="background:var(--grad-purple)">💵</div>
+        <h3>Cash is the fallback, not the point</h3>
+        <p>Can't find a trade that works? Cash gets it done — arranged directly between you two, no fees, no middleman.</p>
       </div>
     </div>
   </section>
@@ -619,8 +607,8 @@ function renderHome(){
     <div class="steps">
       <div class="step"><div class="n">1</div><h4>Create your profile</h4><p>List what you offer, what you rent, what you sell — and what you're looking for.</p></div>
       <div class="step"><div class="n">2</div><h4>Explore your community</h4><p>Browse people, things, and workshops near you or online.</p></div>
-      <div class="step"><div class="n">3</div><h4>Make an exchange</h4><p>Pay in ⚡ Energy, barter directly, or give pure goodwill — you and your match set the terms.</p></div>
-      <div class="step"><div class="n">4</div><h4>Review &amp; get your deposit back</h4><p>Both parties stake a 1 ⚡ deposit per transaction — returned when you leave your review. It pays to show up as your best self.</p></div>
+      <div class="step"><div class="n">3</div><h4>Propose an exchange</h4><p>Barter directly, offer goodwill, or fall back to cash — you and your match set the terms together.</p></div>
+      <div class="step"><div class="n">4</div><h4>Exchange &amp; build trust</h4><p>Complete the exchange and leave each other a review. Your reputation is your currency here.</p></div>
     </div>
   </section>
 
@@ -643,18 +631,22 @@ function renderHome(){
 }
 
 /* ===================== LISTING CARDS ===================== */
+function isBarterFriendly(l){
+  if (l.accepts && l.accepts.length) return l.accepts.some(a=>a.startsWith('barter'));
+  return /barter|goodwill|trade|swap|free|sliding/i.test(l.price||'');
+}
 function cardHTML(l){
-  const energy = /goodwill|free|energy/i.test(l.price);
+  const barter = isBarterFriendly(l);
   return `
   <div class="lcard" onclick="openListing('${jsq(String(l.id))}')">
-    <div class="thumb" style="background:${l.grad}"><span>${l.emoji}</span></div>
+    <div class="thumb" style="background:${l.grad};position:relative"><span>${l.emoji}</span>${barter?'<span style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,.92);border-radius:999px;padding:4px 10px;font-size:.72rem;font-weight:800;color:#1b1339">🤝 Barter-friendly</span>':''}</div>
     <div class="body">
       <span class="cat">${CATS[l.cat]?CATS[l.cat].label:esc(l.cat)}</span>
       <h3>${esc(l.title)}</h3>
       <span class="loc">📍 ${esc(l.loc)} · <a onclick="event.stopPropagation();openUser('${jsq(l.who)}')" style="text-decoration:underline;cursor:pointer">${esc(l.who)}</a></span>
       <p class="desc">${esc(l.desc)}</p>
       <div class="foot">
-        <span class="price ${energy?'energy':''}">${energy?'⚡ ':''}${esc(l.price)}</span>
+        <span class="price ${barter?'energy':''}">${barter?'🤝 ':''}${esc(l.price)}</span>
         <button class="btn btn-teal btn-sm" onclick="event.stopPropagation();openContact('${jsq(l.who)}','${jsq(l.title)}')">Request</button>
       </div>
     </div>
@@ -667,7 +659,7 @@ function filteredListings(){
   return allListings().filter(l =>
     (state.cat==='all' || l.cat===state.cat) &&
     (!q || (l.title+' '+l.desc+' '+l.who+' '+l.loc).toLowerCase().includes(q))
-  );
+  ).sort((a,b) => (isBarterFriendly(b)?1:0) - (isBarterFriendly(a)?1:0)); // barter-friendly first
 }
 function renderExplore(){
   return `
@@ -818,8 +810,8 @@ function profileHTML(name, u, editable){
       <div class="pbox"><h4>🛍️ Things I Sell</h4>${listOr(u.sells,'Nothing for sale yet.')}</div>
       <div class="pbox"><h4>🙏 Things I Want</h4>${listOr(u.wants,'Open to offers!')}</div>
     </div>
-    <div class="pbox" style="margin-top:20px"><h4>💬 Recent Reviews</h4>
-      ${REVIEWS.map(r=>`<div class="review"><div class="who">${esc(r.who)} <span style="color:var(--gold)">${'★'.repeat(r.stars)}</span></div><div class="txt">"${esc(r.txt)}"</div></div>`).join('')}
+    <div class="pbox" style="margin-top:20px"><h4>💬 Reviews</h4>
+      <p style="color:var(--muted);font-size:.9rem">No reviews yet — reviews appear here after completed exchanges. ${editable?'Complete your first exchange to start building trust.':`Be the first to exchange with ${esc(name.split(' ')[0])}.`}</p>
     </div>
   </section>`;
 }
@@ -835,23 +827,19 @@ function renderProfile(){
     offers:m.offers, wants:m.wants,
     rents:mine.filter(l=>l.type==='Rent').map(l=>l.title),
     sells:mine.filter(l=>l.type==='Buy').map(l=>l.title)};
-  const remaining = MAX_ENERGY_PER_USER - (m.purchased||0);
   return `<div class="page-hero"><h1>My Profile</h1><p>Signed in as ${esc(m.email)}${m.provider?` · via ${esc(m.provider)}`:''}</p></div>`
     + profileHTML(m.name,u,true)
     + `<section class="section" style="padding-top:20px;padding-bottom:0">
         <div class="pbox">
-          <h4>⚡ Energy Wallet</h4>
+          <h4>🤝 Community Standing</h4>
           <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center">
-            <div><div style="font-family:'Sora';font-size:1.9rem;font-weight:800;color:var(--indigo-3)">⚡ ${m.wallet||0}</div><div class="hint">Available balance</div></div>
-            <div><div style="font-family:'Sora';font-size:1.9rem;font-weight:800;color:var(--teal-2)">⚡ ${m.escrow||0}</div><div class="hint">Held as review deposits</div></div>
-            <div><div style="font-family:'Sora';font-size:1.9rem;font-weight:800;color:var(--gold-2)">${remaining}</div><div class="hint">Purchase allowance left (max ${MAX_ENERGY_PER_USER})</div></div>
+            <div><div style="font-family:'Sora';font-size:1.9rem;font-weight:800;color:var(--indigo-3)">${mine.length}</div><div class="hint">Active listing${mine.length===1?'':'s'}</div></div>
+            <div><div style="font-family:'Sora';font-size:1.9rem;font-weight:800;color:var(--teal-2)">${mine.filter(isBarterFriendly).length}</div><div class="hint">Barter-friendly 🤝</div></div>
             <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
-              ${(m.escrow||0)>0?`<button class="btn btn-teal btn-sm" onclick="releaseDeposits()">I left my review — return deposits</button>`:''}
-              <button class="btn btn-gold btn-sm" onclick="openBuyEnergy()">Buy Energy</button>
-              ${(m.wallet||0)>1?`<button class="btn btn-outline btn-sm" onclick="openCashOut()">Cash Out</button>`:''}
+              <button class="btn btn-gold btn-sm" onclick="go('create')">＋ Offer Your Energy</button>
             </div>
           </div>
-          <div class="hint" style="margin-top:10px">Buy at $20/⚡ · cash out at $19/⚡. Your first ⚡ is a review credit — it stays in your wallet to back your exchange requests.</div>
+          <div class="hint" style="margin-top:10px">Barter-friendly listings get the 🤝 badge and rank higher in Explore. Your reputation is your currency here.</div>
         </div>
       </section>`
     + (mine.length?`<section class="section" style="padding-bottom:0"><div class="section-head left"><span class="kicker">My listings</span><h2>Energy you've offered</h2></div><div class="listing-grid">${mine.map(cardHTML).join('')}</div></section>`:'')
@@ -865,7 +853,7 @@ function renderProfile(){
 let _authCode = null, _authEmail = null;
 function renderAuth(){
   return `
-  <div class="page-hero"><h1>Sign In or Join</h1><p>Your profile, listings, and Energy wallet — attached to your email.</p></div>
+  <div class="page-hero"><h1>Sign In or Join</h1><p>Your profile and listings — attached to your email.</p></div>
   <section class="section" style="padding-top:36px">
     <div class="form-card">
       <h2 style="margin-bottom:6px">Welcome back — or welcome in</h2>
@@ -922,7 +910,7 @@ function confirmSocial(provider){
 function loginEmail(email, provider){
   const a = accounts();
   if(!a[email]){
-    a[email] = {email, provider, wallet:0, purchased:0, escrow:0, listings:[]};
+    a[email] = {email, provider, listings:[]};
     // Adopt any profile/listings created in this browser before accounts existed
     try{
       const oldP = JSON.parse(localStorage.getItem('e4e_profile')||'null');
@@ -957,11 +945,9 @@ function openDeleteAccount(){
 function confirmDeleteAccount(){
   _delReq = { reason: document.getElementById('delReason').value,
               details: (document.getElementById('delDetails').value||'').trim() };
-  const m = me();
   modalShell(`<div class="inner" style="padding-top:40px">
     <h3>Are you absolutely sure?</h3>
-    <p style="color:var(--muted);font-size:.92rem;margin:10px 0 6px">This permanently deletes your profile, listings, and wallet${m&&(m.wallet||0)>0?` — <b>including your ${m.wallet} ⚡</b>${(m.escrow||0)>0?` and ${m.escrow} ⚡ in deposits`:''}`:''}. It cannot be undone.</p>
-    ${m&&(m.wallet||0)>1?`<p style="color:var(--muted);font-size:.92rem;margin:0 0 6px">💡 Tip: you can <b>cash out</b> your Energy at $19/⚡ before deleting.</p>`:''}
+    <p style="color:var(--muted);font-size:.92rem;margin:10px 0 6px">This permanently deletes your profile and all of your listings. It cannot be undone.</p>
     <div class="fgroup" style="margin-top:14px"><label>Type <b>DELETE</b> to confirm</label><input id="delConfirm" autocomplete="off" placeholder="DELETE"></div>
     <button class="btn btn-block" style="background:#c0392b;color:#fff" onclick="reallyDeleteAccount()">Permanently delete my account</button>
     <button class="btn btn-outline btn-block" style="margin-top:10px" onclick="closeModal()">Cancel</button>
@@ -1005,7 +991,7 @@ function renderProfileSetup(m){
 function editProfile(){ state.editProfile = true; render(); window.scrollTo({top:0}); }
 function renderUser(){
   const name = state.viewUser;
-  const u = USERS[name] || {emoji:'🙂',loc:'Community member',score:4.8,reviews:7,bio:'An active member of the Energy for Energy community.',offers:allListings().filter(l=>l.who===name).map(l=>l.title),rents:[],sells:[],wants:['Open to interesting trades']};
+  const u = USERS[name] || {emoji:'🙂',loc:'Community member',score:'New',reviews:0,bio:'A member of the Energy for Energy community.',offers:allListings().filter(l=>l.who===name).map(l=>l.title),rents:[],sells:[],wants:['Open to interesting trades']};
   return `<div class="page-hero"><h1>Member Profile</h1><p>Every exchange builds trust.</p></div>` + profileHTML(name,u,false);
 }
 function openUser(name){ state.page='user'; state.viewUser=name; render(); window.scrollTo({top:0}); }
@@ -1024,85 +1010,9 @@ function saveProfile(e){
 }
 function joinCommunity(){ go('profile'); }
 
-/* ===================== BUY ENERGY ===================== */
-const PAY_METHODS = [["₿","Bitcoin"],["💳","Credit Card"],["🅿️","PayPal"],["","Apple Pay"],["🇬","Google Pay"],["📱","Samsung Pay"]];
-let _payMethod = "Credit Card";
-function flSupplyLeft(){
-  const sold = Object.values(accounts()).reduce((n,m)=>n+(m.purchased||0), 0);
-  return 20000 - FL_SUPPLY_BASELINE - sold;
-}
-function openBuyEnergy(){
-  const m = me();
-  if(!m){ go('profile'); toast('Sign in first — your Energy needs a wallet to live in.'); return; }
-  const remaining = MAX_ENERGY_PER_USER - (m.purchased||0);
-  modalShell(`<div class="inner" style="padding-top:40px">
-    <h3>Buy ⚡ Energy</h3>
-    <p style="color:var(--muted);font-size:.9rem;margin:6px 0 16px">1 ⚡ = $20 to buy · <b>$19 buyback</b> when you cash out · Florida supply remaining: <b>${flSupplyLeft().toLocaleString()} ⚡</b><br>Your allowance: <b>${remaining} ⚡</b> (hard cap of ${MAX_ENERGY_PER_USER} per member)</p>
-    <div class="fgroup"><label>Amount (whole numbers)</label><input id="buyAmt" type="number" min="1" step="1" max="${remaining}" placeholder="e.g. 25"></div>
-    <div class="fgroup"><label>Payment method</label>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px">
-        ${PAY_METHODS.map(([ic,nm])=>`<button type="button" class="trade-btn ${nm===_payMethod?'sel':''}" onclick="_payMethod='${nm}';openBuyEnergy._redraw&&openBuyEnergy._redraw(this)">${ic} ${nm}</button>`).join('')}
-      </div>
-    </div>
-    <button class="btn btn-gold btn-block" onclick="purchaseEnergy()">Buy Energy ⚡</button>
-    <div class="hint" style="margin-top:10px;text-align:center">Demo checkout — no payment is processed. Production connects Stripe, Coinbase Commerce, and wallet SDKs.</div>
-  </div>`);
-  openBuyEnergy._redraw = btn => { btn.parentElement.querySelectorAll('.trade-btn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); };
-}
-function purchaseEnergy(){
-  const m = me(); if(!m) return;
-  const amt = Math.round(parseFloat(document.getElementById('buyAmt').value));
-  if(isNaN(amt) || amt < 1){ toast('⚠️ Enter a whole number of Energy.'); return; }
-  const remaining = MAX_ENERGY_PER_USER - (m.purchased||0);
-  if(amt > remaining){ toast(`⚠️ Cap reached: you can buy at most ${remaining} more ⚡ (${MAX_ENERGY_PER_USER} lifetime max).`); return; }
-  if(amt > flSupplyLeft()){ toast('⚠️ Not enough Energy left in the Florida supply.'); return; }
-  updateMe(x => { x.wallet = (x.wallet||0) + amt; x.purchased = (x.purchased||0) + amt; });
-  closeModal();
-  toast(`⚡ ${amt} Energy added via ${_payMethod}!`);
-  if(state.page==='profile') render();
-}
-/* ---- Cash out: $19/⚡ buyback; the 1 ⚡ review credit always stays ---- */
-function openCashOut(){
-  const m = me(); if(!m) return;
-  const avail = Math.max(0, (m.wallet||0) - 1);
-  modalShell(`<div class="inner" style="padding-top:40px">
-    <h3>Cash Out ⚡</h3>
-    <p style="color:var(--muted);font-size:.92rem;margin:8px 0 14px">Energy costs <b>$20</b> to buy — the buyback rate is <b>$19</b> per ⚡. The $1 difference keeps the community running. Your <b>1 ⚡ review credit always stays</b> in your wallet.</p>
-    <div class="fgroup"><label>Amount to cash out (up to ${avail} ⚡)</label><input id="cashAmt" type="number" min="1" step="1" max="${avail}" placeholder="e.g. 3" oninput="updateCashPreview()"></div>
-    <div class="hint" id="cashPreview" style="margin-bottom:12px">You'll receive: —</div>
-    <button class="btn btn-gold btn-block" ${avail<1?'disabled':''} onclick="requestCashOut()">Request Cash Out</button>
-    <div class="hint" style="margin-top:10px;text-align:center">${avail<1?'Nothing to cash out yet beyond your review credit.':'Cash-outs are handled personally by the Energy for Energy team (Venmo, Zelle, or check) — usually within a few days.'}</div>
-  </div>`);
-}
-function updateCashPreview(){
-  const n = Math.round(parseFloat(document.getElementById('cashAmt').value));
-  document.getElementById('cashPreview').innerHTML =
-    (isNaN(n)||n<1) ? "You'll receive: —" : `You'll receive: <b>$${(n*19).toLocaleString()}</b> (${n} ⚡ × $19)`;
-}
-function requestCashOut(){
-  const m = me(); if(!m) return;
-  const n = Math.round(parseFloat(document.getElementById('cashAmt').value));
-  const avail = Math.max(0, (m.wallet||0) - 1);
-  if(isNaN(n) || n < 1){ toast('⚠️ Enter a whole number of Energy.'); return; }
-  if(n > avail){ toast(`⚠️ You can cash out at most ${avail} ⚡ — your 1 ⚡ review credit stays.`); return; }
-  doCashOut(n);
-}
-function doCashOut(n){
-  updateMe(x => { x.wallet = (x.wallet||0) - n; });
-  closeModal(); toast(`💵 Cash-out requested: $${(n*19).toLocaleString()} for ${n} ⚡. (Demo mode)`); render();
-}
-function releaseDeposits(){
-  const m = me(); if(!m || !(m.escrow>0)) return;
-  updateMe(x => { x.wallet = (x.wallet||0) + x.escrow; x.escrow = 0; });
-  toast('⚡ Deposits returned — thanks for keeping the ecosystem healthy!');
-  render();
-}
-function refreshNavWallet(){
-  const m = me();
-  document.querySelectorAll('.nav-wallet').forEach(el=>{
-    el.textContent = m ? `⚡ ${m.wallet||0} · Buy` : '⚡ Buy Energy';
-  });
-}
+/* (The Energy-currency economy — wallets, purchases, cash-outs — was retired
+   when the app pivoted to pure connection & barter. See git history.) */
+function refreshNavWallet(){}
 
 /* ===================== CREATE LISTING ===================== */
 let selectedTrades = [];   // {name, kind, qty}
@@ -1116,7 +1026,7 @@ function renderCreate(){
   <div class="page-hero"><h1>Offer Your Energy</h1><p>What are you offering? A skill, a thing, a lesson, a spare room — it all counts.</p></div>
   <section class="section" style="padding-top:36px">
     <div class="form-card">
-      <div class="energy-note">💡 <b>How Energy works:</b> each ⚡ Energy is worth about <b>$20</b>. Mowing a lawn might be 3 Energy; babysitting about 2 Energy/hour. Only <b>20,000 Energy</b> will be sold per state — starting with <b>Florida</b>. Spend it on rentals, goods, and services. Keep it in the ecosystem and there are <b>no fees</b>; the only fee is when you cash out, and that Energy goes back on sale.</div>
+      <div class="energy-note">🤝 <b>Barter first:</b> listings open to trades get the barter badge and rank higher in Explore. Pick what you'd accept from the community trade list — and add a cash price only if you want a fallback.</div>
       <form onsubmit="submitListing(event)">
         <div class="fgroup"><label>What are you offering?</label><input name="title" required maxlength="70" placeholder="e.g. Sourdough baking lessons"></div>
         <div class="frow">
@@ -1129,26 +1039,31 @@ function renderCreate(){
           </div>
           <div class="fgroup"><label>Location</label><div class="ac-wrap"><input name="loc" required autocomplete="off" data-ac placeholder='Start typing a city — or "Online"' value="${p?esc(p.loc):''}"><div class="ac-list"></div></div></div>
         </div>
-        <div class="fgroup"><label>Price (in ⚡ Energy)</label>
-          <div class="energy-row">
-            <input name="energy" type="number" min="1" step="1" placeholder="e.g. 3">
-            <select name="eunit">
-              <option value="">total</option>
-              <option value="/hour">per hour</option>
-              <option value="/day">per day</option>
-              <option value="/session">per session</option>
-              <option value="/night">per night</option>
-            </select>
-          </div>
-          <div class="hint">1 ⚡ Energy ≈ $20 of value</div>
-        </div>
-
-        <div class="or-divider">OR</div>
-
-        <div class="fgroup"><label>Trade — what would you accept in exchange?</label>
+        <div class="fgroup"><label>Barter — what would you accept in exchange?</label>
           <div class="trade-box" id="tradeBox"><span class="ph">Pick from the community trade list below — your selections appear here.</span></div>
           <div class="trade-grid" id="tradeGrid"></div>
           <div style="text-align:center;margin-top:12px"><button type="button" class="btn btn-outline btn-sm" id="showMoreBtn" onclick="showMoreTrades()">Show More ↓</button></div>
+        </div>
+
+        <div class="fgroup"><label>Open to other barter offers?</label>
+          <select name="openBarter">
+            <option value="yes">Yes — surprise me with a trade 🤝</option>
+            <option value="no">Only what I picked above / my cash price</option>
+          </select>
+        </div>
+
+        <div class="fgroup"><label>Cash fallback (optional — barter offers come first)</label>
+          <div class="energy-row">
+            <input name="usd" type="number" min="1" step="1" placeholder="e.g. 40">
+            <select name="eunit">
+              <option value="">$ total</option>
+              <option value="/hour">$ per hour</option>
+              <option value="/day">$ per day</option>
+              <option value="/session">$ per session</option>
+              <option value="/night">$ per night</option>
+            </select>
+          </div>
+          <div class="hint">Leave blank for barter-only. Cash arrangements happen directly between members — no fees.</div>
         </div>
 
         <div class="fgroup"><label>Description</label><textarea name="desc" required maxlength="300" placeholder="Describe what you're offering and what a great exchange looks like."></textarea></div>
@@ -1216,18 +1131,21 @@ function submitListing(e){
   const p = myProfile();
   if(!p){ go('profile'); toast('Sign in and set up your profile first — listings are saved to it.'); return; }
   const f = new FormData(e.target);
-  const energyVal = Math.round(parseFloat(f.get('energy')));
-  const hasEnergy = !isNaN(energyVal) && energyVal > 0;
+  const usdVal = Math.round(parseFloat(f.get('usd')));
+  const hasCash = !isNaN(usdVal) && usdVal > 0;
+  const openBarter = f.get('openBarter') !== 'no';
   const hasTrade = selectedTrades.length > 0;
-  if(!hasEnergy && !hasTrade){ toast('⚠️ Set a price in Energy or pick at least one trade.'); return; }
-  let price = '';
-  if(hasEnergy) price = `${energyVal} Energy${f.get('eunit')||''}`;
-  if(hasTrade) price = price ? `${price} or barter: ${tradeSummary()}` : `Barter: ${tradeSummary()}`;
+  if(!hasCash && !hasTrade && !openBarter){ toast('⚠️ Pick at least one trade, allow open barter offers, or set a cash fallback.'); return; }
+  const accepts = [];
+  if(hasTrade || openBarter) accepts.push(openBarter ? 'barter-open' : 'barter-listed');
+  if(hasCash) accepts.push('cash');
+  let price = hasTrade ? `Barter: ${tradeSummary()}` : (openBarter ? 'Open to barter offers' : '');
+  if(hasCash) price = price ? `${price} — or $${usdVal.toLocaleString()}${f.get('eunit')||''}` : `$${usdVal.toLocaleString()}${f.get('eunit')||''}`;
   const grads = ['var(--grad-purple)','var(--grad-teal)','var(--grad-gold)'];
   saveMyListing({
     id: Date.now(), cat:f.get('cat'), type:({rent:'Rent',buy:'Buy'})[f.get('cat')]||'Barter', title:f.get('title'),
     who: p.name, emoji: f.get('emoji')||'📦', grad: grads[Math.floor(Math.random()*3)],
-    loc:f.get('loc'), price, desc:f.get('desc'), mine:true
+    loc:f.get('loc'), price, accepts, desc:f.get('desc'), mine:true
   });
   toast('⚡ Listing published! Your energy is live.');
   state.cat = f.get('cat'); state.type='all'; state.q='';
@@ -1242,7 +1160,7 @@ function modalShell(inner){
 }
 function openListing(id){
   const l = allListings().find(x=>String(x.id)===String(id)); if(!l) return;
-  const energy = /goodwill|free|energy/i.test(l.price);
+  const barter = isBarterFriendly(l);
   modalShell(`
     <div class="thumb" style="background:${l.grad}">${l.emoji}</div>
     <div class="inner">
@@ -1250,9 +1168,9 @@ function openListing(id){
       <h3>${esc(l.title)}</h3>
       <p style="color:var(--muted);font-size:.9rem;margin-bottom:14px">📍 ${esc(l.loc)} · by <a onclick="closeModal();openUser('${jsq(l.who)}')" style="text-decoration:underline;cursor:pointer;font-weight:600">${esc(l.who)}</a></p>
       <p style="margin-bottom:18px">${esc(l.desc)}</p>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#f6f3fc;border-radius:14px;margin-bottom:18px">
-        <b style="color:${energy?'var(--teal-2)':'var(--indigo-3)'}">${energy?'⚡ ':''}${esc(l.price)}</b>
-        <span style="font-size:.8rem;color:var(--muted)">🛡️ 1 ⚡ review deposit</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;background:#f6f3fc;border-radius:14px;margin-bottom:18px">
+        <b style="color:${barter?'var(--teal-2)':'var(--indigo-3)'}">${barter?'🤝 ':''}${esc(l.price)}</b>
+        ${barter?'<span style="font-size:.8rem;color:var(--muted)">Open to barter — propose a trade!</span>':''}
       </div>
       <button class="btn btn-gold btn-block" onclick="closeModal();openContact('${jsq(l.who)}','${jsq(l.title)}')">Contact / Request Exchange</button>
     </div>`);
@@ -1278,8 +1196,8 @@ function openContact(who, about){
       <p style="color:var(--muted);font-size:.92rem;margin-bottom:18px">About: <b>${esc(about)}</b></p>
       <form onsubmit="sendMessage(event,'${jsq(who)}')">
         <div class="fgroup"><label>Your message</label><textarea id="reqMsg" required placeholder="Hi! I'm interested in this exchange. Here's what I can offer in return…"></textarea></div>
-        <div class="fgroup"><label>What can you offer in exchange? (optional)</label><input id="reqOffer" placeholder="e.g. ⚡ Energy, guitar lessons, fresh vegetables…"></div>
-        <div class="energy-note" style="margin-bottom:16px">🛡️ <b>Review deposit:</b> both parties stake 1 ⚡ per exchange, returned when you leave your review. It pays to show up as your best self.</div>
+        <div class="fgroup"><label>What can you offer in exchange? (optional)</label><input id="reqOffer" placeholder="e.g. guitar lessons, fresh vegetables, tool lending…"></div>
+        <div class="energy-note" style="margin-bottom:16px">🤝 <b>Barter first:</b> lead with what you can trade — most exchanges here never need a dollar. Cash is always a fine fallback if that's what works for both of you.</div>
         <button class="btn btn-teal btn-block" type="submit">Send Request ⚡</button>
       </form>
     </div>`);
@@ -1288,10 +1206,8 @@ function sendMessage(e, who){
   e.preventDefault();
   const m = me();
   if(!m){ closeModal(); go('profile'); toast('Sign in to send requests — exchanges are tied to your profile.'); return; }
-  if((m.wallet||0) < 1){ closeModal(); toast('⚠️ You need 1 ⚡ available for the review deposit.'); openBuyEnergy(); return; }
-  updateMe(x => { x.wallet -= 1; x.escrow = (x.escrow||0) + 1; });
   closeModal();
-  toast('✉️ Request sent to '+who+'! 1 ⚡ deposit held — returned when you leave your review.');
+  toast('✉️ Request sent to '+who+'! They\'ll see your message and what you\'re offering.');
 }
 let toastTimer;
 function toast(msg){
@@ -1306,12 +1222,12 @@ render();
 </script>
 
 <script id="cloudMode">
-/* ===================== CLOUD MODE (Supabase + Square) =====================
+/* ===================== CLOUD MODE (Supabase) =====================
    Activates only when CLOUD config is filled in. Overrides the demo
-   data layer with the real backend. Wallet math is enforced server-side. */
+   data layer with the real backend: accounts, profiles, listings, requests. */
 if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
-  const cache = { session:null, me:null, listings:[], supplySold:0, booted:false };
-  let sb = null, _sqCard = null, _sqPayments = null;
+  const cache = { session:null, me:null, listings:[], booted:false };
+  let sb = null;
 
   function loadScript(src){
     return new Promise((res, rej)=>{
@@ -1325,30 +1241,23 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
   const rowToListing = r => ({ id:r.id, owner:r.owner, cat:r.cat, type:r.type, title:r.title,
     who:r.who||'Member', emoji:r.emoji||'📦',
     grad:grads[Math.abs(String(r.id).split('').reduce((n,c)=>n+c.charCodeAt(0),0))%3],
-    loc:r.loc||'', price:r.price||'', desc:r.description||'', mine:r.owner===uid() });
+    loc:r.loc||'', price:r.price||'', accepts:r.accepts||[], desc:r.description||'', mine:r.owner===uid() });
 
   /* ---- data layer overrides (sync reads from cache) ---- */
   me = function(){ return cache.me; };
   myProfile = function(){ return (cache.me && cache.me.name) ? cache.me : null; };
   myListings = function(){ return cache.listings.filter(l=>l.owner===uid()); };
   communityListings = function(){ return cache.listings; };
-  flSupplyLeft = function(){ return 20000 - FL_SUPPLY_BASELINE - cache.supplySold; };
 
   async function refreshData(){
     const { data: ls } = await sb.from('e4e_listings').select('*').order('created_at', {ascending:false});
     cache.listings = (ls||[]).map(rowToListing);
     if (cache.session){
-      const [{ data: prof }, { data: wal }] = await Promise.all([
-        sb.from('e4e_profiles').select('*').eq('id', uid()).maybeSingle(),
-        sb.from('e4e_wallets').select('*').eq('user_id', uid()).maybeSingle()
-      ]);
+      const { data: prof } = await sb.from('e4e_profiles').select('*').eq('id', uid()).maybeSingle();
       cache.me = { email: cache.session.user.email,
         provider: cache.session.user.app_metadata?.provider !== 'email' ? cache.session.user.app_metadata?.provider : null,
-        ...(prof||{}),
-        wallet: wal?.wallet ?? 0, purchased: wal?.purchased ?? 0, escrow: wal?.escrow ?? 0 };
+        ...(prof||{}) };
     } else cache.me = null;
-    const { data: sup } = await sb.rpc('e4e_total_sold');
-    cache.supplySold = sup || 0;
     render();
   }
 
@@ -1396,7 +1305,7 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
       bio:(f.get('bio')||'').slice(0,400), offers:split(f.get('offers')), wants:split(f.get('wants'))
     });
     if (error){ toast('⚠️ '+error.message); return; }
-    toast(state.editProfile ? '✅ Profile updated!' : '⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'! Your 1 ⚡ review credit is in your wallet.');
+    toast(state.editProfile ? '✅ Profile updated!' : '⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
     state.editProfile = false;
     await refreshData();
   };
@@ -1405,141 +1314,23 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
   saveMyListing = async function(l){
     const { data, error } = await sb.from('e4e_listings').insert({
       owner: uid(), who: cache.me.name, cat:l.cat, type:l.type, title:l.title,
-      emoji:l.emoji, loc:l.loc, price:l.price, description:l.desc
+      emoji:l.emoji, loc:l.loc, price:l.price, accepts:l.accepts||[], description:l.desc
     }).select().single();
     if (error){ toast('⚠️ '+error.message); return; }
     cache.listings.unshift(rowToListing(data));
     if (state.page === 'explore' || state.page === 'profile') render();
   };
 
-  /* ---- review deposit ---- */
+  /* ---- exchange requests (free — recorded so both sides have a trail) ---- */
   sendMessage = async function(e, who){
     e.preventDefault();
     if(!cache.me){ closeModal(); go('profile'); toast('Sign in to send requests.'); return; }
-    if((cache.me.wallet||0) < 1){ closeModal(); toast('⚠️ You need 1 ⚡ available for the review deposit.'); openBuyEnergy(); return; }
     const msg = document.getElementById('reqMsg')?.value || '';
     const offer = document.getElementById('reqOffer')?.value || '';
     const { error } = await sb.rpc('e4e_request_exchange', { p_about: who, p_message: msg, p_offer: offer });
-    if (error){ toast('⚠️ '+(error.message.includes('INSUFFICIENT')?'Not enough Energy for the deposit.':error.message)); return; }
-    cache.me.wallet -= 1; cache.me.escrow += 1;
-    closeModal(); refreshNavWallet();
-    toast('✉️ Request sent to '+who+'! 1 ⚡ deposit held — returned when you leave your review.');
-  };
-  releaseDeposits = async function(){
-    const { data, error } = await sb.rpc('e4e_release_my_deposits');
     if (error){ toast('⚠️ '+error.message); return; }
-    if (data > 0){ cache.me.wallet += data; cache.me.escrow = 0; }
-    toast('⚡ Deposits returned — thanks for keeping the ecosystem healthy!');
-    render();
-  };
-
-  /* ---- cash out ($19 buyback, recorded server-side, paid manually) ---- */
-  doCashOut = async function(n){
-    const { data, error } = await sb.rpc('e4e_request_cashout', { p_amount: n });
-    if (error){
-      toast('⚠️ '+(error.message.includes('KEEP_REVIEW') ? 'Your 1 ⚡ review credit must stay in your wallet.' : error.message));
-      return;
-    }
-    cache.me.wallet -= n;
-    closeModal(); refreshNavWallet(); render();
-    toast(`💵 Cash-out requested: $${((data||n*1900)/100).toLocaleString()} for ${n} ⚡ — we'll send it within a few days.`);
-  };
-
-  /* ---- Square checkout ---- */
-  async function ensureSquare(){
-    if (!window.Square){
-      await loadScript(CLOUD.square.sandbox
-        ? 'https://sandbox.web.squarecdn.com/v1/square.js'
-        : 'https://web.squarecdn.com/v1/square.js');
-    }
-    if (!_sqPayments) _sqPayments = window.Square.payments(CLOUD.square.appId, CLOUD.square.locationId);
-  }
-  openBuyEnergy = async function(){
-    if(!cache.me){ go('profile'); toast('Sign in first — your Energy needs a wallet to live in.'); return; }
-    if(!CLOUD.square.appId){ toast('⚠️ Square is not configured yet — see backend/SETUP.md.'); return; }
-    const remaining = MAX_ENERGY_PER_USER - (cache.me.purchased||0);
-    modalShell(`<div class="inner" style="padding-top:40px">
-      <h3>Buy ⚡ Energy</h3>
-      <p style="color:var(--muted);font-size:.9rem;margin:6px 0 16px">1 ⚡ = $20 to buy · <b>$19 buyback</b> when you cash out · Florida supply remaining: <b>${flSupplyLeft().toLocaleString()} ⚡</b><br>Your allowance: <b>${remaining} ⚡</b> (hard cap of ${MAX_ENERGY_PER_USER} per member)</p>
-      <div class="fgroup"><label>Amount (whole numbers)</label><input id="buyAmt" type="number" min="1" step="1" max="${remaining}" placeholder="e.g. 25"></div>
-      <div id="apay-button" style="display:none;-webkit-appearance:-apple-pay-button;apple-pay-button-type:plain;apple-pay-button-style:black;height:44px;border-radius:10px;margin-bottom:10px;cursor:pointer"></div>
-      <div id="gpay-button" style="display:none;margin-bottom:10px;cursor:pointer"></div>
-      <div class="fgroup"><label>Or pay by card</label><div id="card-container" style="border:1.5px solid #ddd6ee;border-radius:12px;padding:10px;background:#fff"></div></div>
-      <button class="btn btn-gold btn-block" id="payBtn" onclick="purchaseEnergy()">Pay with Square ⚡</button>
-      <div class="hint" style="margin-top:10px;text-align:center">Card · Apple Pay · Google Pay — powered by Square${CLOUD.square.sandbox?' (SANDBOX — test card 4111 1111 1111 1111)':''}</div>
-    </div>`);
-    try {
-      await ensureSquare();
-      _sqCard = await _sqPayments.card();
-      await _sqCard.attach('#card-container');
-    } catch(err){
-      toast('⚠️ Could not load Square: '+err.message);
-      return;
-    }
-    /* Wallet buttons (Apple Pay / Google Pay) — shown only where the device supports them */
-    try {
-      const req = _sqPayments.paymentRequest({ countryCode:'US', currencyCode:'USD',
-        total:{ amount:'20.00', label:'Energy for Energy' } });
-      document.getElementById('buyAmt').addEventListener('input', e=>{
-        const n = Math.round(parseFloat(e.target.value));
-        if(n>=1) req.update({ total:{ amount:(n*20).toFixed(2)+'', label:`Energy for Energy — ${n} ⚡` } });
-      });
-      const walletPay = async (method)=>{
-        const amt = validBuyAmt(); if(amt===null) return;
-        try {
-          const tok = await method.tokenize();
-          if (tok.status !== 'OK') throw new Error(tok.errors?.[0]?.message || 'Payment was not completed.');
-          await completePurchase(amt, tok.token);
-        } catch(err){ toast('⚠️ '+err.message); }
-      };
-      try {
-        const gp = await _sqPayments.googlePay(req);
-        const gbtn = document.getElementById('gpay-button');
-        await gp.attach('#gpay-button', { buttonSizeMode:'fill', buttonType:'short' });
-        gbtn.style.display=''; gbtn.addEventListener('click', ()=>walletPay(gp));
-      } catch(e){ /* Google Pay unavailable on this device/browser */ }
-      try {
-        const ap = await _sqPayments.applePay(req);
-        const abtn = document.getElementById('apay-button');
-        abtn.style.display=''; abtn.addEventListener('click', ()=>walletPay(ap));
-      } catch(e){ /* Apple Pay unavailable (needs Safari + verified domain) */ }
-    } catch(e){ /* wallet setup is optional; card flow still works */ }
-  };
-  function validBuyAmt(){
-    const amtRaw = document.getElementById('buyAmt').value;
-    const amt = Math.round(parseFloat(amtRaw));
-    if(isNaN(amt) || amt < 1 || String(amt) !== String(amtRaw).trim()){ toast('⚠️ Enter a whole number of Energy.'); return null; }
-    const remaining = MAX_ENERGY_PER_USER - (cache.me.purchased||0);
-    if(amt > remaining){ toast(`⚠️ Cap reached: you can buy at most ${remaining} more ⚡.`); return null; }
-    return amt;
-  }
-  async function completePurchase(amt, sourceId){
-    const res = await fetch(`${CLOUD.supabaseUrl}/functions/v1/buy-energy`, {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json',
-        'Authorization':'Bearer '+cache.session.access_token,
-        'apikey': CLOUD.supabaseAnonKey },
-      body: JSON.stringify({ amount:amt, sourceId })
-    });
-    const body = await res.json();
-    if (!res.ok || !body.ok) throw new Error(body.error==='CAP_EXCEEDED' ? `Cap: only ${body.remaining} ⚡ left to buy.` : (body.error||'Payment failed.'));
-    cache.me.wallet = body.wallet; cache.me.purchased = body.purchased; cache.me.escrow = body.escrow;
-    closeModal(); refreshNavWallet();
-    toast(`⚡ ${amt} Energy added — payment confirmed!`);
-    if(state.page==='profile') render();
-  }
-  purchaseEnergy = async function(){
-    const amt = validBuyAmt(); if(amt===null) return;
-    const btn = document.getElementById('payBtn');
-    btn.disabled = true; btn.textContent = 'Processing…';
-    try {
-      const tok = await _sqCard.tokenize();
-      if (tok.status !== 'OK') throw new Error(tok.errors?.[0]?.message || 'Card was not accepted.');
-      await completePurchase(amt, tok.token);
-    } catch(err){
-      toast('⚠️ '+err.message);
-      btn.disabled = false; btn.textContent = 'Pay with Square ⚡';
-    }
+    closeModal();
+    toast('✉️ Request sent to '+who+'! They\'ll see your message and what you\'re offering.');
   };
 
   /* ---- boot ---- */
