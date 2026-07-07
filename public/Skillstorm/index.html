@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKILLSTORM — Every Skill. One Clock.</title>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#131826; --panel2:#1a2136;
+    --storm:#ffd23f; --bolt:#ff5e3a; --teal:#2de1c2;
+    --text:#eef1f8; --muted:#93a0bd;
+    --ninja:#ff5e3a; --precision:#ffd23f; --combat:#e0435c; --mental:#2de1c2; --party:#b06cf7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.6;overflow-x:hidden}
+  h1,h2,h3{font-weight:800;letter-spacing:-.02em}
+  section{padding:72px 24px;max-width:1080px;margin:0 auto}
+  .kicker{color:var(--storm);text-transform:uppercase;letter-spacing:.2em;font-size:.78rem;font-weight:700;margin-bottom:12px}
+
+  /* HERO */
+  .hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;padding:24px;
+    background:radial-gradient(ellipse at 50% -20%, #22304f 0%, var(--bg) 60%)}
+  .hero h1{font-size:clamp(3rem,10vw,6.5rem);line-height:1;
+    background:linear-gradient(100deg,var(--storm) 20%,var(--bolt) 60%,var(--teal) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:crackle 4s ease-in-out infinite}
+  @keyframes crackle{0%,100%{filter:drop-shadow(0 0 14px rgba(255,210,63,.25))}50%{filter:drop-shadow(0 0 30px rgba(255,94,58,.45))}}
+  .hero .tagline{font-size:clamp(1.1rem,3vw,1.6rem);color:var(--text);margin-top:16px;font-weight:600}
+  .hero .sub{color:var(--muted);max-width:640px;margin-top:14px}
+  .hero .cta-row{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+  .btn{display:inline-block;padding:14px 30px;border-radius:10px;font-weight:700;text-decoration:none;cursor:pointer;border:none;font-size:1rem;transition:transform .15s,box-shadow .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:linear-gradient(100deg,var(--storm),var(--bolt));color:#131313;box-shadow:0 6px 24px rgba(255,150,50,.35)}
+  .btn-ghost{background:transparent;color:var(--text);border:2px solid #33405f}
+  .scroll-hint{position:absolute;bottom:26px;color:var(--muted);font-size:.85rem;animation:bob 2s infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+
+  /* STATS BAR */
+  .stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:38px}
+  .stat{background:var(--panel);border:1px solid #212b45;border-radius:12px;padding:14px 26px;text-align:center;min-width:130px}
+  .stat b{display:block;font-size:1.7rem;color:var(--storm)}
+  .stat span{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+  /* HOW IT WORKS */
+  .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:30px}
+  .rule{background:var(--panel);border:1px solid #212b45;border-radius:14px;padding:24px}
+  .rule .num{font-size:2rem;font-weight:800;color:var(--bolt)}
+  .rule h3{margin:8px 0 6px;font-size:1.05rem}
+  .rule p{color:var(--muted);font-size:.92rem}
+
+  /* COURSE MAP */
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0 26px}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;color:var(--muted)}
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .track{display:flex;flex-direction:column;gap:0}
+  .station{display:flex;align-items:stretch;gap:0;cursor:pointer}
+  .station .spine{width:56px;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+  .station .node{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#10131b;font-size:.95rem;z-index:1;transition:transform .15s}
+  .station:hover .node{transform:scale(1.18)}
+  .station .line{flex:1;width:3px;background:#2a3453;min-height:14px}
+  .station .card{flex:1;background:var(--panel);border:1px solid #212b45;border-radius:12px;padding:14px 18px;margin:4px 0;transition:border-color .15s,background .15s}
+  .station:hover .card{border-color:#3b4c78}
+  .station.open .card{background:var(--panel2);border-color:#4a5f96}
+  .card .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .card .title{font-weight:700;font-size:1.02rem}
+  .card .tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:999px;color:#10131b;white-space:nowrap}
+  .card .detail{max-height:0;overflow:hidden;transition:max-height .35s ease;color:var(--muted);font-size:.92rem}
+  .station.open .detail{max-height:220px;padding-top:10px}
+  .card .chev{color:var(--muted);transition:transform .3s;font-size:.8rem}
+  .station.open .chev{transform:rotate(180deg)}
+
+  /* CHESS CALLOUT */
+  .callout{background:linear-gradient(120deg,#12241f,#101a2e);border:1px solid #1f4a3f;border-radius:16px;padding:30px;margin-top:44px;display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .callout .piece{font-size:3.4rem}
+  .callout h3{color:var(--teal);margin-bottom:6px}
+  .callout p{color:var(--muted);max-width:640px}
+
+  /* PENALTY PLAYGROUND */
+  .calc{background:var(--panel);border:1px solid #212b45;border-radius:16px;padding:30px;margin-top:30px}
+  .calc h3{margin-bottom:4px}
+  .calc p.hint{color:var(--muted);font-size:.9rem;margin-bottom:20px}
+  .sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+  .sl label{font-size:.86rem;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:6px}
+  .sl label b{color:var(--text)}
+  input[type=range]{width:100%;accent-color:var(--bolt)}
+  .calc .result{margin-top:24px;text-align:center;font-size:1.05rem;color:var(--muted)}
+  .calc .result b{font-size:2rem;color:var(--storm);display:block;font-variant-numeric:tabular-nums}
+  .calc .verdict{margin-top:6px;font-size:.9rem;color:var(--teal);min-height:1.4em}
+
+  /* PHYSICAL + VR */
+  .twocol{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:26px}
+  .col-card{background:var(--panel);border:1px solid #212b45;border-radius:14px;padding:26px}
+  .col-card h3{margin-bottom:10px}
+  .col-card ul{list-style:none;margin-top:8px}
+  .col-card li{color:var(--muted);font-size:.93rem;padding:5px 0 5px 24px;position:relative}
+  .col-card li::before{content:"⚡";position:absolute;left:0;font-size:.8rem}
+
+  /* WAITLIST */
+  .waitlist{background:linear-gradient(120deg,#1c1430,#251020);border:1px solid #3a2a52;border-radius:20px;padding:48px 30px;text-align:center;margin-top:20px}
+  .waitlist h2{font-size:2rem}
+  .waitlist p{color:var(--muted);max-width:520px;margin:12px auto 26px}
+  .wl-form{display:flex;gap:10px;max-width:460px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+  .wl-form input{flex:1;min-width:220px;padding:14px 18px;border-radius:10px;border:1px solid #3a4568;background:#0d1120;color:var(--text);font-size:1rem}
+  .wl-form input:focus{outline:2px solid var(--storm)}
+  .wl-msg{margin-top:14px;color:var(--teal);font-weight:600;min-height:1.4em}
+
+  footer{text-align:center;padding:34px;color:#5a6684;font-size:.85rem}
+  @media(max-width:600px){section{padding:52px 16px}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="kicker">A new kind of competition</div>
+  <h1>SKILLSTORM</h1>
+  <div class="tagline">Every skill. One clock. No hiding.</div>
+  <p class="sub">A single timed gauntlet that fuses ninja obstacles with paintball, knife and ax throwing, archery, memory trials — and a chessboard you can't get past until you win. Fastest raw time takes it all.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="#waitlist">Join the Waitlist</a>
+    <a class="btn btn-ghost" href="#course">Explore the Course</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>11</b><span>Stations</span></div>
+    <div class="stat"><b>1</b><span>Clock</span></div>
+    <div class="stat"><b>~14</b><span>Min avg run</span></div>
+    <div class="stat"><b>5</b><span>Skill types</span></div>
+  </div>
+  <div class="scroll-hint">▼ scroll</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="kicker">How it works</div>
+  <h2>One run. One time. Everything counts.</h2>
+  <div class="rules">
+    <div class="rule"><div class="num">01</div><h3>The clock never stops</h3><p>From the start gate to the buzzer, one timer runs. Your score IS your raw time. No penalties, no bonuses, no fine print.</p></div>
+    <div class="rule"><div class="num">02</div><h3>Redo it till it's done</h3><p>Fall in the water? Climb again. Botch the memory grid? New pattern. Lose at chess? New game. Every retry happens on your clock.</p></div>
+    <div class="rule"><div class="num">03</div><h3>10 shots or you're out</h3><p>Paintball, archery, knife, ax: 10 shots to hit 3 targets, each. Use all 10 without all 3 hits and your run ends. Disqualified.</p></div>
+    <div class="rule"><div class="num">04</div><h3>No buyouts. No mercy.</h3><p>You can't skip a station, buy your way past, or take a penalty instead. Climbers get walled by archery, sharpshooters gas out on the Salmon Ladder — the champion does it all.</p></div>
+  </div>
+</section>
+
+<!-- COURSE MAP -->
+<section id="course">
+  <div class="kicker">The course</div>
+  <h2>11 stations. Tap each one.</h2>
+  <div class="legend">
+    <span><i class="dot" style="background:var(--ninja)"></i> Ninja</span>
+    <span><i class="dot" style="background:var(--precision)"></i> Precision</span>
+    <span><i class="dot" style="background:var(--combat)"></i> Combat</span>
+    <span><i class="dot" style="background:var(--mental)"></i> Mental</span>
+    <span><i class="dot" style="background:var(--party)"></i> Party</span>
+  </div>
+  <div class="track" id="track"></div>
+
+  <div class="callout">
+    <div class="piece">♞</div>
+    <div>
+      <h3>The Chess Gate</h3>
+      <p>Station 9 is a chessboard, and the rule is brutal in its simplicity: <b>beat the computer or stay put.</b> However many games it takes, however long it takes — the clock is running. It's not a hard opponent. But your arms are shaking from the Salmon Ladder, your heart is at 170, and every second you think is a second you lose.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PENALTY PLAYGROUND -->
+<section>
+  <div class="kicker">Try the math</div>
+  <h2>The run-time simulator</h2>
+  <div class="calc">
+    <h3>How fast would <em>your</em> run be?</h3>
+    <p class="hint">No penalties, no bonuses — misses just cost you the time it takes to try again. Base clean-run pace: 11:30. Careful with the shot counters: 10 is a DQ.</p>
+    <div class="sliders">
+      <div class="sl"><label>Obstacle falls <b id="v-fall">1</b></label><input type="range" id="s-fall" min="0" max="8" value="1"></div>
+      <div class="sl"><label>Paintballs used (3–10) <b id="v-pb">4</b></label><input type="range" id="s-pb" min="3" max="10" value="4"></div>
+      <div class="sl"><label>Arrows used (3–10) <b id="v-ar">5</b></label><input type="range" id="s-ar" min="3" max="10" value="5"></div>
+      <div class="sl"><label>Knife + ax throws used (6–20) <b id="v-th">8</b></label><input type="range" id="s-th" min="6" max="20" value="8"></div>
+      <div class="sl"><label>Chess games to win <b id="v-chess">1</b></label><input type="range" id="s-chess" min="1" max="6" value="1"></div>
+      <div class="sl"><label>Memory grids needed <b id="v-mem">1</b></label><input type="range" id="s-mem" min="1" max="6" value="1"></div>
+    </div>
+    <div class="result">Your raw time<b id="r-time">11:53</b><div class="verdict" id="r-verdict"></div></div>
+  </div>
+</section>
+
+<!-- REAL LIFE + VR -->
+<section>
+  <div class="kicker">Two arenas, one sport</div>
+  <h2>Built for real life. Trained in VR.</h2>
+  <div class="twocol">
+    <div class="col-card">
+      <h3>🏟️ The Physical Course</h3>
+      <p style="color:var(--muted);font-size:.93rem">Warehouse-scale competition venues where everything is real: real axes, real water hazards, real chess clocks.</p>
+      <ul>
+        <li>Sanctioned events at gyms &amp; entertainment centers</li>
+        <li>Official app handles timing, DQ calls &amp; brackets</li>
+        <li>Spectator-friendly: every station is short and dramatic</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h3>🥽 The VR Proving Ground</h3>
+      <p style="color:var(--muted);font-size:.93rem">The companion VR game (Quest &amp; PC VR) uses honest physics — real throwing arcs, real climbing motion — so practice actually transfers.</p>
+      <ul>
+        <li>Run the full gauntlet from your living room</li>
+        <li>Global &amp; weekly leaderboards</li>
+        <li>Your VR rank seeds your bracket at live events</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section id="waitlist">
+  <div class="waitlist">
+    <div class="kicker">Get in early</div>
+    <h2>The storm is coming.</h2>
+    <p>Join the waitlist for early VR access, playtest invites, and first dibs on live event registration.</p>
+    <form class="wl-form" id="wl-form">
+      <input type="email" id="wl-email" placeholder="you@example.com" required>
+      <button class="btn btn-primary" type="submit">Count me in</button>
+    </form>
+    <div class="wl-msg" id="wl-msg"></div>
+  </div>
+</section>
+
+<footer>SKILLSTORM™ (working title) · Concept preview — details subject to change · © 2026</footer>
+
+<script>
+const STATIONS = [
+  {n:1, name:"Quintuple Steps + Rolling Log", type:"ninja", time:"~45s",
+   desc:"Five angled platforms over water, then a spinning log you cross hand-over-hand. Fall in and you're back to the start of the obstacle, plus 10 seconds."},
+  {n:2, name:"Archery Range", type:"precision", time:"~60s · DQ risk",
+   desc:"10 arrows, 3 targets — two static at range, one mover. Hit all three or your run is over. Real bows at live events."},
+  {n:3, name:"Ring Slide + Cargo Net", type:"ninja", time:"~60s",
+   desc:"Grab the rings, ride the rail, release at the right moment — then scramble up the cargo net. Momentum is everything."},
+  {n:4, name:"The Throwing Alley", type:"precision", time:"~90s · DQ risk",
+   desc:"Two lanes: knife, then ax. Each lane is 10 throws to stick 3 targets — miss the quota in either and you're disqualified. The knife's half-spin is the skill to master."},
+  {n:5, name:"Paintball Gallery", type:"combat", time:"~90s · DQ risk",
+   desc:"One marker, 10 paintballs, 3 targets down the corridor — including a pop-up. Hit all three or you're out. With 10 rounds, every trigger pull is a decision."},
+  {n:6, name:"Memory Vault", type:"mental", time:"~60s",
+   desc:"A pattern lights up on a 4×4 grid — reproduce it. Miss, and you get a brand-new pattern to memorize while your clock keeps running. Your legs get a break; your brain doesn't."},
+  {n:7, name:"Flip Cup Table", type:"party", time:"~30s",
+   desc:"Five cups, five clean flips, in a row. Simple. Infuriating. The crowd's favorite place to watch a leader crumble."},
+  {n:8, name:"Salmon Ladder + Cliffhanger", type:"ninja", time:"~75s",
+   desc:"The signature power move: explosive pull-ups that pop the bar up the rungs, straight into a fingertip traverse. Grip strength decides your fate here."},
+  {n:9, name:"THE CHESS GATE ♞", type:"mental", time:"until you win",
+   desc:"Beat the computer to continue. No shortcut, no mercy — just you, a low-level engine, and a clock that will not stop. Lose, and the board resets for another game."},
+  {n:10, name:"Ring Toss Finale", type:"precision", time:"~45s",
+   desc:"Carnival classic, un-rigged: our rings actually fit the pegs. Land three to pass — unlimited rings, but every toss is time."},
+  {n:11, name:"The Warped Wall", type:"ninja", time:"~30s",
+   desc:"Sprint, plant, reach, grab. As many attempts as you need to make the ledge, then hit the buzzer and stop the clock. The only wall between you and the leaderboard."}
+];
+const COLORS = {ninja:"var(--ninja)", precision:"var(--precision)", combat:"var(--combat)", mental:"var(--mental)", party:"var(--party)"};
+const LABELS = {ninja:"Ninja", precision:"Precision", combat:"Combat", mental:"Mental", party:"Party"};
+
+const track = document.getElementById("track");
+STATIONS.forEach((s,i)=>{
+  const el = document.createElement("div");
+  el.className = "station";
+  el.innerHTML = `
+    <div class="spine">
+      ${i>0?'<div class="line"></div>':'<div style="flex:1"></div>'}
+      <div class="node" style="background:${COLORS[s.type]}">${s.n}</div>
+      ${i<STATIONS.length-1?'<div class="line"></div>':'<div style="flex:1"></div>'}
+    </div>
+    <div class="card">
+      <div class="head">
+        <span class="title">${s.name}</span>
+        <span style="display:flex;align-items:center;gap:10px">
+          <span class="tag" style="background:${COLORS[s.type]}">${LABELS[s.type]} · ${s.time}</span>
+          <span class="chev">▼</span>
+        </span>
+      </div>
+      <div class="detail">${s.desc}</div>
+    </div>`;
+  el.addEventListener("click",()=>el.classList.toggle("open"));
+  track.appendChild(el);
+});
+
+// Run-time simulator — no penalties/bonuses, retries just take time. Shot limits can DQ you.
+const BASE = 690; // 11:30 clean pace (minimum shots already included)
+const ids = ["fall","pb","ar","th","chess","mem"];
+function fmt(sec){const m=Math.floor(sec/60),s=Math.round(sec%60);return m+":"+String(s).padStart(2,"0");}
+function recalc(){
+  const v = {};
+  ids.forEach(id=>{ v[id]=+document.getElementById("s-"+id).value; document.getElementById("v-"+id).textContent=v[id]; });
+  // DQ check: hitting the ammo ceiling means you likely didn't land all 3
+  const dq = v.pb===10 || v.ar===10 || v.th===20;
+  const timeEl = document.getElementById("r-time"), verdEl = document.getElementById("r-verdict");
+  if(dq){
+    timeEl.textContent = "DQ";
+    verdEl.textContent = "💀 Out of ammo before the third target. Run over — no time recorded.";
+    return;
+  }
+  // Each extra attempt costs its natural redo time
+  const t = BASE
+    + v.fall*12            // re-climb after a fall
+    + (v.pb-3)*6           // extra paintball shots (aim + fire)
+    + (v.ar-3)*8           // extra arrows (nock + draw)
+    + (v.th-6)*7           // extra knife/ax throws (retrieve stance + throw)
+    + (v.chess-1)*75       // each lost chess game
+    + (v.mem-1)*20;        // each fresh memory pattern
+  timeEl.textContent = fmt(t);
+  verdEl.textContent = t<=720 ? "⚡ Legend-tier pace. See you at the finals."
+    : t<=840 ? "🔥 Pro-tier. Podium contender."
+    : t<=1020 ? "💪 Solid Rookie run — the storm respects hustle."
+    : "🌪️ You survived every gate — slow, but never disqualified.";
+}
+ids.forEach(id=>document.getElementById("s-"+id).addEventListener("input",recalc));
+recalc();
+
+// Waitlist (placeholder — no backend yet)
+document.getElementById("wl-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const email = document.getElementById("wl-email").value.trim();
+  if(!email) return;
+  document.getElementById("wl-msg").textContent = "⚡ You're on the list, " + email.split("@")[0] + "! (Demo — signups aren't stored yet.)";
+  document.getElementById("wl-form").reset();
+});
+</script>
+</body>
+</html>
