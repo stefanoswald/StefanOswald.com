@@ -608,7 +608,7 @@ function renderHome(){
       <div class="step"><div class="n">1</div><h4>Create your profile</h4><p>List what you offer, what you rent, what you sell — and what you're looking for.</p></div>
       <div class="step"><div class="n">2</div><h4>Explore your community</h4><p>Browse people, things, and workshops near you or online.</p></div>
       <div class="step"><div class="n">3</div><h4>Propose an exchange</h4><p>Barter directly, offer goodwill, or fall back to cash — you and your match set the terms together.</p></div>
-      <div class="step"><div class="n">4</div><h4>Exchange &amp; build trust</h4><p>Complete the exchange and leave each other a review. Your reputation is your currency here.</p></div>
+      <div class="step"><div class="n">4</div><h4>Exchange &amp; review within 24h</h4><p>Complete the exchange, then review each other within 24 hours — reviews are what make the next exchange possible.</p></div>
     </div>
   </section>
 
@@ -647,7 +647,7 @@ function cardHTML(l){
       <p class="desc">${esc(l.desc)}</p>
       <div class="foot">
         <span class="price ${barter?'energy':''}">${barter?'🤝 ':''}${esc(l.price)}</span>
-        <button class="btn btn-teal btn-sm" onclick="event.stopPropagation();openContact('${jsq(l.who)}','${jsq(l.title)}')">Request</button>
+        <button class="btn btn-teal btn-sm" onclick="event.stopPropagation();openContact('${jsq(l.who)}','${jsq(l.title)}','${l.owner||''}')">Request</button>
       </div>
     </div>
   </div>`;
@@ -662,14 +662,16 @@ function filteredListings(){
   ).sort((a,b) => (isBarterFriendly(b)?1:0) - (isBarterFriendly(a)?1:0)); // barter-friendly first
 }
 function renderExplore(){
+  const od = overdueReviews();
   return `
   <div class="page-hero">
     <h1>Explore Exchanges</h1>
     <p>Browse skills, rentals, items, and learning opportunities from your community.</p>
   </div>
   <section class="section" style="padding-top:36px">
+    ${od.length?`<div class="energy-note" style="margin-bottom:16px">⚠️ <b>Review due:</b> you completed an exchange over 24 hours ago and haven't reviewed it. Search and new requests are paused until your review is in. <button class="btn btn-sm" style="background:#c0392b;color:#fff;margin-left:6px" onclick="openReviewModal('${jsq(String(od[0].id))}')">Leave review now</button></div>`:''}
     <div class="filterbar">
-      <div class="search-wrap"><span class="ic">🔎</span><input id="searchInput" type="text" placeholder="Search listings, people, places…"></div>
+      <div class="search-wrap"><span class="ic">🔎</span><input id="searchInput" type="text" ${od.length?'disabled placeholder="Search paused — review due"':'placeholder="Search listings, people, places…"'}></div>
     </div>
     <div class="chips" style="margin-bottom:24px">
       <button class="chip ${state.cat==='all'?'active':''}" onclick="state.cat='all';refreshGrid(true)">All</button>
@@ -811,7 +813,9 @@ function profileHTML(name, u, editable){
       <div class="pbox"><h4>🙏 Things I Want</h4>${listOr(u.wants,'Open to offers!')}</div>
     </div>
     <div class="pbox" style="margin-top:20px"><h4>💬 Reviews</h4>
-      <p style="color:var(--muted);font-size:.9rem">No reviews yet — reviews appear here after completed exchanges. ${editable?'Complete your first exchange to start building trust.':`Be the first to exchange with ${esc(name.split(' ')[0])}.`}</p>
+      ${(u.realReviews&&u.realReviews.length)
+        ? u.realReviews.map(r=>`<div class="review"><div class="who">${esc(r.reviewer_name||'Member')} <span style="color:var(--gold)">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span></div>${r.txt?`<div class="txt">"${esc(r.txt)}"</div>`:''}</div>`).join('')
+        : `<p style="color:var(--muted);font-size:.9rem">No reviews yet — reviews appear here after completed exchanges. ${editable?'Complete your first exchange to start building trust.':`Be the first to exchange with ${esc(name.split(' ')[0])}.`}</p>`}
     </div>
   </section>`;
 }
@@ -823,7 +827,10 @@ function renderProfile(){
   if(!m) return renderAuth();
   if(!m.name || state.editProfile) return renderProfileSetup(m);
   const mine = myListings();
-  const u = {emoji:m.emoji,loc:m.loc,bio:m.bio,score:m.score||'New',reviews:0,
+  const rv = reviewsAboutMe();
+  const u = {emoji:m.emoji,loc:m.loc,bio:m.bio,
+    score: rv.length ? +(rv.reduce((n,r)=>n+r.stars,0)/rv.length).toFixed(1) : 'New',
+    reviews: rv.length, realReviews: rv,
     offers:m.offers, wants:m.wants,
     rents:mine.filter(l=>l.type==='Rent').map(l=>l.title),
     sells:mine.filter(l=>l.type==='Buy').map(l=>l.title)};
@@ -842,6 +849,23 @@ function renderProfile(){
           <div class="hint" style="margin-top:10px">Barter-friendly listings get the 🤝 badge and rank higher in Explore. Your reputation is your currency here.</div>
         </div>
       </section>`
+    + (myExchanges().length?`<section class="section" style="padding-top:20px;padding-bottom:0">
+        <div class="pbox"><h4>🔄 My Exchanges</h4>
+          ${myExchanges().map(x=>`
+            <div class="review" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+              <div style="flex:1;min-width:220px">
+                <div class="who">${x.mine?'→ To':'← From'} ${esc(x.otherName)} · ${esc(x.about||'exchange')}</div>
+                <div class="txt">${esc(x.offer||x.message||'')}</div>
+              </div>
+              ${x.status==='pending'
+                ? `<button class="btn btn-teal btn-sm" onclick="completeExchange('${jsq(String(x.id))}')">We did it — mark completed ✓</button>`
+                : x.reviewedByMe
+                  ? `<span class="hint">✓ Completed &amp; reviewed</span>`
+                  : `<button class="btn btn-sm" style="${x.overdue?'background:#c0392b;color:#fff':'background:var(--grad-gold);color:#fff'}" onclick="openReviewModal('${jsq(String(x.id))}')">${x.overdue?'⚠️ Review overdue':'Leave review'}</button>`}
+            </div>`).join('')}
+          <div class="hint" style="margin-top:10px">Reviews are due within <b>24 hours</b> of completing an exchange — searching and connecting pause until they're in.</div>
+        </div>
+      </section>`:'')
     + (mine.length?`<section class="section" style="padding-bottom:0"><div class="section-head left"><span class="kicker">My listings</span><h2>Energy you've offered</h2></div><div class="listing-grid">${mine.map(cardHTML).join('')}</div></section>`:'')
     + `<section class="section" style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
         <button class="btn btn-outline" onclick="signOut()">Sign out</button>
@@ -965,8 +989,30 @@ function doDeleteAccount(){
   localStorage.removeItem('e4e_session');
   closeModal(); toast('Account deleted.'); refreshNavWallet(); render();
 }
+/* ---- Profile offers/wants pickers (powers quick listings + trade ordering) ---- */
+let _profSel = null, _profShown = 18;
+function initProfSel(m){
+  if(_profSel) return;
+  _profSel = { offers:[...(m.offers||[])], wants:[...(m.wants||[])] };
+}
+function toggleProf(g, name){
+  const arr = _profSel[g], i = arr.indexOf(name);
+  if(i>=0) arr.splice(i,1); else arr.push(name);
+  render();
+}
+function profChipGrid(g){
+  const sel = _profSel[g];
+  const names = TRADE_CATALOG.map(t=>t[0]);
+  const custom = sel.filter(n=>!names.includes(n));
+  const shown = names.slice(0, _profShown);
+  const selectedHidden = sel.filter(n=>names.includes(n) && !shown.includes(n));
+  const list = [...custom, ...selectedHidden, ...shown];
+  return `<div class="trade-grid">${list.map(n=>`<button type="button" class="trade-btn ${sel.includes(n)?'sel':''}" onclick="toggleProf('${g}','${jsq(n)}')">${esc(n)}</button>`).join('')}</div>
+  ${_profShown < names.length ? `<div style="text-align:center;margin-top:10px"><button type="button" class="btn btn-outline btn-sm" onclick="_profShown+=24;render()">Show More ↓</button></div>`:''}`;
+}
 function renderProfileSetup(m){
   const editing = !!m.name;
+  initProfSel(m);
   return `
   <div class="page-hero"><h1>${editing?'Edit your profile':'Almost there'}</h1><p>${editing?'Update how the community sees you.':'Signed in as '+esc(m.email)+' — now tell the community who you are.'}</p></div>
   <section class="section" style="padding-top:36px">
@@ -980,15 +1026,21 @@ function renderProfileSetup(m){
           <select name="emoji">${PROFILE_EMOJIS.map(e=>`<option value="${e}" ${e===m.emoji?'selected':''}>${e}</option>`).join('')}</select>
         </div>
         <div class="fgroup"><label>Bio (up to 400 characters)</label><textarea name="bio" maxlength="400" placeholder="Who are you, and what energy do you bring?">${esc(m.bio||'')}</textarea></div>
-        <div class="fgroup"><label>Skills you offer (comma-separated)</label><input name="offers" placeholder="e.g. Guitar lessons, dog walking, tax help" value="${esc((m.offers||[]).join(', '))}"></div>
-        <div class="fgroup"><label>Things you want (comma-separated)</label><input name="wants" placeholder="e.g. Bike repair, sourdough starter, French practice" value="${esc((m.wants||[]).join(', '))}"></div>
+        <div class="fgroup"><label>What do you offer? <span style="font-weight:400;color:var(--muted)">Select everything — this powers one-tap listings later.</span></label>
+          ${profChipGrid('offers')}
+          <input name="extraOffers" placeholder="Anything not on the list? Add it here, comma-separated" style="margin-top:10px">
+        </div>
+        <div class="fgroup"><label>What are you looking for? <span style="font-weight:400;color:var(--muted)">Select everything — these appear first when you build listings.</span></label>
+          ${profChipGrid('wants')}
+          <input name="extraWants" placeholder="Anything not on the list? Add it here, comma-separated" style="margin-top:10px">
+        </div>
         <button class="btn btn-gold btn-block" type="submit">${editing?'Save Changes ⚡':'Create My Profile ⚡'}</button>
-        ${editing?`<button type="button" class="btn btn-outline btn-block" style="margin-top:10px" onclick="state.editProfile=false;render();window.scrollTo({top:0})">Cancel</button>`:''}
+        ${editing?`<button type="button" class="btn btn-outline btn-block" style="margin-top:10px" onclick="state.editProfile=false;_profSel=null;render();window.scrollTo({top:0})">Cancel</button>`:''}
       </form>
     </div>
   </section>`;
 }
-function editProfile(){ state.editProfile = true; render(); window.scrollTo({top:0}); }
+function editProfile(){ state.editProfile = true; _profSel = null; render(); window.scrollTo({top:0}); }
 function renderUser(){
   const name = state.viewUser;
   const u = USERS[name] || {emoji:'🙂',loc:'Community member',score:'New',reviews:0,bio:'A member of the Energy for Energy community.',offers:allListings().filter(l=>l.who===name).map(l=>l.title),rents:[],sells:[],wants:['Open to interesting trades']};
@@ -1000,12 +1052,14 @@ function saveProfile(e){
   e.preventDefault();
   const f = new FormData(e.target);
   const split = s => (s||'').split(',').map(x=>x.trim()).filter(Boolean);
+  const offers = [...new Set([..._profSel.offers, ...split(f.get('extraOffers'))])];
+  const wants  = [...new Set([..._profSel.wants,  ...split(f.get('extraWants'))])];
   updateMe(m => Object.assign(m, {
     name:f.get('name'), loc:f.get('loc'), emoji:f.get('emoji')||'⚡', bio:f.get('bio'),
-    offers:split(f.get('offers')), wants:split(f.get('wants'))
+    offers, wants
   }));
   toast(state.editProfile ? '✅ Profile updated!' : '⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
-  state.editProfile = false;
+  state.editProfile = false; _profSel = null;
   render();
 }
 function joinCommunity(){ go('profile'); }
@@ -1026,7 +1080,10 @@ function renderCreate(){
   <div class="page-hero"><h1>Offer Your Energy</h1><p>What are you offering? A skill, a thing, a lesson, a spare room — it all counts.</p></div>
   <section class="section" style="padding-top:36px">
     <div class="form-card">
-      <div class="energy-note">🤝 <b>Barter first:</b> listings open to trades get the barter badge and rank higher in Explore. Pick what you'd accept from the community trade list — and add a cash price only if you want a fallback.</div>
+      <div class="energy-note">🤝 <b>Barter first:</b> every listing names at least <b>3 things</b> its owner would accept in trade — that's what keeps this a community, not a store. Add a cash price only if you want a fallback.</div>
+      ${p&&(p.offers||[]).length?`<div class="fgroup"><label>⚡ Quick start — turn one of your profile offers into a listing</label>
+        <div class="trade-grid">${p.offers.slice(0,12).map(o=>`<button type="button" class="trade-btn" onclick="quickFill('${jsq(o)}')">${esc(o)}</button>`).join('')}</div>
+      </div>`:''}
       <form onsubmit="submitListing(event)">
         <div class="fgroup"><label>What are you offering?</label><input name="title" required maxlength="70" placeholder="e.g. Sourdough baking lessons"></div>
         <div class="frow">
@@ -1039,8 +1096,8 @@ function renderCreate(){
           </div>
           <div class="fgroup"><label>Location</label><div class="ac-wrap"><input name="loc" required autocomplete="off" data-ac placeholder='Start typing a city — or "Online"' value="${p?esc(p.loc):''}"><div class="ac-list"></div></div></div>
         </div>
-        <div class="fgroup"><label>Barter — what would you accept in exchange?</label>
-          <div class="trade-box" id="tradeBox"><span class="ph">Pick from the community trade list below — your selections appear here.</span></div>
+        <div class="fgroup"><label>Barter — what would you accept in exchange? <span style="font-weight:400;color:var(--muted)">Pick at least 3 — the things you're looking for appear first.</span></label>
+          <div class="trade-box" id="tradeBox"><span class="ph">Pick at least 3 from the community trade list below — your selections appear here.</span></div>
           <div class="trade-grid" id="tradeGrid"></div>
           <div style="text-align:center;margin-top:12px"><button type="button" class="btn btn-outline btn-sm" id="showMoreBtn" onclick="showMoreTrades()">Show More ↓</button></div>
         </div>
@@ -1077,27 +1134,50 @@ function renderCreate(){
   </section>`;
 }
 
-/* ---- Trade picker (choices are curated — no free text, no vulgarity risk) ---- */
+/* ---- Trade picker (choices are curated — no free text, no vulgarity risk).
+   Ordered per-user: things from YOUR profile wants come first. ---- */
+function tradeList(){
+  const p = myProfile();
+  const wants = (p && p.wants) ? p.wants : [];
+  const inCatalog = TRADE_CATALOG.filter(([n])=>wants.includes(n));
+  const customWants = wants.filter(w=>!TRADE_CATALOG.some(([n])=>n===w)).map(w=>[w,'s']);
+  const rest = TRADE_CATALOG.filter(([n])=>!wants.includes(n));
+  return [...inCatalog, ...customWants, ...rest];
+}
 function renderTradeGrid(){
   const grid = document.getElementById('tradeGrid');
   if(!grid) return;
-  grid.innerHTML = TRADE_CATALOG.slice(0, tradesShown).map(([name,kind],i)=>{
+  const list = tradeList();
+  const p = myProfile();
+  const wants = (p && p.wants) ? p.wants : [];
+  grid.innerHTML = list.slice(0, tradesShown).map(([name,kind],i)=>{
     const sel = selectedTrades.some(t=>t.name===name);
-    return `<button type="button" class="trade-btn ${sel?'sel':''}" onclick="toggleTrade(${i})">${esc(name)}</button>`;
+    const isWant = wants.includes(name);
+    return `<button type="button" class="trade-btn ${sel?'sel':''}" onclick="toggleTrade(${i})">${isWant?'⭐ ':''}${esc(name)}</button>`;
   }).join('');
   const more = document.getElementById('showMoreBtn');
-  if(more) more.style.display = tradesShown >= TRADE_CATALOG.length ? 'none' : '';
+  if(more) more.style.display = tradesShown >= list.length ? 'none' : '';
 }
 function showMoreTrades(){
-  tradesShown = Math.min(tradesShown + 12, TRADE_CATALOG.length);
+  tradesShown = Math.min(tradesShown + 12, tradeList().length);
   renderTradeGrid(); // the button sits below the grid, so it lands at the bottom of the longer list
 }
 function toggleTrade(i){
-  const [name,kind] = TRADE_CATALOG[i];
+  const [name,kind] = tradeList()[i];
   const at = selectedTrades.findIndex(t=>t.name===name);
   if(at>=0) selectedTrades.splice(at,1);
   else selectedTrades.push({name, kind, qty:1});
   renderTradeBox(); renderTradeGrid();
+}
+function quickFill(name){
+  const form = document.querySelector('.form-card form'); if(!form) return;
+  form.title.value = name;
+  const t = TRADE_CATALOG.find(([n])=>n===name);
+  const kind = t ? t[1] : 's';
+  form.cat.value = kind==='r' ? 'rent' : (kind==='i' ? 'buy' : 'skills');
+  if(!form.desc.value) form.desc.value = `Offering ${name.toLowerCase()} to the community — open to a good trade!`;
+  toast('✍️ Draft started from your profile — now pick at least 3 barter options below.');
+  form.title.focus();
 }
 function bumpTrade(idx,d){
   const t = selectedTrades[idx]; if(!t) return;
@@ -1134,12 +1214,10 @@ function submitListing(e){
   const usdVal = Math.round(parseFloat(f.get('usd')));
   const hasCash = !isNaN(usdVal) && usdVal > 0;
   const openBarter = f.get('openBarter') !== 'no';
-  const hasTrade = selectedTrades.length > 0;
-  if(!hasCash && !hasTrade && !openBarter){ toast('⚠️ Pick at least one trade, allow open barter offers, or set a cash fallback.'); return; }
-  const accepts = [];
-  if(hasTrade || openBarter) accepts.push(openBarter ? 'barter-open' : 'barter-listed');
+  if(selectedTrades.length < 3){ toast(`⚠️ Pick at least 3 barter options (you have ${selectedTrades.length}) — it's what keeps the community trading.`); return; }
+  const accepts = [openBarter ? 'barter-open' : 'barter-listed'];
   if(hasCash) accepts.push('cash');
-  let price = hasTrade ? `Barter: ${tradeSummary()}` : (openBarter ? 'Open to barter offers' : '');
+  let price = `Barter: ${tradeSummary()}`;
   if(hasCash) price = price ? `${price} — or $${usdVal.toLocaleString()}${f.get('eunit')||''}` : `$${usdVal.toLocaleString()}${f.get('eunit')||''}`;
   const grads = ['var(--grad-purple)','var(--grad-teal)','var(--grad-gold)'];
   saveMyListing({
@@ -1172,7 +1250,7 @@ function openListing(id){
         <b style="color:${barter?'var(--teal-2)':'var(--indigo-3)'}">${barter?'🤝 ':''}${esc(l.price)}</b>
         ${barter?'<span style="font-size:.8rem;color:var(--muted)">Open to barter — propose a trade!</span>':''}
       </div>
-      <button class="btn btn-gold btn-block" onclick="closeModal();openContact('${jsq(l.who)}','${jsq(l.title)}')">Contact / Request Exchange</button>
+      <button class="btn btn-gold btn-block" onclick="closeModal();openContact('${jsq(l.who)}','${jsq(l.title)}','${l.owner||''}')">Contact / Request Exchange</button>
     </div>`);
 }
 function openWorkshop(id){
@@ -1189,7 +1267,31 @@ function openWorkshop(id){
       <button class="btn btn-gold btn-block" onclick="closeModal();openContact('${jsq(w.host)}','${jsq(w.title)}')">Request a Spot</button>
     </div>`);
 }
-function openContact(who, about){
+/* ---- Exchange lifecycle & reviews (demo stubs; cloud mode overrides) ---- */
+let _reqTo = null, _reqAbout = '', _revStars = 5;
+function overdueReviews(){ return []; }
+function myExchanges(){ return []; }
+function reviewsAboutMe(){ return []; }
+function completeExchange(){ toast('Demo mode: exchanges activate on the live backend.'); }
+function submitReview(){ closeModal(); toast('Demo mode: reviews activate on the live backend.'); }
+function openReviewModal(id){
+  _revStars = 5;
+  modalShell(`<div class="inner" style="padding-top:40px">
+    <h3>Leave your review</h3>
+    <p style="color:var(--muted);font-size:.92rem;margin:8px 0 14px">Honest reviews are the currency of trust here — and they're due within 24 hours of completing an exchange.</p>
+    <div class="fgroup"><label>Rating</label>
+      <div class="trade-grid" style="grid-template-columns:repeat(5,1fr)" id="starRow">
+        ${[1,2,3,4,5].map(n=>`<button type="button" class="trade-btn sel" onclick="_revStars=${n};document.querySelectorAll('#starRow .trade-btn').forEach((b,i)=>b.classList.toggle('sel',i<${n}))">★</button>`).join('')}
+      </div>
+    </div>
+    <div class="fgroup"><label>Your review</label><textarea id="revTxt" maxlength="500" placeholder="How did the exchange go?"></textarea></div>
+    <button class="btn btn-gold btn-block" onclick="submitReview('${jsq(String(id))}')">Submit review 🌟</button>
+  </div>`);
+}
+function openContact(who, about, owner){
+  const od = overdueReviews();
+  if(od.length){ toast('⚠️ You have a review due — leave it and you can connect again.'); openReviewModal(od[0].id); return; }
+  _reqTo = owner || null; _reqAbout = about || '';
   modalShell(`
     <div class="inner" style="padding-top:40px">
       <h3>Message ${esc(who)}</h3>
@@ -1226,7 +1328,7 @@ render();
    Activates only when CLOUD config is filled in. Overrides the demo
    data layer with the real backend: accounts, profiles, listings, requests. */
 if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
-  const cache = { session:null, me:null, listings:[], booted:false };
+  const cache = { session:null, me:null, listings:[], exchanges:[], reviewsAboutMe:[], booted:false };
   let sb = null;
 
   function loadScript(src){
@@ -1253,13 +1355,48 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     const { data: ls } = await sb.from('e4e_listings').select('*').order('created_at', {ascending:false});
     cache.listings = (ls||[]).map(rowToListing);
     if (cache.session){
-      const { data: prof } = await sb.from('e4e_profiles').select('*').eq('id', uid()).maybeSingle();
+      const [{ data: prof }, { data: ex }, { data: revs }] = await Promise.all([
+        sb.from('e4e_profiles').select('*').eq('id', uid()).maybeSingle(),
+        sb.from('e4e_requests').select('*').or(`from_user.eq.${uid()},to_user.eq.${uid()}`).order('created_at',{ascending:false}),
+        sb.from('e4e_reviews').select('*').or(`reviewer.eq.${uid()},about_user.eq.${uid()}`)
+      ]);
       cache.me = { email: cache.session.user.email,
         provider: cache.session.user.app_metadata?.provider !== 'email' ? cache.session.user.app_metadata?.provider : null,
         ...(prof||{}) };
-    } else cache.me = null;
+      const myRevs = (revs||[]).filter(r=>r.reviewer===uid());
+      cache.reviewsAboutMe = (revs||[]).filter(r=>r.about_user===uid());
+      cache.exchanges = (ex||[]).map(x=>({
+        id:x.id, about:x.about, message:x.message, offer:x.offer,
+        status:x.status||'pending', completed_at:x.completed_at,
+        mine: x.from_user===uid(),
+        otherName: x.from_user===uid() ? (x.to_name||'a member') : (x.from_name||'a member'),
+        reviewedByMe: myRevs.some(r=>r.exchange_id===x.id),
+        overdue: (x.status==='completed') && x.completed_at &&
+                 (Date.now() - new Date(x.completed_at).getTime() > 24*3600*1000) &&
+                 !myRevs.some(r=>r.exchange_id===x.id)
+      }));
+    } else { cache.me = null; cache.exchanges = []; cache.reviewsAboutMe = []; }
     render();
   }
+
+  /* ---- exchange lifecycle & reviews ---- */
+  overdueReviews = function(){ return cache.exchanges.filter(x=>x.overdue); };
+  myExchanges = function(){ return cache.exchanges; };
+  reviewsAboutMe = function(){ return cache.reviewsAboutMe; };
+  completeExchange = async function(id){
+    const { error } = await sb.rpc('e4e_complete_exchange', { p_id:id });
+    if (error){ toast('⚠️ '+error.message); return; }
+    toast('✓ Exchange completed! Leave your review within 24 hours — it keeps the community strong.');
+    await refreshData();
+  };
+  submitReview = async function(id){
+    const txt = document.getElementById('revTxt')?.value || '';
+    const { error } = await sb.rpc('e4e_leave_review', { p_exchange:id, p_stars:_revStars, p_txt:txt });
+    if (error){ toast('⚠️ '+error.message); return; }
+    closeModal();
+    toast('🌟 Review posted — thank you for keeping trust flowing!');
+    await refreshData();
+  };
 
   /* ---- auth overrides ---- */
   sendCode = async function(){
@@ -1300,13 +1437,15 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     e.preventDefault();
     const f = new FormData(e.target);
     const split = s => (s||'').split(',').map(x=>x.trim()).filter(Boolean);
+    const offers = [...new Set([..._profSel.offers, ...split(f.get('extraOffers'))])];
+    const wants  = [...new Set([..._profSel.wants,  ...split(f.get('extraWants'))])];
     const { error } = await sb.from('e4e_profiles').upsert({
       id: uid(), name:(f.get('name')||'').slice(0,60), loc:f.get('loc'), emoji:f.get('emoji')||'⚡',
-      bio:(f.get('bio')||'').slice(0,400), offers:split(f.get('offers')), wants:split(f.get('wants'))
+      bio:(f.get('bio')||'').slice(0,400), offers, wants
     });
     if (error){ toast('⚠️ '+error.message); return; }
     toast(state.editProfile ? '✅ Profile updated!' : '⚡ Welcome to the community, '+f.get('name').split(' ')[0]+'!');
-    state.editProfile = false;
+    state.editProfile = false; _profSel = null;
     await refreshData();
   };
 
@@ -1321,16 +1460,21 @@ if (CLOUD.supabaseUrl && CLOUD.supabaseAnonKey) (function(){
     if (state.page === 'explore' || state.page === 'profile') render();
   };
 
-  /* ---- exchange requests (free — recorded so both sides have a trail) ---- */
+  /* ---- exchange requests (free — both sides see them in My Exchanges) ---- */
   sendMessage = async function(e, who){
     e.preventDefault();
     if(!cache.me){ closeModal(); go('profile'); toast('Sign in to send requests.'); return; }
+    if(!_reqTo){ closeModal(); toast('🙂 That one\'s a sample preview listing — try a listing from a real member.'); return; }
     const msg = document.getElementById('reqMsg')?.value || '';
     const offer = document.getElementById('reqOffer')?.value || '';
-    const { error } = await sb.rpc('e4e_request_exchange', { p_about: who, p_message: msg, p_offer: offer });
-    if (error){ toast('⚠️ '+error.message); return; }
+    const { error } = await sb.rpc('e4e_request_exchange', { p_to:_reqTo, p_about:_reqAbout, p_message: msg, p_offer: offer });
+    if (error){
+      if (error.message.includes('REVIEW_REQUIRED')){ closeModal(); toast('⚠️ You have a review due — leave it first.'); const od=overdueReviews(); if(od.length) openReviewModal(od[0].id); return; }
+      toast('⚠️ '+error.message); return;
+    }
     closeModal();
-    toast('✉️ Request sent to '+who+'! They\'ll see your message and what you\'re offering.');
+    toast('✉️ Request sent to '+who+'! Check My Exchanges on your profile to track it.');
+    await refreshData();
   };
 
   /* ---- boot ---- */
