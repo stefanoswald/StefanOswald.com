@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helix Hearts — Date for marriage. Match on values.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FBF7F3; --paper:#FFFFFF; --ink:#2C2833; --ink-soft:#5B5563; --ink-faint:#8B8492;
+  --rose:#B94A63; --rose-deep:#9A3A52; --rose-soft:#F6E4E8; --rose-mist:#FBF0F2;
+  --teal:#37716F; --teal-deep:#2C5B59; --teal-soft:#E2EFEE; --teal-mist:#F0F7F6;
+  --gold:#B8912F; --gold-soft:#F5EDD8;
+  --green:#3E7D52; --green-soft:#E4F0E8;
+  --amber:#9C6B1E; --amber-soft:#F7EDDB;
+  --line:#EAE3DC;
+  --shadow:0 2px 8px rgba(44,40,51,.06), 0 12px 32px rgba(44,40,51,.07);
+  --shadow-sm:0 1px 4px rgba(44,40,51,.07);
+  --radius:20px;
+  --font-display:'Fraunces', Georgia, serif;
+  --font-body:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--cream);color:var(--ink);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.display{font-family:var(--font-display);font-weight:600;line-height:1.2;letter-spacing:-.01em}
+a{color:var(--teal);text-decoration:none}
+button{font-family:var(--font-body);cursor:pointer;border:none;background:none;font-size:1rem}
+img{max-width:100%}
+
+/* ---------- Nav ---------- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(251,247,243,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1120px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:28px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.25rem;font-weight:700;color:var(--ink);cursor:pointer}
+.logo svg{flex-shrink:0}
+.nav-links{display:flex;gap:4px;margin-left:auto;align-items:center;flex-wrap:wrap}
+.nav-link{padding:8px 14px;border-radius:999px;color:var(--ink-soft);font-weight:500;font-size:.92rem;cursor:pointer;transition:.15s}
+.nav-link:hover{background:var(--rose-mist);color:var(--rose-deep)}
+.nav-link.active{background:var(--rose-soft);color:var(--rose-deep);font-weight:600}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 26px;border-radius:999px;font-weight:600;font-size:.98rem;transition:.18s;text-align:center}
+.btn-primary{background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;box-shadow:0 4px 14px rgba(185,74,99,.32)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(185,74,99,.4)}
+.btn-secondary{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);box-shadow:var(--shadow-sm)}
+.btn-secondary:hover{border-color:var(--rose);color:var(--rose-deep)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-deep)}
+.btn-ghost{color:var(--ink-soft);padding:10px 16px}
+.btn-ghost:hover{color:var(--rose-deep)}
+.btn-sm{padding:8px 16px;font-size:.88rem}
+.btn-danger{background:#fff;color:#A33;border:1.5px solid #E5C4C4}
+.btn-danger:hover{background:#FBEFEF}
+
+/* ---------- Layout ---------- */
+.page{display:none;min-height:calc(100vh - 61px)}
+.page.visible{display:block}
+.container{max-width:1120px;margin:0 auto;padding:40px 24px}
+.container-narrow{max-width:780px;margin:0 auto;padding:40px 24px}
+.card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;border:1px solid rgba(234,227,220,.6)}
+.card-soft{background:var(--paper);border-radius:var(--radius);border:1px solid var(--line);padding:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;font-weight:700;color:var(--rose);margin-bottom:10px}
+.muted{color:var(--ink-soft)}
+.small{font-size:.87rem}
+.tiny{font-size:.78rem;color:var(--ink-faint)}
+
+/* ---------- Badges & chips ---------- */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:600}
+.badge-rose{background:var(--rose-soft);color:var(--rose-deep)}
+.badge-teal{background:var(--teal-soft);color:var(--teal-deep)}
+.badge-gold{background:var(--gold-soft);color:var(--gold)}
+.badge-green{background:var(--green-soft);color:var(--green)}
+.badge-amber{background:var(--amber-soft);color:var(--amber)}
+.badge-gray{background:#F0EDEA;color:var(--ink-soft)}
+.chip{display:inline-block;padding:6px 14px;border-radius:999px;background:var(--teal-mist);color:var(--teal-deep);font-size:.85rem;font-weight:500;border:1px solid var(--teal-soft)}
+
+/* ---------- Landing ---------- */
+.hero{background:linear-gradient(150deg,#FDF2ED 0%,#FBF7F3 45%,#EDF5F3 100%);border-bottom:1px solid var(--line)}
+.hero-inner{max-width:1120px;margin:0 auto;padding:88px 24px 72px;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+.hero h1{font-size:3.2rem;font-weight:600;margin-bottom:20px}
+.hero h1 em{font-style:italic;color:var(--rose)}
+.hero p.lead{font-size:1.18rem;color:var(--ink-soft);margin-bottom:30px;max-width:34em}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.hero-visual{position:relative}
+.section{padding-top:72px;padding-bottom:72px}
+.section-title{font-size:2.1rem;margin-bottom:12px}
+.section-sub{color:var(--ink-soft);max-width:44em;margin-bottom:40px;font-size:1.05rem}
+.step-num{width:40px;height:40px;border-radius:12px;background:var(--rose-soft);color:var(--rose-deep);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:16px}
+.ethics-panel{background:linear-gradient(135deg,var(--teal-mist),#FBF7F3);border:1px solid var(--teal-soft);border-radius:24px;padding:40px}
+.ethics-list{display:grid;grid-template-columns:1fr 1fr;gap:14px 32px;margin-top:22px}
+.ethics-item{display:flex;gap:12px;align-items:flex-start;font-size:.95rem;color:var(--ink-soft)}
+.ethics-item .ico{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;margin-top:2px}
+.ico-yes{background:var(--green-soft);color:var(--green)}
+.ico-no{background:var(--rose-soft);color:var(--rose-deep)}
+
+/* ---------- Weights bars ---------- */
+.weight-row{display:grid;grid-template-columns:220px 1fr 52px;gap:14px;align-items:center;padding:9px 0;font-size:.93rem}
+.weight-track{height:10px;background:#F0EBE5;border-radius:999px;overflow:hidden}
+.weight-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--rose))}
+.weight-pct{font-weight:700;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- Score ring ---------- */
+.ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.ring svg{transform:rotate(-90deg)}
+.ring-label{position:absolute;text-align:center}
+.ring-label .num{font-family:var(--font-display);font-weight:700;line-height:1}
+.ring-label .cap{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);font-weight:600}
+
+/* ---------- Match cards ---------- */
+.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px}
+.match-card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(234,227,220,.6);overflow:hidden;display:flex;flex-direction:column;transition:.18s}
+.match-card:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(44,40,51,.09),0 18px 44px rgba(44,40,51,.1)}
+.match-photo{height:150px;display:flex;align-items:center;justify-content:center;position:relative}
+.match-avatar{width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.7rem;font-weight:700;color:#fff;border:3px solid rgba(255,255,255,.7);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.match-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+.match-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.values-chips{display:flex;flex-wrap:wrap;gap:6px}
+.values-chips .chip{font-size:.76rem;padding:4px 10px}
+.flag-line{display:flex;gap:8px;align-items:flex-start;font-size:.85rem;color:var(--ink-soft)}
+.flag-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:7px}
+
+/* ---------- Breakdown table ---------- */
+.bd-row{display:grid;grid-template-columns:1fr 90px 64px;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid #F2EDE8;font-size:.95rem}
+.bd-row:last-child{border-bottom:none}
+.bd-bar{height:8px;background:#F0EBE5;border-radius:999px;overflow:hidden}
+.bd-fill{height:100%;border-radius:999px}
+.bd-score{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- Forms & wizard ---------- */
+.field{margin-bottom:18px}
+.field label{display:block;font-weight:600;font-size:.9rem;margin-bottom:7px}
+.field .hint{font-weight:400;color:var(--ink-faint);font-size:.8rem;margin-left:6px}
+.input, select.input{width:100%;padding:12px 16px;border:1.5px solid var(--line);border-radius:12px;font-size:.98rem;font-family:var(--font-body);background:#fff;color:var(--ink);transition:.15s}
+.input:focus{outline:none;border-color:var(--rose);box-shadow:0 0 0 3px rgba(185,74,99,.12)}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt-card{border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;transition:.15s;background:#fff}
+.opt-card:hover{border-color:var(--rose)}
+.opt-card.selected{border-color:var(--rose);background:var(--rose-mist);box-shadow:0 0 0 3px rgba(185,74,99,.1)}
+.opt-card .t{font-weight:600;margin-bottom:2px}
+.opt-card .d{font-size:.83rem;color:var(--ink-soft)}
+.wizard-progress{display:flex;gap:6px;margin-bottom:32px}
+.wizard-progress .seg{height:6px;flex:1;border-radius:999px;background:#EDE7E0;transition:.3s}
+.wizard-progress .seg.done{background:linear-gradient(90deg,var(--rose),var(--teal))}
+.wizard-step{display:none}
+.wizard-step.visible{display:block;animation:fadeUp .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wizard-nav{display:flex;justify-content:space-between;margin-top:32px;gap:12px}
+
+/* ---------- Likert ---------- */
+.likert{display:flex;gap:6px}
+.likert button{flex:1;padding:9px 4px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:.72rem;font-weight:600;color:var(--ink-soft);transition:.12s;line-height:1.25}
+.likert button:hover{border-color:var(--teal)}
+.likert button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.likert.rose button.on{background:var(--rose);border-color:var(--rose)}
+.q-item{padding:18px 0;border-bottom:1px solid #F2EDE8}
+.q-item .q-text{font-weight:500;margin-bottom:12px;font-size:.96rem}
+.q-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;display:inline-block}
+
+/* ---------- Tabs ---------- */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:28px}
+.tab{padding:9px 18px;border-radius:999px;font-weight:600;font-size:.88rem;color:var(--ink-soft);background:#F3EEE9;transition:.15s}
+.tab:hover{color:var(--rose-deep)}
+.tab.active{background:var(--ink);color:#fff}
+
+/* ---------- DNA page ---------- */
+.dna-state{border-radius:16px;padding:22px 24px;border:1.5px solid;display:flex;gap:16px;align-items:flex-start}
+.dna-state .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.connect-card{display:flex;align-items:center;gap:16px;padding:18px 20px;border:1.5px solid var(--line);border-radius:16px;background:#fff;transition:.15s}
+.connect-card:hover{border-color:var(--teal);box-shadow:var(--shadow-sm)}
+.connect-logo{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem;color:#fff;flex-shrink:0;font-family:var(--font-display)}
+.dropzone{border:2px dashed var(--line);border-radius:16px;padding:38px 24px;text-align:center;color:var(--ink-soft);transition:.15s;cursor:pointer;background:#FDFBF9}
+.dropzone:hover{border-color:var(--teal);background:var(--teal-mist)}
+
+/* ---------- Toggles ---------- */
+.toggle-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px 0;border-bottom:1px solid #F2EDE8}
+.toggle-row:last-child{border-bottom:none}
+.switch{position:relative;width:46px;height:26px;flex-shrink:0;cursor:pointer}
+.switch .track{position:absolute;inset:0;background:#DDD5CC;border-radius:999px;transition:.2s}
+.switch .knob{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.2s}
+.switch.on .track{background:var(--teal)}
+.switch.on .knob{left:23px}
+
+/* ---------- Sliders (0–100 agree scale) ---------- */
+.slider-wrap{display:flex;flex-direction:column;gap:4px}
+.slider-row{display:flex;align-items:center;gap:12px}
+.slider-row .emo{font-size:1.3rem;flex-shrink:0}
+input.hslider{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:99px;outline:none;cursor:pointer;
+  background:linear-gradient(90deg,#D9534F 0%,#E8C547 50%,#3E7D52 100%)}
+input.hslider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.25);cursor:grab}
+input.hslider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.25);cursor:grab}
+.slider-meta{display:flex;justify-content:center;position:relative;min-height:22px}
+.slider-meta .mid-emo{position:absolute;left:50%;transform:translateX(-50%);top:-2px;font-size:1.05rem;opacity:.7}
+.slider-val{font-size:.8rem;font-weight:600;color:var(--ink-soft);text-align:center;width:100%;font-variant-numeric:tabular-nums}
+/* ---------- Scenario options ---------- */
+.scen-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.scen-opts .opt-card{padding:12px 14px}
+.scen-opts .opt-card .d{font-size:.87rem;color:var(--ink)}
+/* ---------- Photo upload ---------- */
+.photo-row{display:flex;gap:12px;flex-wrap:wrap}
+.photo-slot{width:92px;height:92px;border-radius:16px;border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-faint);font-size:1.5rem;background:#FDFBF9;overflow:hidden;transition:.15s;position:relative}
+.photo-slot:hover{border-color:var(--rose);color:var(--rose)}
+.photo-slot img{width:100%;height:100%;object-fit:cover}
+.photo-slot.locked{cursor:default;opacity:.45}
+.photo-slot.locked:hover{border-color:var(--line);color:var(--ink-faint)}
+.photo-slot .lbl{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:.58rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint)}
+/* ---------- City autocomplete ---------- */
+.ac-wrap{position:relative}
+.ac-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:30;overflow:hidden;max-height:210px;overflow-y:auto}
+.ac-item{padding:10px 16px;cursor:pointer;font-size:.94rem}
+.ac-item:hover{background:var(--rose-mist)}
+/* ---------- Pricing ---------- */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.price-card{background:var(--paper);border-radius:var(--radius);border:1.5px solid var(--line);padding:30px 26px;display:flex;flex-direction:column;gap:14px;position:relative}
+.price-card.featured{border-color:var(--rose);box-shadow:0 8px 28px rgba(185,74,99,.16)}
+.price-card .price{font-family:var(--font-display);font-size:2.2rem;font-weight:700}
+.price-card .price .per{font-size:.9rem;color:var(--ink-faint);font-family:var(--font-body);font-weight:500}
+.price-card ul{list-style:none;display:flex;flex-direction:column;gap:9px;font-size:.9rem;color:var(--ink-soft)}
+.price-card ul li{display:flex;gap:9px;align-items:flex-start}
+.price-card ul li::before{content:'✓';color:var(--green);font-weight:700}
+.founder-bar{height:10px;background:#F0EBE5;border-radius:99px;overflow:hidden}
+.founder-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--rose),var(--gold))}
+.ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 16px;border-radius:999px;white-space:nowrap}
+@media(max-width:860px){.price-grid{grid-template-columns:1fr}.scen-opts{grid-template-columns:1fr}}
+/* ---------- Misc ---------- */
+.callout{border-radius:14px;padding:16px 20px;font-size:.9rem;display:flex;gap:12px;align-items:flex-start}
+.callout-teal{background:var(--teal-mist);border:1px solid var(--teal-soft);color:var(--teal-deep)}
+.callout-rose{background:var(--rose-mist);border:1px solid var(--rose-soft);color:var(--rose-deep)}
+.callout-amber{background:var(--amber-soft);border:1px solid #EBD9B8;color:var(--amber)}
+.divider{height:1px;background:var(--line);margin:28px 0}
+.footer{border-top:1px solid var(--line);background:#F7F2EC;padding:40px 0 32px;margin-top:48px}
+.footer-disclaimer{font-size:.82rem;color:var(--ink-faint);max-width:62em;line-height:1.7}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-size:.9rem;font-weight:500;opacity:0;transition:.3s;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--ink-soft);font-weight:500;font-size:.9rem;cursor:pointer;margin-bottom:20px}
+.back-link:hover{color:var(--rose-deep)}
+.completion-list{display:flex;flex-direction:column;gap:10px}
+.completion-item{display:flex;align-items:center;gap:12px;font-size:.92rem}
+.check-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0}
+.starter{background:var(--rose-mist);border:1px solid var(--rose-soft);border-radius:14px;padding:14px 18px;font-size:.93rem;font-style:italic;color:var(--ink)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:860px){
+  .hero-inner{grid-template-columns:1fr;padding:52px 24px 48px;gap:36px}
+  .hero h1{font-size:2.3rem}
+  .grid-2,.grid-3,.ethics-list,.opt-grid{grid-template-columns:1fr}
+  .weight-row{grid-template-columns:130px 1fr 46px;font-size:.85rem}
+  .bd-row{grid-template-columns:1fr 70px 50px}
+  .nav-inner{padding:12px 16px;gap:12px}
+  .nav-links{gap:0}
+  .nav-link{padding:7px 10px;font-size:.82rem}
+  .likert button{font-size:.62rem;padding:8px 2px}
+  .section{padding-top:48px;padding-bottom:48px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo" onclick="go('landing')">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+        <path d="M16 27C16 27 4.5 19.5 4.5 11.8C4.5 7.8 7.6 5 11 5C13.1 5 15 6.1 16 7.8C17 6.1 18.9 5 21 5C24.4 5 27.5 7.8 27.5 11.8C27.5 19.5 16 27 16 27Z" fill="#B94A63"/>
+        <path d="M11.5 10.5C13 12.5 19 12.5 20.5 14.8M11.5 14.8C13 17 19 17 20.5 19.2M12.8 19.2C14.2 20.8 17.8 20.8 19.2 22.3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      Helix Hearts
+    </div>
+    <div class="nav-links" id="navLinks" style="display:none">
+      <div class="nav-link" data-nav="dashboard" onclick="go('dashboard')">Dashboard</div>
+      <div class="nav-link" data-nav="matches" onclick="go('matches')">Matches</div>
+      <div class="nav-link" data-nav="questionnaire" onclick="go('questionnaire')">Assessments</div>
+      <div class="nav-link" data-nav="dna" onclick="go('dna')">Health Reports</div>
+      <div class="nav-link" data-nav="settings" onclick="go('settings')">Settings</div>
+    </div>
+    <div class="nav-links" id="navLinksGuest">
+      <div class="nav-link" onclick="go('onboarding')">Sign in</div>
+      <button class="btn btn-primary btn-sm" onclick="go('onboarding')">Find My Match</button>
+    </div>
+  </div>
+</nav>
+
+<main id="app"></main>
+
+<footer class="footer">
+  <div class="container" style="padding-top:0;padding-bottom:0">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:24px">
+      <div class="logo" style="font-size:1.05rem">Helix Hearts</div>
+      <div class="small muted">Serious dating for marriage &amp; family — built on transparency and consent.</div>
+    </div>
+    <p class="footer-disclaimer"><strong>Important:</strong> Helix Hearts is not medical advice, genetic counseling, or a guarantee of relationship or reproductive outcomes. Compatibility scores describe assessment alignment between two people — they do not measure human worth, predict love, or evaluate anyone's genes as "better" or "worse." Genetic information is never displayed to anyone — not even your matches. It is used solely as a private factor in compatibility scoring and can be deleted at any time. Please consult qualified professionals (counselors, physicians, licensed genetic counselors) before making relationship or reproductive decisions.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script>
+/* =====================================================
+   HELIX HEARTS — DATA
+   ===================================================== */
+
+// ---------- Scoring weights (transparent, always shown to users) ----------
+const WEIGHTS = [
+  {key:'dna',      label:'Reproductive health compatibility',        pct:20, color:'#6B5B95'},
+  {key:'family',   label:'Marriage & family goals',                  pct:20, color:'#9A3A52'},
+  {key:'values',   label:'Core values alignment',                    pct:15, color:'#B94A63'},
+  {key:'eq',       label:'Emotional maturity / EQ',                  pct:12, color:'#37716F'},
+  {key:'comm',     label:'Communication & conflict style',           pct:12, color:'#2C5B59'},
+  {key:'lifestyle',label:'Lifestyle compatibility',                  pct:7,  color:'#B8912F'},
+  {key:'redflag',  label:'Red-flag risk reduction',                  pct:7,  color:'#9C6B1E'},
+  {key:'greenflag',label:'Green-flag strength',                      pct:7,  color:'#3E7D52'},
+];
+
+// ---------- Assessment metadata (names, time estimates) ----------
+const ASSESS_META = [
+  {tab:'values',  name:'Values',                  time:'≈ 4 min',  detail:'10 sliders + 4 real-world scenarios'},
+  {tab:'eq',      name:'Emotional maturity',      time:'≈ 6 min',  detail:'6 sliders + 6 scenarios'},
+  {tab:'comm',    name:'Communication & conflict',time:'≈ 6 min',  detail:'6 sliders + 6 scenarios'},
+  {tab:'family',  name:'Family & life goals',     time:'≈ 5 min',  detail:'12 questions'},
+  {tab:'flags',   name:'Red / green flags',       time:'≈ 20 min', detail:'100 sliders'},
+  {tab:'thinking',name:'Thinking style',          time:'≈ 3 min',  detail:'8 items · optional'},
+  {tab:'iq',      name:'Quick cognitive test',    time:'≈ 8 min',  detail:'10 questions · results always hidden'},
+];
+
+// ---------- Slider label anchors ----------
+const LIKERT = ['Strongly disagree','Disagree','Neutral','Agree','Strongly agree'];
+
+/* ---------- 100 Red / Green flag items ----------
+   Green items are mixed-direction (r:true = reverse-coded) so
+   sliding everything to "agree" is NOT the socially perfect answer. */
+const FLAG_THEMES = {
+  green: [
+    {theme:'Keeps promises', items:[
+      {t:'I’ve canceled plans last-minute more than once this year simply because I didn’t feel like going.', r:true},
+      {t:'If I say I’ll do something, it happens — even after it stops being convenient.'},
+      {t:'I sometimes agree to things just to end the conversation, then quietly let them slide.', r:true},
+      {t:'Friends would name me as the one who always follows through.'},
+      {t:'Small promises — calling back, picking something up — tend to slip through the cracks with me.', r:true}]},
+    {theme:'Takes accountability', items:[
+      {t:'When I’m accused of something, my first instinct is to point out what the other person did.', r:true},
+      {t:'I can apologize without adding “…but you”.'},
+      {t:'Looking back honestly, the problems in my past relationships were mostly the other person’s fault.', r:true},
+      {t:'I can hear hard feedback about myself and bounce back quickly.'},
+      {t:'At least once, I’ve let someone else take blame for something I did.', r:true}]},
+    {theme:'Communicates directly', items:[
+      {t:'I drop hints and hope my partner figures out what I need.', r:true},
+      {t:'I raise issues within a day or two instead of stockpiling them.'},
+      {t:'There are important things I never told a past partner because the moment never felt right.', r:true},
+      {t:'People always know where they stand with me.'},
+      {t:'I say “it’s fine” when it isn’t.', r:true}]},
+    {theme:'Handles conflict calmly', items:[
+      {t:'I’ve said things in anger I’d be embarrassed to repeat here.', r:true},
+      {t:'Mid-argument, I can pause and deliberately lower the temperature.'},
+      {t:'Old grievances resurface when we fight about new things.', r:true},
+      {t:'I fight about the issue, not the person.'},
+      {t:'Winning the argument matters to me more than I’d like to admit.', r:true}]},
+    {theme:'Wants a similar family structure', items:[
+      {t:'I can describe the family life I want in real detail.'},
+      {t:'I’ve told a partner what they wanted to hear about children.', r:true},
+      {t:'I’m genuinely ready to trade personal freedom for family life.'},
+      {t:'Honestly, my family goals shift depending on who I’m dating.', r:true},
+      {t:'I weigh how today’s choices affect the family I want tomorrow.'}]},
+    {theme:'Financially responsible', items:[
+      {t:'I only have a vague idea of where my money goes each month.', r:true},
+      {t:'I save something every month, even when it’s small.'},
+      {t:'In the past year there’s a purchase I hid or downplayed.', r:true},
+      {t:'I’m fully honest with partners about my debts and obligations.'},
+      {t:'When money stress hits, I avoid looking at my accounts.', r:true}]},
+    {theme:'Emotionally available', items:[
+      {t:'Partners have told me I’m hard to read or hard to reach.', r:true},
+      {t:'I let a partner see me struggling, not just coping.'},
+      {t:'When things get emotionally intense, part of me wants to leave the room.', r:true},
+      {t:'I ask about my partner’s inner world, not just their day.'},
+      {t:'I keep my deepest worries entirely to myself.', r:true}]},
+    {theme:'Has long-term goals', items:[
+      {t:'I can name my top three goals for the next five years right now.'},
+      {t:'My long-term plans rarely survive past a few months.', r:true},
+      {t:'I make real decisions today for a future decades away.'},
+      {t:'“Figuring it out as I go” describes most of my adult life.', r:true},
+      {t:'I regularly review whether my life is on the track I want.'}]},
+    {theme:'Respects boundaries', items:[
+      {t:'When a partner asks for space, I keep checking in anyway.', r:true},
+      {t:'A “no” is a complete answer — I accept it the first time.'},
+      {t:'I have read a partner’s messages without asking.', r:true},
+      {t:'I actively encourage my partner’s friendships and time away from me.'},
+      {t:'If a boundary doesn’t make sense to me, I push back on it.', r:true}]},
+    {theme:'Kind under stress', items:[
+      {t:'Deadlines and pressure make me snappy with the people closest to me.', r:true},
+      {t:'I stay patient with waiters, agents, and support reps even when things go wrong.'},
+      {t:'My partner can tell I’ve had a bad day by how I treat them.', r:true},
+      {t:'Stress makes me more careful with people, not less.'},
+      {t:'More than once this year I’ve apologized for how I acted “because I was stressed.”', r:true}]},
+  ],
+  red: [
+    {theme:'Avoids responsibility', items:[
+      {t:'When things go wrong, it’s usually someone else’s fault.'},
+      {t:'I tend to leave difficult tasks for other people to handle.'},
+      {t:'I avoid conversations where I might have to admit fault.'},
+      {t:'I often commit to things and quietly let them slide.'},
+      {t:'I expect partners to manage the “adult” parts of life for me.'}]},
+    {theme:'Hides important information', items:[
+      {t:'I sometimes keep significant things secret from partners to avoid conflict.'},
+      {t:'I have hidden financial, legal, or relationship history from someone I dated.'},
+      {t:'Small lies are fine if they keep the peace.'},
+      {t:'I present a different version of myself online or to new partners.'},
+      {t:'I would rather be caught later than be honest now.'}]},
+    {theme:'Controlling behavior', items:[
+      {t:'I feel entitled to approve who my partner spends time with.'},
+      {t:'I check a partner’s phone or location when I feel uneasy.'},
+      {t:'I use silence or withdrawal to make a partner change behavior.'},
+      {t:'One partner should have the final say in most decisions.'},
+      {t:'I get uncomfortable when my partner has a life independent of me.'}]},
+    {theme:'Disrespect toward service workers', items:[
+      {t:'I raise my voice at staff when service is slow or wrong.'},
+      {t:'Tipping is optional even for good service.'},
+      {t:'People in service jobs mostly deserve the treatment they get.'},
+      {t:'I’ve walked out or caused a scene over minor service mistakes.'},
+      {t:'How someone treats a waiter says little about their character.'}]},
+    {theme:'Addiction without a recovery plan', items:[
+      {t:'People close to me have expressed concern about my drinking or substance use.'},
+      {t:'I have tried to cut back on a substance or habit and couldn’t.'},
+      {t:'I hide how much I drink, use, gamble, or game.'},
+      {t:'My habits have caused problems at work or in relationships.'},
+      {t:'Even though the issue keeps coming back, I’m confident I can handle it alone.'}]},
+    {theme:'Financial recklessness', items:[
+      {t:'I frequently spend money I don’t have.'},
+      {t:'I have hidden purchases or debt from a partner.'},
+      {t:'I ignore bills or financial problems and hope they resolve themselves.'},
+      {t:'I’d rather enjoy today than plan for retirement or emergencies.'},
+      {t:'Loans from friends or family often go unpaid.'}]},
+    {theme:'Chronic jealousy', items:[
+      {t:'I feel threatened when my partner has close friends of the gender they date.'},
+      {t:'I need frequent reassurance that my partner isn’t interested in others.'},
+      {t:'I have accused partners of cheating without real evidence.'},
+      {t:'My jealousy has caused fights in most of my relationships.'},
+      {t:'Jealousy is proof of love.'}]},
+    {theme:'Different child / family future', items:[
+      {t:'I say I’m open to children mainly because partners want to hear it.'},
+      {t:'I avoid pinning down what I actually want for family life.'},
+      {t:'My stated family goals change depending on who I’m dating.'},
+      {t:'I expect my partner to compromise on children more than I will.'},
+      {t:'I would delay the children conversation as long as possible.'}]},
+    {theme:'Poor anger control', items:[
+      {t:'When I’m angry, I say things I later regret.'},
+      {t:'I have thrown, slammed, or broken things during arguments.'},
+      {t:'People sometimes seem afraid of my temper.'},
+      {t:'Small frustrations can set me off quickly.'},
+      {t:'I struggle to calm myself down once I’m upset.'}]},
+    {theme:'Refuses repair after conflict', items:[
+      {t:'After a fight, I wait for the other person to fix things.'},
+      {t:'I can hold a grudge for weeks.'},
+      {t:'I use the silent treatment rather than talking things through.'},
+      {t:'Apologizing feels like losing.'},
+      {t:'I’d rather let a relationship die than revisit a painful conversation.'}]},
+  ]
+};
+
+// ---------- Values ----------
+const VALUE_KEYS = [
+  {key:'family',    label:'Family closeness'},
+  {key:'honesty',   label:'Honesty & integrity'},
+  {key:'growth',    label:'Personal growth'},
+  {key:'stability', label:'Stability & security'},
+  {key:'faith',     label:'Faith / spirituality'},
+  {key:'adventure', label:'Adventure & novelty'},
+  {key:'community', label:'Community & service'},
+  {key:'health',    label:'Health & wellness'},
+  {key:'ambition',  label:'Career ambition'},
+  {key:'generosity',label:'Generosity'},
+];
+const VALUE_SCENARIOS = [
+  {key:'vs1', q:'You’re offered a promotion that doubles your income but demands 65-hour weeks for three years — right when you hoped to start a family.', opts:[
+    'Take it — financial security is the foundation of family life',
+    'Negotiate a middle path, even if it stalls my career',
+    'Decline — the family window matters more than the money',
+    'Take it and push the family timeline back']},
+  {key:'vs2', q:'An aging parent can no longer live alone. What feels most right?', opts:[
+    'They move in with us, period',
+    'We fund good professional care nearby',
+    'We relocate to be closer to them',
+    'Care should be shared across siblings — I’d coordinate, not carry it alone']},
+  {key:'vs3', q:'Your partner’s dream job is across the country. Your career, friends, and family are all here.', opts:[
+    'We go — a spouse’s dream outranks my comfort zone',
+    'We go only if my career survives the move',
+    'They should turn it down — we’re building roots here',
+    'Long-distance temporarily while we figure it out']},
+  {key:'vs4', q:'A surprise $50,000 windfall lands in your account. Honestly, what happens to it?', opts:[
+    'Nearly all of it invested or saved',
+    'Half saved, half enjoyed — you only live once',
+    'Straight to the house / family fund',
+    'A chunk given to family or charity, the rest saved']},
+];
+
+// ---------- Emotional maturity ----------
+const EQ_SLIDERS = [
+  {key:'e1', t:'When criticized, my first instinct is to explain why the other person is wrong.', r:true},
+  {key:'e2', t:'I can say “I was wrong” within a day of realizing it.'},
+  {key:'e3', t:'When I’m stressed, the people around me can tell — I get short with them.', r:true},
+  {key:'e4', t:'I need several days of space before I can discuss a conflict.', r:true},
+  {key:'e5', t:'Crying in front of a partner is difficult for me.', r:true},
+  {key:'e6', t:'I replay arguments in my head long after they’re resolved.', r:true},
+];
+const EQ_SCENARIOS = [
+  {key:'eqs1', q:'Your partner comes home visibly upset but says “I’m fine.” You…', opts:[
+    'Give them space until they bring it up',
+    'Gently name it: “You seem off — want to talk or want quiet?”',
+    'Press a little — “fine” clearly isn’t true',
+    'Lighten the mood and try to cheer them up']},
+  {key:'eqs2', q:'Mid-argument, you realize you’re actually the one in the wrong. What really happens?', opts:[
+    'I stop and admit it on the spot',
+    'I steer toward a related point where I’m still right',
+    'I go quiet and apologize later, once I’ve cooled down',
+    'I concede partially but keep some of my position']},
+  {key:'eqs3', q:'Your partner pokes fun at a sensitive spot of yours in front of friends. You…', opts:[
+    'Laugh along, raise it privately later that night',
+    'Signal discomfort in the moment, discuss at home',
+    'Say nothing — bringing it up feels petty',
+    'Fire back with a joke at their expense']},
+  {key:'eqs4', q:'Brutal day at work. Your partner is excited to discuss wedding plans tonight. You…', opts:[
+    'Push through and engage — their excitement matters',
+    'Ask for an hour to decompress, then give real attention',
+    'Ask to reschedule to tomorrow when I can be present',
+    'Sit through it, though my mind will be elsewhere']},
+  {key:'eqs5', q:'Your partner is deeply anxious about something you consider objectively minor. You…', opts:[
+    'Take the worry seriously — it’s big to them',
+    'Comfort first, then gently offer perspective',
+    'Reassure them it’s not a big deal',
+    'Help solve the practical problem so the worry goes away']},
+  {key:'eqs6', q:'A flash of jealousy hits when your partner warmly mentions an attractive coworker. You…', opts:[
+    'Name it honestly right away, without accusation',
+    'Sit with it; mention it only if it keeps growing',
+    'Say nothing — my feeling, my job to manage',
+    'Make a light joke that hints at how I feel']},
+];
+
+// ---------- Communication & conflict ----------
+const COMM_SLIDERS = [
+  {key:'c1', t:'I’d rather keep the peace tonight than start a hard conversation.', r:true},
+  {key:'c2', t:'During a fight, my voice rises before I notice it.', r:true},
+  {key:'c3', t:'I’ve been told I go silent when I’m hurt.', r:true},
+  {key:'c4', t:'I bring up money concerns as soon as I notice them.'},
+  {key:'c5', t:'Sarcasm finds its way into my arguments.', r:true},
+  {key:'c6', t:'After a conflict, I need the other person to reach out first.', r:true},
+];
+const COMM_SCENARIOS = [
+  {key:'cs1', q:'You discover your partner spent a significant amount without mentioning it. You…', opts:[
+    'Raise it that day, calmly and directly',
+    'Wait for a natural moment, then ask about it',
+    'Watch whether it becomes a pattern before saying anything',
+    'Say nothing — their money is their business until we merge finances']},
+  {key:'cs2', q:'Third night in a row your partner is on their phone through dinner. You…', opts:[
+    'Say something in the moment, kindly',
+    'Make a joke about it and see if they get the hint',
+    'Plan a proper conversation about phones and presence',
+    'Let it go — everyone has phases']},
+  {key:'cs3', q:'It’s 11pm, you’re both exhausted, and a disagreement is going in circles. You…', opts:[
+    'Keep going — never go to bed angry',
+    'Pause it and set a specific time tomorrow to finish',
+    'Sleep on it — most fights look smaller in the morning',
+    'Depends entirely on who started it']},
+  {key:'cs4', q:'At a family dinner, your partner’s parent criticizes how you two plan to raise kids. You…', opts:[
+    'Respond politely but firmly at the table',
+    'Let it pass, align with my partner privately afterward',
+    'Expect my partner to handle their own parent',
+    'Engage the debate — ideas should be defended']},
+  {key:'cs5', q:'You strongly disagree with something your partner just said — in front of friends. You…', opts:[
+    'Voice the disagreement openly; healthy couples debate',
+    'Give a neutral response, discuss it later privately',
+    'Stay quiet; public disagreement embarrasses everyone',
+    'Make a light contrary comment and move on']},
+  {key:'cs6', q:'Your partner asks “what’s wrong?” — something is, but you can’t articulate it yet. You…', opts:[
+    'Say exactly that: “Something, but I can’t name it yet — give me time”',
+    'Say “nothing” until I understand it myself',
+    'Talk it through out loud, messy and unfinished',
+    'Deflect now, bring it up days later once it’s clear']},
+];
+
+// ---------- Family & life goals ----------
+const FAMILY_ITEMS = [
+  {key:'kidsTiming', label:'Timing for children', type:'choice', options:['Within 1–2 years','2–5 years','Someday, flexible','Unsure','Prefer no children']},
+  {key:'kidCount',   label:'Ideal number of children', type:'choice', options:['1','2','3','4+','Flexible','None']},
+  {key:'parenting',  label:'Parenting style leaning', type:'choice', options:['Structured & consistent','Warm & flexible','Balanced / it depends','Haven’t decided']},
+  {key:'relocation', label:'Willingness to relocate for family', type:'choice', options:['Very willing','Open to discussion','Prefer to stay rooted']},
+  {key:'roles',      label:'Household roles', type:'choice', options:['Fully shared / egalitarian','Lean traditional','Whatever works per season','Undecided']},
+  {key:'discipline', label:'A child repeatedly breaks a clear rule. Your instinct?', type:'choice', options:['Consistent consequence, every time','Depends on why they broke it','Warmth and conversation first, consequences rarely','I’d defer to my partner’s judgment']},
+  {key:'faithHome',  label:'Role of faith in your future home', type:'choice', options:['None','Holidays & traditions only','Regular practice','Central to daily life','Open to partner’s lead']},
+  {key:'childcare',  label:'Ideal childcare in the first two years', type:'choice', options:['One parent home full-time','Both reduce schedules and split','Grandparents / family help','Professional childcare, both careers continue']},
+  {key:'money',      label:'How should married finances work?', type:'choice', options:['Fully merged','Merged + personal allowances','Proportional split by income','Mostly separate']},
+  {key:'inlaws',     label:'Your in-laws drop by unannounced — again. You…', type:'choice', options:['Always welcome, that’s family','Fine occasionally, but we set expectations','Partner must handle their own parents','Clear boundary: call first, every time']},
+  {key:'sickNight',  label:'Sick child at 3am; you both work tomorrow. Who gets up?', type:'choice', options:['Whoever has the lighter morning','We alternate, strictly fair','Probably me, honestly','Probably my partner, honestly']},
+  {key:'fertility',  label:'If conceiving naturally proved difficult, you’d lean toward…', type:'choice', options:['Fertility treatment as far as it takes','Some treatment, then adoption','Adoption early on','Accepting life without children','Haven’t thought about it']},
+];
+
+// ---------- Thinking style (optional) ----------
+const THINKING_SLIDERS = [
+  {key:'t1', t:'I decide quickly and adjust later, rather than deliberating up front.'},
+  {key:'t2', t:'I prefer detailed plans over improvising.'},
+  {key:'t3', t:'Abstract ideas energize me as much as practical ones.'},
+  {key:'t4', t:'Once a problem is solved in my head, I lose interest in executing the details.'},
+  {key:'t5', t:'I notice small details others miss.'},
+  {key:'t6', t:'Under uncertainty, I gather more information even if it delays the decision.'},
+];
+const THINKING_SCENARIOS = [
+  {key:'ts1', q:'Flat-pack furniture arrives. You…', opts:[
+    'Read the instructions fully, then build',
+    'Skim the pictures and dive in',
+    'Sort every piece first, then follow steps exactly',
+    'Build by intuition; instructions are a last resort']},
+  {key:'ts2', q:'Planning a two-week trip together, your natural role is…', opts:[
+    'The spreadsheet: bookings, times, backups',
+    'A rough outline with room to wander',
+    'Book flights and figure the rest out there',
+    'Happily follow someone else’s plan']},
+];
+
+// ---------- Quick cognitive test (results ALWAYS hidden) ----------
+const IQ_ITEMS = [
+  {q:'What number comes next? 2, 6, 12, 20, 30, …', opts:['36','40','42','44']},
+  {q:'Which doesn’t belong?', opts:['Swan','Sparrow','Bat','Robin']},
+  {q:'Book is to chapter as symphony is to…', opts:['Orchestra','Movement','Conductor','Melody']},
+  {q:'All Blorks are Fims. Some Fims are Zands. Which must be true?', opts:['All Blorks are Zands','Some Zands are Blorks','Some Fims are Blorks','No Blorks are Zands']},
+  {q:'A shirt costs $40 after a 20% discount. Original price?', opts:['$44','$48','$50','$52']},
+  {q:'A lily patch doubles daily and covers the whole pond on day 48. When was it half-covered?', opts:['Day 24','Day 40','Day 47','Day 46']},
+  {q:'What letter comes next? A, C, F, J, O, …', opts:['S','T','U','V']},
+  {q:'3 machines make 3 widgets in 3 minutes. How long for 100 machines to make 100 widgets?', opts:['100 minutes','3 minutes','33 minutes','1 minute']},
+  {q:'Which number is the odd one out? 4, 9, 16, 23, 25', opts:['9','16','23','25']},
+  {q:'Rearrange “NAICH” and you get the name of a…', opts:['Country','Animal','City','Plant']},
+];
+
+// ---------- City autocomplete data ----------
+const CITIES = ['Albuquerque, NM','Atlanta, GA','Austin, TX','Baltimore, MD','Boise, ID','Boston, MA','Boulder, CO','Charlotte, NC','Chicago, IL','Cincinnati, OH','Cleveland, OH','Colorado Springs, CO','Columbus, OH','Dallas, TX','Denver, CO','Detroit, MI','El Paso, TX','Fort Collins, CO','Fort Worth, TX','Houston, TX','Indianapolis, IN','Jacksonville, FL','Kansas City, MO','Las Vegas, NV','Los Angeles, CA','Louisville, KY','Memphis, TN','Miami, FL','Milwaukee, WI','Minneapolis, MN','Nashville, TN','New Orleans, LA','New York, NY','Oakland, CA','Oklahoma City, OK','Omaha, NE','Orlando, FL','Philadelphia, PA','Phoenix, AZ','Pittsburgh, PA','Portland, OR','Raleigh, NC','Sacramento, CA','Salt Lake City, UT','San Antonio, TX','San Diego, CA','San Francisco, CA','San Jose, CA','Seattle, WA','St. Louis, MO','Tampa, FL','Tucson, AZ','Washington, DC'];
+
+// ---------- Uploadable report types (all optional; never displayed to anyone) ----------
+const REPORT_TYPES = [
+  {icon:'🧬', name:'Carrier screening', ex:'Invitae, Natera, Fulgent, Labcorp — or your 23andMe / AncestryDNA / MyHeritage raw-data download', tag:'Signature · 20% factor', badge:'badge-rose'},
+  {icon:'🛡️', name:'Recent STD panel', ex:'Full panel from your clinic or an at-home lab, ideally within the last 6 months', tag:'Strongly encouraged', badge:'badge-teal'},
+  {icon:'📊', name:'Comprehensive biomarker panel', ex:'Function Health, Rhythm, Lifeforce, InsideTracker, or a full metabolic + hormone panel from your doctor', tag:'Encouraged', badge:'badge-teal'},
+  {icon:'🦴', name:'DEXA scan', ex:'Body composition & bone density report from any imaging center', tag:'Optional', badge:'badge-gray'},
+  {icon:'🧠', name:'Official cognitive / IQ test', ex:'WAIS, Stanford-Binet, or other proctored results — sealed on upload exactly like our in-app test, never displayed', tag:'Sealed on upload', badge:'badge-gold'},
+  {icon:'📄', name:'Any other official report', ex:'Fitness assessments, sleep studies, wellness panels — anything official that completes your picture', tag:'Optional', badge:'badge-gray'},
+];
+
+// ---------- Current (demo) user ----------
+const ME = {
+  name:'Stefan', dob:'1992-03-14', age:34, location:'Denver, CO', gender:'Man', orientation:'Straight',
+  intention:'Dating for marriage', kids:'Open to children, ideally within 2–5 years',
+  completion:{profile:true, values:true, eq:true, comm:true, family:true, flags:true, thinking:false, iq:false, dna:false},
+  values:{family:5,honesty:5,growth:4,stability:4,faith:3,adventure:3,community:3,health:4,ambition:4,generosity:4},
+  eq:{selfAwareness:4,regulation:4,empathy:4,accountability:5,repair:4},
+  comm:{directness:4,listening:4,calm:4,repairSpeed:4,openness:4},
+  family:{kidsTiming:'2–5 years',kidCount:'2',parenting:'Balanced / it depends',relocation:'Open to discussion',roles:'Fully shared / egalitarian'},
+  lifestyle:{activity:4,social:3,routine:4,travel:3,thrift:4},
+  greenAvg:4.2, redAvg:1.8,
+  dna:{status:'none'}
+};
+
+// ---------- Sample matches ----------
+// dnaState: 'clear' | 'shared-risk' | 'incomplete' | 'declined'  (INTERNAL ONLY — never displayed)
+const USERS = [
+  {
+    id:'maya', name:'Maya', age:32, location:'Boulder, CO', gender:'Woman', pronoun:'she',
+    grad1:'#B94A63', grad2:'#E8A0B0', intention:'Dating for marriage', kids:'Wants children in 2–5 years',
+    tagline:'Pediatric nurse who believes Sunday dinners are sacred.',
+    values:{family:5,honesty:5,growth:4,stability:4,faith:3,adventure:3,community:4,health:4,ambition:3,generosity:5},
+    eq:{selfAwareness:5,regulation:4,empathy:5,accountability:4,repair:5},
+    comm:{directness:4,listening:5,calm:4,repairSpeed:4,openness:4},
+    family:{kidsTiming:'2–5 years',kidCount:'2',parenting:'Balanced / it depends',relocation:'Open to discussion',roles:'Fully shared / egalitarian'},
+    lifestyle:{activity:4,social:3,routine:4,travel:4,thrift:3},
+    greenAvg:4.5, redAvg:1.5, dnaState:'clear',
+    greens:['Apologizes first and means it','Five-year plan includes family, not just career','Friends describe her as "the reliable one"'],
+    cautions:['Prefers to save aggressively; you spend more freely on travel','Open to relocating — you lean toward staying near Denver'],
+    discuss:['Household budget philosophy and savings targets','Whether "open to discussion" on relocation means the same thing to both of you'],
+    starters:['Ask about the family tradition she most wants to carry forward.','She rates "community & service" higher than most — ask what she volunteers for.','You both chose "Balanced" parenting — swap stories about how you were raised.']
+  },
+  {
+    id:'elena', name:'Elena', age:35, location:'Denver, CO', gender:'Woman', pronoun:'she',
+    grad1:'#37716F', grad2:'#7FB5A8', intention:'Dating for marriage', kids:'Wants children soon',
+    tagline:'Architect. Direct communicator. Building things that last — buildings and marriages.',
+    values:{family:4,honesty:5,growth:5,stability:4,faith:2,adventure:3,community:3,health:4,ambition:5,generosity:4},
+    eq:{selfAwareness:4,regulation:4,empathy:4,accountability:5,repair:4},
+    comm:{directness:5,listening:4,calm:4,repairSpeed:5,openness:4},
+    family:{kidsTiming:'Within 1–2 years',kidCount:'2',parenting:'Structured & consistent',relocation:'Open to discussion',roles:'Fully shared / egalitarian'},
+    lifestyle:{activity:4,social:4,routine:4,travel:3,thrift:4},
+    greenAvg:4.3, redAvg:1.7, dnaState:'shared-risk',
+    greens:['Repairs conflict fast — never lets things fester','Financially meticulous; zero hidden debt','Says exactly what she means, kindly'],
+    cautions:['Wants children sooner than your stated window','Rates faith lower than you — worth a values conversation'],
+    discuss:['Timeline for children — hers is 1–2 years, yours is 2–5','What role, if any, faith plays in the home you’d build'],
+    starters:['Ask what "structured parenting" looked like in her childhood home.','You both scored high on accountability — trade stories of apologies done right.','She’s an architect: ask what a "home built for a family" means to her.']
+  },
+  {
+    id:'priya', name:'Priya', age:31, location:'Fort Collins, CO', gender:'Woman', pronoun:'she',
+    grad1:'#B8912F', grad2:'#E0C878', intention:'Dating for marriage', kids:'Open to children, flexible timing',
+    tagline:'High-school teacher, marathon runner, believer in slow and steady everything.',
+    values:{family:4,honesty:5,growth:5,stability:3,faith:3,adventure:4,community:4,health:5,ambition:3,generosity:4},
+    eq:{selfAwareness:4,regulation:5,empathy:4,accountability:4,repair:4},
+    comm:{directness:3,listening:5,calm:5,repairSpeed:3,openness:5},
+    family:{kidsTiming:'Someday, flexible',kidCount:'Flexible',parenting:'Warm & flexible',relocation:'Very willing',roles:'Whatever works per season'},
+    lifestyle:{activity:5,social:3,routine:4,travel:4,thrift:4},
+    greenAvg:4.1, redAvg:1.6, dnaState:'incomplete',
+    greens:['Remarkably calm under stress','Listens fully before responding','Health & wellness is a shared top value'],
+    cautions:['Softer communicator — may hint where you state directly','Family timing is "someday" vs your 2–5 year window'],
+    discuss:['Whether "flexible" on children converges with your timeline','How you’ll bridge direct vs gentle communication styles'],
+    starters:['Ask what she’s training for right now.','She listens first, speaks second — give her space and you’ll learn a lot.','Ask what "warm and flexible" parenting means to her in practice.']
+  },
+  {
+    id:'sarah', name:'Sarah', age:36, location:'Colorado Springs, CO', gender:'Woman', pronoun:'she',
+    grad1:'#8E5B9A', grad2:'#C39BCF', intention:'Dating for marriage', kids:'Wants children soon',
+    tagline:'Nonprofit director. Faith-centered. Looking for a true partner, not a project.',
+    values:{family:5,honesty:4,growth:3,stability:5,faith:5,adventure:2,community:5,health:3,ambition:3,generosity:5},
+    eq:{selfAwareness:4,regulation:3,empathy:5,accountability:4,repair:3},
+    comm:{directness:4,listening:4,calm:3,repairSpeed:3,openness:3},
+    family:{kidsTiming:'Within 1–2 years',kidCount:'3',parenting:'Structured & consistent',relocation:'Prefer to stay rooted',roles:'Lean traditional'},
+    lifestyle:{activity:3,social:4,routine:5,travel:2,thrift:5},
+    greenAvg:3.9, redAvg:2.1, dnaState:'declined',
+    greens:['Deeply consistent — same person on good and bad days','Generosity is her defining trait','Crystal-clear about wanting family'],
+    cautions:['Faith is central for her, moderate for you','Prefers traditional roles; you chose egalitarian','Needs more time to re-engage after conflict'],
+    discuss:['How faith would shape weekly family life','Household roles — your assessments differ meaningfully here','Conflict recovery pace and what each of you needs'],
+    starters:['Ask about the community project she’s proudest of.','Ask what a meaningful Sunday looks like in her ideal family.','You both value stability highly — talk about what "rooted" means.']
+  },
+  {
+    id:'jordan', name:'Jordan', age:33, location:'Denver, CO', gender:'Woman', pronoun:'she',
+    grad1:'#3E7D52', grad2:'#8FC7A0', intention:'Open to marriage, taking it steady', kids:'Unsure about children',
+    tagline:'Software engineer, weekend climber, still figuring out the kids question honestly.',
+    values:{family:3,honesty:5,growth:5,stability:3,faith:1,adventure:5,community:2,health:4,ambition:4,generosity:3},
+    eq:{selfAwareness:5,regulation:4,empathy:3,accountability:4,repair:4},
+    comm:{directness:5,listening:3,calm:4,repairSpeed:4,openness:4},
+    family:{kidsTiming:'Unsure',kidCount:'Flexible',parenting:'Haven’t decided',relocation:'Very willing',roles:'Fully shared / egalitarian'},
+    lifestyle:{activity:5,social:4,routine:2,travel:5,thrift:3},
+    greenAvg:4.0, redAvg:1.9, dnaState:'clear',
+    greens:['Radically honest — including about being unsure','Strong self-awareness','Zero controlling tendencies in flag responses'],
+    cautions:['Unsure about children — you’re clearly open to them','Higher novelty-seeking vs your steadier lifestyle'],
+    discuss:['The children question, early and honestly','Whether her flexibility and your routine can share a calendar'],
+    starters:['Ask what would help her get clarity on the family question.','You both prize honesty above all — ask what honesty cost her once.','Ask about her favorite climb — then whether she’d take you.']
+  },
+  {
+    id:'amara', name:'Amara', age:30, location:'Aurora, CO', gender:'Woman', pronoun:'she',
+    grad1:'#C06A3B', grad2:'#E8A87C', intention:'Dating for marriage', kids:'Wants children someday',
+    tagline:'Physician assistant with a big laugh and a five-year plan.',
+    values:{family:4,honesty:4,growth:4,stability:4,faith:4,adventure:3,community:3,health:5,ambition:4,generosity:4},
+    eq:{selfAwareness:3,regulation:3,empathy:4,accountability:3,repair:3},
+    comm:{directness:3,listening:4,calm:3,repairSpeed:3,openness:3},
+    family:{kidsTiming:'Someday, flexible',kidCount:'2',parenting:'Balanced / it depends',relocation:'Open to discussion',roles:'Whatever works per season'},
+    lifestyle:{activity:4,social:4,routine:3,travel:3,thrift:3},
+    greenAvg:3.6, redAvg:2.4, dnaState:'incomplete',
+    greens:['Optimistic and warm in conflict descriptions','Health values align strongly with yours'],
+    cautions:['Flag responses suggest conflict-avoidance patterns','Accountability scores lower — worth observing early','Timing for children less defined'],
+    discuss:['How each of you raises problems before they grow','Her honest timeline for family','What accountability looks like day-to-day'],
+    starters:['Ask what her five-year plan actually says.','Ask how she recharges after a hard hospital week.','You share "health & wellness" — plan an active first date.']
+  },
+];
+
+// ---------- Scoring engine (fully explainable) ----------
+function likertSim(a, b, keys){
+  let d=0; keys.forEach(k=> d += Math.abs((a[k]||3)-(b[k]||3)));
+  return 1 - d/(keys.length*4);
+}
+function choiceSim(a, b, items){
+  let s=0;
+  items.forEach(it=>{
+    const va=a[it.key], vb=b[it.key];
+    if(va===vb) s+=1;
+    else if(isAdjacent(it.key,va,vb)) s+=0.6;
+    else s+=0.2;
+  });
+  return s/items.length;
+}
+const ADJ = {
+  kidsTiming:[['Within 1–2 years','2–5 years'],['2–5 years','Someday, flexible'],['Someday, flexible','Unsure']],
+  kidCount:[['1','2'],['2','3'],['3','4+'],['2','Flexible'],['1','Flexible'],['3','Flexible'],['Flexible','Flexible']],
+  parenting:[['Structured & consistent','Balanced / it depends'],['Warm & flexible','Balanced / it depends'],['Haven’t decided','Balanced / it depends']],
+  relocation:[['Very willing','Open to discussion'],['Open to discussion','Prefer to stay rooted']],
+  roles:[['Fully shared / egalitarian','Whatever works per season'],['Lean traditional','Whatever works per season'],['Undecided','Whatever works per season']]
+};
+function isAdjacent(key,a,b){
+  return (ADJ[key]||[]).some(p=>(p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a));
+}
+const EQ_TRAIT_KEYS = ['selfAwareness','regulation','empathy','accountability','repair'];
+const COMM_TRAIT_KEYS = ['directness','listening','calm','repairSpeed','openness'];
+
+function computeCategories(me, u){
+  const c = {};
+  c.values    = Math.round(likertSim(me.values, u.values, VALUE_KEYS.map(v=>v.key))*100);
+  c.family    = Math.round(choiceSim(me.family, u.family, FAMILY_ITEMS.slice(0,5))*100);
+  const eqLevel = (avg(me.eq,EQ_TRAIT_KEYS)+avg(u.eq,EQ_TRAIT_KEYS))/2/5;
+  const eqSim   = likertSim(me.eq, u.eq, EQ_TRAIT_KEYS);
+  c.eq        = Math.round((eqLevel*0.6 + eqSim*0.4)*100);
+  const cLevel = (avg(me.comm,COMM_TRAIT_KEYS)+avg(u.comm,COMM_TRAIT_KEYS))/2/5;
+  const cSim   = likertSim(me.comm, u.comm, COMM_TRAIT_KEYS);
+  c.comm      = Math.round((cLevel*0.55 + cSim*0.45)*100);
+  c.lifestyle = Math.round(likertSim(me.lifestyle, u.lifestyle, ['activity','social','routine','travel','thrift'])*100);
+  c.redflag   = Math.round((1 - (u.redAvg-1)/4)*100);
+  c.greenflag = Math.round(((u.greenAvg-1)/4)*100);
+  // DNA: internal factor only. Never displayed as carrier detail — surfaces solely as this category score.
+  c.dna = u.dnaState==='clear' ? 100 : (u.dnaState==='shared-risk' ? 70 : null); // null = not scored
+  return c;
+}
+function avg(obj, keys){ return keys.reduce((s,k)=>s+(obj[k]||3),0)/keys.length; }
+
+function computeScore(me, u){
+  const cats = computeCategories(me, u);
+  const active = WEIGHTS.filter(w=> cats[w.key]!==null && cats[w.key]!==undefined);
+  const totalPct = active.reduce((s,w)=>s+w.pct,0);
+  let score=0;
+  const rows = active.map(w=>{
+    const effPct = w.pct/totalPct*100;
+    const contrib = cats[w.key]*effPct/100;
+    score += contrib;
+    return {...w, catScore:cats[w.key], effPct:Math.round(effPct*10)/10, contrib:Math.round(contrib*10)/10};
+  });
+  const skipped = WEIGHTS.filter(w=>!active.includes(w));
+  return {total:Math.round(score), rows, skipped, cats};
+}
+</script>
+<script>
+/* =====================================================
+   HELIX HEARTS — APP (router + views)
+   ===================================================== */
+const app = document.getElementById('app');
+const state = {
+  signedIn:false, route:'landing', currentMatch:null,
+  onboardStep:0, onboard:{intention:null, dnaChoice:null, city:''},
+  qTab:'values', answers:{}, photo:null,
+  settings:{profileVisible:true, showFaith:false, showPolitics:false, dnaUseInMatching:false, showLastActive:true}
+};
+
+/* ---------- Neon backend (Data API + Neon Auth, no SDK needed) ----------
+   1. Create a project at https://console.neon.tech
+   2. Run neon-schema.sql (in this folder) in the SQL Editor
+   3. Enable the Data API (sidebar): check "Use Neon Auth" and
+      "Grant public schema access"
+   4. Settings → Backend → paste the Data API URL + Auth URL → Connect.
+   Neon Auth is Better Auth over REST; the Data API is PostgREST —
+   both are called with plain fetch(). Until connected, everything
+   runs in demo mode with in-memory data. */
+// Pre-configured for the "Helix Hearts" Neon project (Settings → Backend to change)
+const NEON_DEFAULT_DATA = 'https://ep-gentle-dawn-atvgcmqg.apirest.c-9.us-east-1.aws.neon.tech/neondb/rest/v1';
+const NEON_DEFAULT_AUTH = 'https://ep-gentle-dawn-atvgcmqg.neonauth.c-9.us-east-1.aws.neon.tech/neondb/auth';
+let NEON_DATA_URL = localStorage.getItem('hh_neon_data') || NEON_DEFAULT_DATA;
+let NEON_AUTH_URL = localStorage.getItem('hh_neon_auth') || NEON_DEFAULT_AUTH;
+let nnJwt = null, nnJwtAt = 0;
+const sb = { get on(){ return !!(NEON_DATA_URL && NEON_AUTH_URL); } }; // backend handle
+function nnNorm(u){ return (u||'').trim().replace(/\/+$/,''); }
+async function nnSession(force){
+  if(!sb.on) return null;
+  if(!force && nnJwt && Date.now()-nnJwtAt < 10*60*1000) return nnJwt; // ~15 min tokens
+  try{
+    const r = await fetch(NEON_AUTH_URL+'/get-session',{credentials:'include'});
+    nnJwt = r.headers.get('set-auth-jwt') || null; nnJwtAt = Date.now();
+    return nnJwt;
+  }catch(e){ return null; }
+}
+async function nnRest(pathQuery, method, body, extraHeaders){
+  if(!sb.on) return null;
+  const jwt = await nnSession();
+  try{
+    return await fetch(NEON_DATA_URL+'/'+pathQuery,{
+      method: method||'GET',
+      headers:{'Content-Type':'application/json',
+               ...(jwt?{'Authorization':'Bearer '+jwt}:{}),
+               ...(extraHeaders||{})},
+      body: body?JSON.stringify(body):undefined
+    });
+  }catch(e){ return null; }
+}
+function nnUid(){
+  try{ return JSON.parse(atob(nnJwt.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).sub || null; }
+  catch(e){ return null; }
+}
+async function nnSignUp(email,password,name){
+  if(!sb.on) return null;
+  try{
+    const r = await fetch(NEON_AUTH_URL+'/sign-up/email',{
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,password,name,callbackURL:(location.origin.startsWith('http')?location.origin:'http://localhost')})
+    });
+    if(!r.ok){ const e=await r.json().catch(()=>({})); toast(e.message||'Sign-up failed'); return null; }
+    await nnSession(true);
+    // Create the profile row — the DB trigger assigns founder number & plan
+    await nnRest('profiles','POST',{full_name:name},{Prefer:'resolution=merge-duplicates'});
+    await nnLoadAll();
+    return true;
+  }catch(e){ toast('Sign-up failed — check the Auth URL'); return null; }
+}
+async function nnSignIn(email,password){
+  if(!sb.on) return null;
+  try{
+    const r = await fetch(NEON_AUTH_URL+'/sign-in/email',{
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,password})
+    });
+    if(!r.ok){ const e=await r.json().catch(()=>({})); toast(e.message||'Sign-in failed — check email and password'); return null; }
+    await nnSession(true);
+    await nnLoadAll();
+    return true;
+  }catch(e){ toast('Sign-in failed — check the Auth URL'); return null; }
+}
+async function nnSignOut(){
+  try{ await fetch(NEON_AUTH_URL+'/sign-out',{method:'POST',credentials:'include'}); }catch(e){}
+  nnJwt=null; state.signedIn=false; state.photo=null; state.answers={}; state.reports=[];
+  go('landing'); toast('Signed out');
+}
+/* Restore everything the user has saved: profile, answers, photo, reports */
+async function nnLoadAll(){
+  const uid = nnUid(); if(!uid) return;
+  try{
+    const [pr,ar,ph,rp] = await Promise.all([
+      nnRest('profiles?select=*&id=eq.'+encodeURIComponent(uid)),
+      nnRest('answers?select=question_id,value'),
+      nnRest('photos?select=data_url&slot=eq.0&user_id=eq.'+encodeURIComponent(uid)),
+      nnRest('reports?select=kind,uploaded_at&order=uploaded_at.desc')
+    ]);
+    if(pr?.ok){ const rows=await pr.json();
+      if(rows[0]){ state.profile=rows[0];
+        if(rows[0].full_name) ME.name=rows[0].full_name.split(' ')[0];
+        if(rows[0].founder_number) state.founderNum=rows[0].founder_number; } }
+    if(ar?.ok){ (await ar.json()).forEach(a=>{
+      const n=Number(a.value); state.answers[a.question_id]=(a.value!==''&&!isNaN(n))?n:a.value; }); }
+    if(ph?.ok){ const rows=await ph.json(); if(rows[0]?.data_url) state.photo=rows[0].data_url; }
+    if(rp?.ok){ state.reports=await rp.json(); }
+  }catch(e){}
+}
+function sbSaveAnswer(qid,val){
+  if(!sb.on) return;
+  nnRest('answers','POST',{question_id:qid,value:String(val)},{Prefer:'resolution=merge-duplicates'});
+}
+function nnVal(id){ const v=document.getElementById(id)?.value; return v&&v.trim()?v.trim():null; }
+async function nnSaveProfile(){
+  if(!sb.on || !(await nnSession())) return;
+  const body={ dob:nnVal('obDob'), location:nnVal('locInput'), gender:nnVal('obGender'),
+    orientation:nnVal('obOrient'), relationship_goal:nnVal('obGoal'), career_level:nnVal('obCareer'),
+    faith:nnVal('obFaith'), politics:nnVal('obPolitics'), news_frequency:nnVal('obNews'),
+    education:nnVal('obEdu'), lifestyle:nnVal('obLifestyle'),
+    intention:state.onboard.intention||undefined, full_name:state.onboard.name||undefined };
+  Object.keys(body).forEach(k=>{ if(body[k]==null) delete body[k]; });
+  nnRest('profiles','POST',body,{Prefer:'resolution=merge-duplicates'});
+}
+function sbConfigure(){
+  const dataUrl=nnNorm(document.getElementById('nnDataUrl')?.value);
+  const authUrl=nnNorm(document.getElementById('nnAuthUrl')?.value);
+  if(!dataUrl || !authUrl){ toast('Enter both the Data API URL and the Auth URL'); return; }
+  if(!/^https:\/\//.test(dataUrl) || !/^https:\/\//.test(authUrl)){ toast('Both URLs should start with https://'); return; }
+  NEON_DATA_URL = dataUrl.endsWith('/rest/v1') ? dataUrl : dataUrl+'/rest/v1';
+  NEON_AUTH_URL = authUrl;
+  localStorage.setItem('hh_neon_data', NEON_DATA_URL);
+  localStorage.setItem('hh_neon_auth', NEON_AUTH_URL);
+  // Connection test: a PostgREST-formatted reply (even 401 asking for a JWT)
+  // proves the Data API is live; data flows once the user signs in.
+  fetch(NEON_DATA_URL+'/app_counters?key=eq.member_count&select=value')
+    .then(async r=>{
+      const t=await r.text();
+      if(r.ok || t.includes('authorization') || t.includes('JWT')){ toast('Neon connected ✓'); }
+      else{ toast('Reached the server, but the reply looks wrong — double-check the Data API URL'); }
+      render();
+    })
+    .catch(()=>{ toast('Could not reach the Data API — check the URL'); render(); });
+}
+function sbDisconnect(){
+  localStorage.removeItem('hh_neon_data'); localStorage.removeItem('hh_neon_auth');
+  NEON_DATA_URL=''; NEON_AUTH_URL=''; nnJwt=null;
+  render(); toast('Disconnected — back to demo mode');
+}
+
+function go(route, param){
+  state.route = route;
+  if(param!==undefined) state.currentMatch = param;
+  if(['dashboard','matches','matchDetail','dna','questionnaire','settings'].includes(route)) state.signedIn = true;
+  render();
+  window.scrollTo({top:0});
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* ---------- Shared components ---------- */
+function ring(score, size, stroke, fontSize){
+  size=size||120; stroke=stroke||10; fontSize=fontSize||'1.9rem';
+  const r=(size-stroke)/2, c=2*Math.PI*r, off=c*(1-score/100);
+  const col = score>=80?'#3E7D52':score>=65?'#37716F':score>=50?'#B8912F':'#9C6B1E';
+  return `<div class="ring" style="width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#F0EBE5" stroke-width="${stroke}"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"/>
+    </svg>
+    <div class="ring-label"><div class="num" style="font-size:${fontSize};color:${col}">${score}</div><div class="cap">match</div></div>
+  </div>`;
+}
+function weightBars(){
+  return WEIGHTS.map(w=>`
+    <div class="weight-row">
+      <div>${w.label}</div>
+      <div class="weight-track"><div class="weight-fill" style="width:${w.pct*4}%;background:${w.color}"></div></div>
+      <div class="weight-pct">${w.pct}%</div>
+    </div>`).join('');
+}
+function breakdownRows(result){
+  return result.rows.map(w=>`
+    <div class="bd-row">
+      <div>${w.label}<span class="tiny" style="display:block">weight ${w.effPct}% · contributes ${w.contrib} pts</span></div>
+      <div class="bd-bar"><div class="bd-fill" style="width:${w.catScore}%;background:${w.color}"></div></div>
+      <div class="bd-score">${w.catScore}</div>
+    </div>`).join('') +
+    result.skipped.map(w=>`
+    <div class="bd-row" style="opacity:.55">
+      <div>${w.label}<span class="tiny" style="display:block">not scored — weight redistributed</span></div>
+      <div class="bd-bar"></div><div class="bd-score">—</div>
+    </div>`).join('');
+}
+function sharedValues(u, n){
+  n=n||5;
+  return VALUE_KEYS
+    .map(v=>({label:v.label, mine:ME.values[v.key], theirs:u.values[v.key]}))
+    .filter(v=>v.mine>=4 && v.theirs>=4)
+    .sort((a,b)=>(b.mine+b.theirs)-(a.mine+a.theirs))
+    .slice(0,n);
+}
+function explainMatch(u, res){
+  const strong = res.rows.filter(r=>r.catScore>=80 && r.key!=='dna').sort((a,b)=>b.catScore-a.catScore).slice(0,3).map(r=>r.label.toLowerCase());
+  const weak = res.rows.filter(r=>r.catScore<70 && r.key!=='dna').sort((a,b)=>a.catScore-b.catScore).slice(0,2);
+  let s = `You and ${u.name} score ${res.total}% because you share ${strong.join(', ')}.`;
+  if(res.cats.dna===100) s += ` Your reproductive health compatibility is excellent.`;
+  else if(res.cats.dna===70) s += ` Your reproductive health compatibility is partial — if things get serious, a licensed genetic counselor can help you plan a family with confidence.`;
+  if(weak.length) s += ` Before getting serious, it’s worth discussing ${weak.map(w=>w.label.toLowerCase()).join(' and ')}${u.discuss?.length? ' — see the discussion guide below':''}.`;
+  return s;
+}
+function navHighlight(){
+  const signed = state.signedIn;
+  document.getElementById('navLinks').style.display = signed?'flex':'none';
+  document.getElementById('navLinksGuest').style.display = signed?'none':'flex';
+  document.querySelectorAll('[data-nav]').forEach(el=>{
+    el.classList.toggle('active', el.dataset.nav===state.route || (state.route==='matchDetail'&&el.dataset.nav==='matches'));
+  });
+}
+
+/* ---------- Slider (0–100 agree scale) ---------- */
+function sliderLabel(v){
+  v=+v;
+  const l = v<=15?'Strongly disagree':v<40?'Disagree':v<=60?'Neutral':v<85?'Agree':'Strongly agree';
+  return `${v} · ${l}`;
+}
+function slider(id, def){
+  const v = state.answers[id] ?? (def??50);
+  return `<div class="slider-wrap">
+    <div class="slider-row"><span class="emo">🙁</span>
+      <input type="range" min="0" max="100" value="${v}" class="hslider" oninput="slide('${id}',this.value)">
+      <span class="emo">🙂</span></div>
+    <div class="slider-meta"><span class="mid-emo">😐</span></div>
+    <div class="slider-val" id="sv_${id}">${sliderLabel(v)}</div>
+  </div>`;
+}
+function slide(id,v){
+  state.answers[id]=+v;
+  const el=document.getElementById('sv_'+id);
+  if(el) el.textContent=sliderLabel(v);
+  sbSaveAnswer(id,v);
+}
+function scenario(id, sc){
+  return `<div class="q-item"><div class="q-text">${sc.q}</div>
+    <div class="scen-opts">${sc.opts.map((o,i)=>`
+      <div class="opt-card ${state.answers[id]===i?'selected':''}" onclick="answer('${id}',${i})"><div class="d">${o}</div></div>`).join('')}
+    </div></div>`;
+}
+function answer(id,val){ state.answers[id]=val; sbSaveAnswer(id,val); render(); }
+
+/* ---------- Photos ---------- */
+function photoSlots(){
+  return `<input type="file" accept="image/*" id="photoInput" style="display:none" onchange="photoPicked(event)">
+  <div class="photo-row">
+    <div class="photo-slot" onclick="document.getElementById('photoInput').click()">
+      ${state.photo?`<img src="${state.photo}" alt="Profile photo">`:'＋'}
+      <span class="lbl" ${state.photo?'style="color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)"':''}>${state.photo?'Profile':'Add photo'}</span>
+    </div>
+    ${[1,2,3].map(()=>`<div class="photo-slot locked">＋<span class="lbl">Soon</span></div>`).join('')}
+  </div>`;
+}
+function photoPicked(e){
+  const f=e.target.files[0]; if(!f) return;
+  const img=new Image();
+  img.onload=()=>{
+    // Downscale to ≤512px JPEG so it stores compactly and loads fast
+    const c=document.createElement('canvas');
+    const s=Math.min(1, 512/Math.max(img.width,img.height));
+    c.width=Math.round(img.width*s); c.height=Math.round(img.height*s);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    const dataUrl=c.toDataURL('image/jpeg',0.82);
+    URL.revokeObjectURL(img.src);
+    state.photo=dataUrl; render();
+    if(sb.on){ nnRest('photos?on_conflict=user_id,slot','POST',{slot:0,data_url:dataUrl},{Prefer:'resolution=merge-duplicates'}); toast('Profile photo saved ✓'); }
+    else toast('Profile photo added');
+  };
+  img.src=URL.createObjectURL(f);
+}
+function avatar(size,font){
+  if(state.photo) return `<div class="match-avatar" style="width:${size}px;height:${size}px;overflow:hidden;padding:0;border:3px solid #fff"><img src="${state.photo}" style="width:100%;height:100%;object-fit:cover"></div>`;
+  return `<div class="match-avatar" style="width:${size}px;height:${size}px;font-size:${font};background:linear-gradient(135deg,#B94A63,#37716F)">${ME.name[0]}</div>`;
+}
+
+/* ---------- City autocomplete ---------- */
+function cityInput(el){
+  const q=el.value.trim().toLowerCase();
+  const list=document.getElementById('acList'); if(!list) return;
+  if(q.length<2){ list.style.display='none'; return; }
+  const hits=CITIES.filter(c=>c.toLowerCase().startsWith(q)).slice(0,6);
+  list.innerHTML=hits.map(c=>`<div class="ac-item" onclick="pickCity('${c.replace(/'/g,"\\'")}')">${c}</div>`).join('');
+  list.style.display=hits.length?'block':'none';
+}
+function pickCity(c){
+  const inp=document.getElementById('locInput');
+  if(inp) inp.value=c;
+  state.onboard.city=c;
+  const list=document.getElementById('acList');
+  if(list) list.style.display='none';
+}
+
+/* =====================================================
+   LANDING
+   ===================================================== */
+function viewLanding(){
+  return `
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">For intentional daters</div>
+        <h1>Date for marriage. <em>Love with your eyes open.</em></h1>
+        <p class="lead">Helix Hearts is the first marriage-focused matchmaker with <strong>reproductive health compatibility</strong> built in. Match on values, maturity, and family goals — and learn early whether family planning together deserves a conversation with a genetic counselor, while it's still just a conversation.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="go('onboarding')">Find My Match →</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('how').scrollIntoView()">How it works</button>
+        </div>
+        <div class="hero-badges">
+          <span class="badge badge-rose">✓ Reproductive health matching — our signature</span>
+          <span class="badge badge-teal">✓ Full-picture profiles appear first</span>
+          <span class="badge badge-gold">✓ Transparent scoring — no black box</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="card" style="max-width:360px;margin:0 auto">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px">
+            <div class="match-avatar" style="width:56px;height:56px;font-size:1.2rem;background:linear-gradient(135deg,#B94A63,#E8A0B0)">M</div>
+            <div><strong>Maya, 32</strong><div class="tiny">Dating for marriage</div></div>
+            <div style="margin-left:auto">${ring(93,72,7,'1.15rem')}</div>
+          </div>
+          <div class="values-chips" style="margin-bottom:14px">
+            <span class="chip">Family closeness</span><span class="chip">Honesty</span><span class="chip">Stability</span>
+          </div>
+          <div class="small muted" style="font-style:italic">“You share marriage goals, parenting plans, strong communication — and your reproductive health compatibility is excellent.”</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container section" id="how">
+    <div class="eyebrow">How it works</div>
+    <h2 class="section-title">Compatibility you can actually read</h2>
+    <p class="section-sub">No mystery algorithms, no "perfect match" promises. Every score comes with a full breakdown you can inspect line by line.</p>
+    <div class="grid-3">
+      <div class="card-soft"><div class="step-num">1</div><h3 style="font-size:1.15rem;margin-bottom:8px">Answer honestly</h3><p class="small muted">Seven assessments built to surface who you really are — real-world scenarios, tough questions, and a 100-item red/green flag inventory. About 50 minutes total, saved as you go.</p></div>
+      <div class="card-soft"><div class="step-num">2</div><h3 style="font-size:1.15rem;margin-bottom:8px">See why you match</h3><p class="small muted">Every match includes a 0–100 score with weighted categories, areas of alignment, and the exact topics to discuss before getting serious.</p></div>
+      <div class="card-soft"><div class="step-num">3</div><h3 style="font-size:1.15rem;margin-bottom:8px">Reproductive health — our signature</h3><p class="small muted">Upload a carrier report — never displayed to anyone, it simply becomes a private factor worth 20% of your score and unlocks priority placement. Add STD panels, biomarker tests (Function, Rhythm, Lifeforce), DEXA scans, or any official report to complete your picture.</p></div>
+    </div>
+  </div>
+
+  <div class="container section" style="padding-top:0">
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <div class="eyebrow">The formula</div>
+        <h2 class="section-title">One score, eight weighted parts</h2>
+        <p class="section-sub" style="margin-bottom:24px">The same public formula for every member — and reproductive health leads at 20%, because it's what we're for. Skip it and your score is computed from the remaining categories, but full-picture profiles appear first in matching.</p>
+        <div class="card">${weightBars()}</div>
+      </div>
+      <div class="ethics-panel">
+        <h3 style="font-size:1.35rem;margin-bottom:6px">Privacy you can verify</h3>
+        <p class="small muted">Genetic information is powerful — so we handle it with clinical-grade care and total transparency.</p>
+        <div class="ethics-list">
+          <div class="ethics-item"><span class="ico ico-no">✕</span>Genetic data is never displayed to anyone — it only informs your score</div>
+          <div class="ethics-item"><span class="ico ico-no">✕</span>No selling or sharing of genetic data, ever</div>
+          <div class="ethics-item"><span class="ico ico-yes">✓</span>Explicit consent before any health data is used</div>
+          <div class="ethics-item"><span class="ico ico-yes">✓</span>Delete your genetic data at any time, permanently</div>
+          <div class="ethics-item"><span class="ico ico-yes">✓</span>Licensed genetic counselor referrals built in</div>
+          <div class="ethics-item"><span class="ico ico-yes">✓</span>Sensitive info private by default</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container section" style="padding-top:0" id="plans">
+    <div class="eyebrow">Founding member program</div>
+    <h2 class="section-title">Free full access for our first 10,000 members</h2>
+    <p class="section-sub">Every founding member gets every feature free until we reach 10,000 members — then a month of full access on us, plus another month for every friend you invite who joins. The founder badge is yours forever.</p>
+    <div class="card" style="margin-bottom:28px;padding:22px 26px">
+      <div style="display:flex;justify-content:space-between;font-size:.88rem;font-weight:600;margin-bottom:8px"><span>2,847 founder spots claimed</span><span>10,000</span></div>
+      <div class="founder-bar"><div class="founder-fill" style="width:28.5%"></div></div>
+    </div>
+    <div class="price-grid">
+      <div class="price-card">
+        <h3 style="font-size:1.2rem">Free</h3>
+        <div class="price">$0<span class="per"> / forever</span></div>
+        <ul>
+          <li>5 new matches per month</li>
+          <li>Core assessments &amp; match scores</li>
+          <li>Standard placement in matching</li>
+          <li>Basic profile</li>
+        </ul>
+      </div>
+      <div class="price-card featured">
+        <div class="ribbon">Founders — free now</div>
+        <h3 style="font-size:1.2rem">Founding member</h3>
+        <div class="price">$0<span class="per"> until 10,000 members</span></div>
+        <ul>
+          <li><strong>Everything in Full Access, free</strong></li>
+          <li>Free until we reach 10,000 members</li>
+          <li>Then +1 month free — and +1 more month for every friend who joins on your invite</li>
+          <li>Founder badge, forever</li>
+        </ul>
+        <button class="btn btn-primary" onclick="go('onboarding')">Claim founder access →</button>
+      </div>
+      <div class="price-card">
+        <h3 style="font-size:1.2rem">Full Access</h3>
+        <div class="price">$24<span class="per"> / month</span></div>
+        <ul>
+          <li>Unlimited matches &amp; introductions</li>
+          <li>Full score breakdowns &amp; discussion guides</li>
+          <li>Reproductive health matching (20% factor)</li>
+          <li>Priority "full picture" placement</li>
+          <li>Conversation starters &amp; coaching prompts</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container section" style="padding-top:0">
+    <div class="card" style="text-align:center;padding:52px 28px;background:linear-gradient(135deg,#FDF2ED,#EDF5F3)">
+      <h2 class="section-title" style="margin-bottom:10px">Ready to date like you mean it?</h2>
+      <p class="muted" style="margin-bottom:26px">Join members who are building toward marriage, family, and a future on purpose.</p>
+      <button class="btn btn-primary" onclick="go('onboarding')">Find My Match →</button>
+    </div>
+  </div>`;
+}
+
+/* =====================================================
+   ONBOARDING (6-step wizard)
+   ===================================================== */
+const OB_STEPS = 6;
+function viewOnboarding(){
+  const s = state.onboardStep;
+  return `
+  <div class="container-narrow">
+    <div class="wizard-progress">${Array.from({length:OB_STEPS},(_,i)=>`<div class="seg ${i<=s?'done':''}"></div>`).join('')}</div>
+    <div class="card" style="padding:36px">
+
+      <div class="wizard-step ${s===0?'visible':''}">
+        ${(state.onboard.mode||'signup')==='signup'?`
+        <div class="eyebrow">Step 1 · Account</div>
+        <h2 style="font-size:1.7rem;margin-bottom:6px">Create your account</h2>
+        <div class="callout callout-teal small" style="margin-bottom:20px">✨ We auto-filled what we could — just review, add a photo, and set a password.</div>
+        <div class="field"><label>Full name</label><input class="input" id="obName" value="Stefan Oswald" placeholder="Your name"></div>
+        <div class="field"><label>Email</label><input class="input" id="obEmail" value="stefanpauloswald@gmail.com" placeholder="you@example.com"></div>
+        <div class="field"><label>Password</label><input class="input" id="obPass" type="password" placeholder="Create a password (6+ characters)"></div>
+        <div class="field"><label>Profile photo <span class="hint">at least one to start — more slots coming</span></label>${photoSlots()}</div>
+        <label class="small muted" style="display:flex;gap:10px;align-items:flex-start;margin-top:6px"><input type="checkbox" checked style="margin-top:4px">I'm 18+, dating with serious intentions, and I agree to the Terms &amp; Privacy Policy.</label>
+        <p class="small" style="margin-top:16px">Already a member? <a style="cursor:pointer;font-weight:600" onclick="state.onboard.mode='signin';render()">Sign in</a></p>`
+        :`
+        <div class="eyebrow">Sign in</div>
+        <h2 style="font-size:1.7rem;margin-bottom:6px">Welcome back</h2>
+        <p class="muted small" style="margin-bottom:22px">Your profile, assessment answers, and reports are saved to your account.</p>
+        <div class="field"><label>Email</label><input class="input" id="obEmail" value="stefanpauloswald@gmail.com" placeholder="you@example.com"></div>
+        <div class="field"><label>Password</label><input class="input" id="obPass" type="password" placeholder="Your password"></div>
+        <p class="small" style="margin-top:16px">New here? <a style="cursor:pointer;font-weight:600" onclick="state.onboard.mode='signup';render()">Create an account</a></p>`}
+      </div>
+
+      <div class="wizard-step ${s===1?'visible':''}">
+        <div class="eyebrow">Step 2 · Intentions</div>
+        <h2 style="font-size:1.7rem;margin-bottom:6px">What are you here for?</h2>
+        <p class="muted small" style="margin-bottom:24px">Everyone sees everyone's answer. Honesty saves months.</p>
+        <div class="opt-grid" id="intentGrid">
+          ${['Dating for marriage','Open to children','Wants children soon','Unsure','Does not want children'].map(o=>`
+            <div class="opt-card ${state.onboard.intention===o?'selected':''}" onclick="pickIntent('${o}')"><div class="t">${o}</div><div class="d">${{
+              'Dating for marriage':'Actively looking for a spouse',
+              'Open to children':'Marriage-minded and open to kids',
+              'Wants children soon':'Family-building is a near-term goal',
+              'Unsure':'Honest about still deciding',
+              'Does not want children':'Marriage yes, children no'
+            }[o]}</div></div>`).join('')}
+        </div>
+      </div>
+
+      <div class="wizard-step ${s===2?'visible':''}">
+        <div class="eyebrow">Step 3 · Profile basics</div>
+        <h2 style="font-size:1.7rem;margin-bottom:6px">The essentials</h2>
+        <div class="callout callout-teal small" style="margin-bottom:20px">✨ Auto-filled from your account — edit anything that's off.</div>
+        <div class="grid-2" style="gap:0 20px">
+          <div class="field"><label>Date of birth</label><input class="input" id="obDob" type="date" value="1992-03-14"></div>
+          <div class="field"><label>Location <span class="hint">start typing — we'll complete it</span></label>
+            <div class="ac-wrap">
+              <input class="input" id="locInput" value="Denver, CO" placeholder="e.g. Den…" oninput="cityInput(this)" autocomplete="off">
+              <div class="ac-list" id="acList" style="display:none"></div>
+            </div>
+          </div>
+          <div class="field"><label>Gender</label><select class="input" id="obGender"><option>Man</option><option>Woman</option><option>Non-binary</option><option>Prefer to self-describe</option></select></div>
+          <div class="field"><label>Orientation</label><select class="input" id="obOrient"><option>Straight</option><option>Gay</option><option>Lesbian</option><option>Bisexual</option><option>Other</option></select></div>
+          <div class="field"><label>Relationship goal</label><select class="input" id="obGoal"><option>Marriage within 1 year</option><option>Marriage in 1–2 years</option><option selected>Marriage within 2–3 years</option><option>Marriage, no rush</option><option>Long-term partnership</option></select></div>
+          <div class="field"><label>Career / ambition level</label><select class="input" id="obCareer"><option>Balanced — career matters, family first</option><option>Highly ambitious</option><option>Work to live</option></select></div>
+          <div class="field"><label>Faith / spirituality <span class="hint">optional</span></label><select class="input" id="obFaith"><option>Prefer not to say</option><option>Spiritual, not religious</option><option>Practicing — Christian</option><option>Practicing — Jewish</option><option>Practicing — Muslim</option><option>Practicing — Hindu</option><option>Practicing — Buddhist</option><option>Atheist / agnostic</option><option>Other</option></select></div>
+          <div class="field"><label>Politics / worldview <span class="hint">optional</span></label><select class="input" id="obPolitics"><option>Prefer not to say</option><option>Progressive</option><option>Liberal</option><option>Moderate</option><option>Conservative</option><option>Indifferent</option><option>Apolitical</option><option>Other</option></select></div>
+          <div class="field"><label>How often do you follow the news? <span class="hint">optional</span></label><select class="input" id="obNews"><option>Prefer not to say</option><option>Multiple times a day</option><option>Daily</option><option>A few times a week</option><option>Rarely</option><option>Never — I tune it out</option></select></div>
+          <div class="field"><label>Education <span class="hint">optional</span></label><select class="input" id="obEdu"><option>Prefer not to say</option><option>High school</option><option>Some college</option><option>Bachelor's</option><option>Master's</option><option>Doctorate / professional</option></select></div>
+          <div class="field"><label>Lifestyle</label><select class="input" id="obLifestyle"><option>Active &amp; outdoorsy</option><option>Homebody &amp; cozy</option><option>Social &amp; out often</option><option>Balanced mix</option></select></div>
+        </div>
+        <div class="callout callout-teal small">🔒 Faith, politics, and education are <strong>private by default</strong>. You choose per-field who can see them in Settings.</div>
+      </div>
+
+      <div class="wizard-step ${s===3?'visible':''}">
+        <div class="eyebrow">Step 4 · Assessments</div>
+        <h2 style="font-size:1.7rem;margin-bottom:6px">Your compatibility assessments</h2>
+        <p class="muted small" style="margin-bottom:24px">Seven assessments, about 50 minutes total. Progress saves automatically — finish anytime from your dashboard. Matches improve as you complete them.</p>
+        ${ASSESS_META.map(x=>`<div class="completion-item" style="padding:10px 0;border-bottom:1px solid #F2EDE8">
+          <span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">→</span>
+          <div style="flex:1"><strong>${x.name}</strong><div class="tiny">${x.detail}</div></div>
+          <span class="badge badge-gray">${x.time}</span></div>`).join('')}
+      </div>
+
+      <div class="wizard-step ${s===4?'visible':''}">
+        <div class="eyebrow">Step 5 · Our signature</div>
+        <h2 style="font-size:1.7rem;margin-bottom:6px">Reproductive health compatibility</h2>
+        <p class="muted small" style="margin-bottom:18px">The reason most members choose Helix Hearts. Connect a carrier report and it becomes one private factor in your compatibility score — worth 20% of the formula. It is <strong>never displayed to anyone</strong>, including your matches. Full-picture profiles get the most complete score and appear first in matching.</p>
+        <div class="callout callout-rose small" style="margin-bottom:18px">This does not determine whether you should date someone. It simply helps identify whether a couple may want professional reproductive counseling.</div>
+        <div class="opt-grid">
+          <div class="opt-card ${state.onboard.dnaChoice==='later'?'selected':''}" onclick="pickDna('later')"><div class="t">Decide later</div><div class="d">Explore the feature from your dashboard</div></div>
+          <div class="opt-card ${state.onboard.dnaChoice==='setup'?'selected':''}" onclick="pickDna('setup')"><div class="t">Set up after onboarding</div><div class="d">Connect a testing service or upload a report</div></div>
+          <div class="opt-card ${state.onboard.dnaChoice==='decline'?'selected':''}" onclick="pickDna('decline')"><div class="t">No thanks</div><div class="d">Skip — your score is computed from the other categories; full-picture profiles rank first</div></div>
+        </div>
+      </div>
+
+      <div class="wizard-step ${s===5?'visible':''}" style="text-align:center;padding:20px 0">
+        <div style="font-size:3rem;margin-bottom:10px">🎉</div>
+        <h2 style="font-size:1.8rem;margin-bottom:10px">Welcome to Helix Hearts, Stefan</h2>
+        <p class="muted" style="max-width:32em;margin:0 auto 14px">You're founding member <strong>#2,847</strong> — every feature is free until we reach 10,000 members, then a month on us plus a month for each friend who joins with your invite. We've pre-filled your assessments with sample answers so you can explore the demo.</p>
+        <span class="badge badge-gold">★ Founder — Full Access</span>
+      </div>
+
+      <div class="wizard-nav">
+        <button class="btn btn-ghost" onclick="obPrev()" ${s===0?'style="visibility:hidden"':''}>← Back</button>
+        <button class="btn btn-primary" onclick="obNext()">${s===0&&(state.onboard.mode||'signup')==='signin'?'Sign in →':s===OB_STEPS-1?'Go to my dashboard →':'Continue →'}</button>
+      </div>
+    </div>
+  </div>`;
+}
+function pickIntent(o){ state.onboard.intention=o; render(); }
+function pickDna(o){ state.onboard.dnaChoice=o; render(); }
+function obNext(){
+  const s=state.onboardStep;
+  if(s===0){
+    const mode=state.onboard.mode||'signup';
+    const nm=document.getElementById('obName')?.value.trim();
+    const em=document.getElementById('obEmail')?.value.trim();
+    const pw=document.getElementById('obPass')?.value;
+    state.onboard.name=nm||state.onboard.name;
+    if(mode==='signin'){
+      if(sb.on && em && pw){
+        nnSignIn(em,pw).then(ok=>{ if(ok){ state.signedIn=true; go('dashboard'); toast('Welcome back, '+ME.name+'!'); } });
+      } else { state.signedIn=true; go('dashboard'); }
+      return;
+    }
+    if(sb.on && em && pw && pw.length>=6){
+      nnSignUp(em,pw,nm).then(d=>{ if(d) toast('Account created ✓ — everything you enter is now saved'); });
+    }
+  }
+  if(s===2) nnSaveProfile();
+  if(s>=OB_STEPS-1){ state.signedIn=true; go('dashboard'); toast('Profile created — welcome!'); return; }
+  state.onboardStep++; render(); window.scrollTo({top:0});
+}
+function obPrev(){ if(state.onboardStep>0){state.onboardStep--; render();} }
+
+/* =====================================================
+   DASHBOARD
+   ===================================================== */
+function viewDashboard(){
+  const done = Object.values(ME.completion).filter(Boolean).length;
+  const total = Object.keys(ME.completion).length;
+  const pct = Math.round(done/total*100);
+  const ranked = USERS.map(u=>({u, res:computeScore(ME,u)})).sort((a,b)=>((b.res.cats.dna!==null)-(a.res.cats.dna!==null)) || (b.res.total-a.res.total));
+  const top = ranked[0];
+  const timeFor = tab => (ASSESS_META.find(m=>m.tab===tab)||{}).time||'';
+  const compItems = [
+    ['profile','Profile basics',''],['values','Values',timeFor('values')],['eq','Emotional maturity',timeFor('eq')],
+    ['comm','Communication & conflict',timeFor('comm')],['family','Family & life goals',timeFor('family')],
+    ['flags','Red / green flags (100)',timeFor('flags')],['thinking','Thinking style (optional)',timeFor('thinking')],
+    ['iq','Quick cognitive test (hidden results)',timeFor('iq')],['dna','Health reports (signature)','']
+  ];
+  return `
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px">
+      ${avatar(58,'1.3rem')}
+      <div>
+        <h1 style="font-size:2rem">Good to see you, ${ME.name} <span class="badge badge-gold" style="vertical-align:middle">★ Founder</span></h1>
+        <p class="muted">Here's where your search for a life partner stands.</p>
+      </div>
+    </div>
+    <div class="grid-3" style="align-items:start">
+
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:18px;margin-bottom:18px">
+          ${ring(pct,86,8,'1.3rem')}
+          <div><h3 style="font-size:1.1rem">Profile completion</h3><p class="tiny">Complete assessments to sharpen match accuracy</p></div>
+        </div>
+        <div class="completion-list">
+          ${compItems.map(c=>`<div class="completion-item">
+            <span class="check-dot" style="${ME.completion[c[0]]?'background:var(--green-soft);color:var(--green)':'background:#F0EDEA;color:var(--ink-faint)'}">${ME.completion[c[0]]?'✓':'○'}</span>
+            <span style="flex:1;${ME.completion[c[0]]?'':'color:var(--ink-faint)'}">${c[1]}</span>
+            ${!ME.completion[c[0]]?`<button class="btn-ghost tiny" style="color:var(--teal);font-weight:600;cursor:pointer;white-space:nowrap" onclick="go('${c[0]==='dna'?'dna':'questionnaire'}')">${c[2]?c[2]+' · ':''}Start →</button>`:''}
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div style="grid-column:span 2;display:flex;flex-direction:column;gap:24px">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+            <h3 style="font-size:1.2rem">Top match suggestions</h3>
+            <button class="btn btn-secondary btn-sm" onclick="go('matches')">View all matches →</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            ${ranked.slice(0,3).map(({u,res})=>`
+              <div style="display:flex;align-items:center;gap:16px;padding:12px;border:1px solid var(--line);border-radius:14px;cursor:pointer" onclick="go('matchDetail','${u.id}')">
+                <div class="match-avatar" style="width:52px;height:52px;font-size:1.1rem;background:linear-gradient(135deg,${u.grad1},${u.grad2})">${u.name[0]}</div>
+                <div style="flex:1;min-width:0"><strong>${u.name}, ${u.age}</strong><div class="tiny" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${u.intention} · ${u.location}</div></div>
+                ${ring(res.total,60,6,'1rem')}
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:1.2rem;margin-bottom:4px">Why ${top.u.name} is your top match — ${top.res.total}%</h3>
+          <p class="small muted" style="margin-bottom:16px">${explainMatch(top.u, top.res)}</p>
+          ${breakdownRows(top.res)}
+          <div style="margin-top:18px"><button class="btn btn-primary btn-sm" onclick="go('matchDetail','${top.u.id}')">See ${top.u.name}'s full profile →</button></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =====================================================
+   MATCHES LIST
+   ===================================================== */
+function viewMatches(){
+  const ranked = USERS.map(u=>({u, res:computeScore(ME,u)})).sort((a,b)=>((b.res.cats.dna!==null)-(a.res.cats.dna!==null)) || (b.res.total-a.res.total));
+  return `
+  <div class="container">
+    <div style="margin-bottom:28px">
+      <h1 style="font-size:2rem">Your matches</h1>
+      <p class="muted">Full-picture profiles — where both reproductive health summaries are on file — appear first, then by Helix score. Click any card for the full breakdown.</p>
+    </div>
+    <div class="match-grid">
+      ${ranked.map(({u,res})=>{
+        const sv = sharedValues(u,5);
+        return `
+        <div class="match-card">
+          <div class="match-photo" style="background:linear-gradient(135deg,${u.grad1}22,${u.grad2}44)">
+            <div class="match-avatar" style="background:linear-gradient(135deg,${u.grad1},${u.grad2})">${u.name[0]}</div>
+          </div>
+          <div class="match-body">
+            <div class="match-head">
+              <div>
+                <h3 style="font-size:1.25rem">${u.name}, ${u.age}</h3>
+                <div class="tiny">${u.location}</div>
+                <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-rose">${u.intention}</span>${res.cats.dna!==null?'<span class="badge badge-teal">Full picture</span>':''}</div>
+              </div>
+              ${ring(res.total,74,7,'1.2rem')}
+            </div>
+            <p class="small muted" style="font-style:italic">"${u.tagline}"</p>
+            <div>
+              <div class="q-tag" style="color:var(--teal-deep)">Top shared values</div>
+              <div class="values-chips">${sv.map(v=>`<span class="chip">${v.label}</span>`).join('')||'<span class="tiny">Complete your values assessment to see</span>'}</div>
+            </div>
+            <div>
+              <div class="q-tag" style="color:var(--green)">Green flag highlights</div>
+              ${u.greens.slice(0,2).map(g=>`<div class="flag-line"><span class="flag-dot" style="background:var(--green)"></span>${g}</div>`).join('')}
+            </div>
+            <div>
+              <div class="q-tag" style="color:var(--amber)">Private to you · areas to explore</div>
+              ${u.cautions.slice(0,1).map(c=>`<div class="flag-line"><span class="flag-dot" style="background:var(--amber)"></span>${c}</div>`).join('')}
+            </div>
+            <button class="btn btn-secondary btn-sm" style="margin-top:auto" onclick="go('matchDetail','${u.id}')">Full compatibility report →</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <p class="tiny" style="margin-top:24px;max-width:56em">"Areas to explore" notes are visible only to you, are phrased from assessment differences — never accusations — and exist to help you have better early conversations.</p>
+  </div>`;
+}
+
+/* =====================================================
+   MATCH DETAIL
+   ===================================================== */
+function viewMatchDetail(){
+  const u = USERS.find(x=>x.id===state.currentMatch) || USERS[0];
+  const res = computeScore(ME,u);
+  const sv = sharedValues(u,6);
+  const dnaScore = res.cats.dna;
+  return `
+  <div class="container">
+    <div class="back-link" onclick="go('matches')">← Back to matches</div>
+    <div class="grid-2" style="align-items:start;grid-template-columns:.9fr 1.1fr">
+
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="card" style="text-align:center">
+          <div class="match-avatar" style="width:110px;height:110px;font-size:2.4rem;margin:0 auto 16px;background:linear-gradient(135deg,${u.grad1},${u.grad2})">${u.name[0]}</div>
+          <h1 style="font-size:1.9rem">${u.name}, ${u.age}</h1>
+          <div class="muted small" style="margin-bottom:12px">${u.location}</div>
+          <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:18px">
+            <span class="badge badge-rose">${u.intention}</span>
+            <span class="badge badge-teal">${u.kids}</span>
+            ${dnaScore!==null?'<span class="badge badge-teal">Full picture</span>':''}
+          </div>
+          <p class="small muted" style="font-style:italic;margin-bottom:20px">"${u.tagline}"</p>
+          ${ring(res.total,130,11)}
+          <p class="tiny" style="margin-top:12px">Helix score — every point explained on the right</p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:1.1rem;margin-bottom:12px">Conversation starters</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">${u.starters.map(s=>`<div class="starter">${s}</div>`).join('')}</div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:1.1rem;margin-bottom:10px">Reproductive health <span class="tiny">(signature module)</span></h3>
+          ${dnaScore!==null?`
+          <div class="bd-row" style="border:none;padding-top:0">
+            <div>Compatibility factor<span class="tiny" style="display:block">the only thing anyone ever sees</span></div>
+            <div class="bd-bar"><div class="bd-fill" style="width:${dnaScore}%;background:#6B5B95"></div></div>
+            <div class="bd-score">${dnaScore}</div>
+          </div>
+          ${dnaScore===70?`<div class="callout callout-teal small" style="margin-top:10px">🩺 If this connection gets serious, a licensed genetic counselor can help you plan a family with confidence. The NSGC directory (findageneticcounselor.nsgc.org) lists telehealth options.</div>`:''}`
+          :`<p class="small muted">Not scored — one or both of you hasn't added reproductive health data. The 20% weight is redistributed across the other categories.</p>`}
+          <p class="tiny" style="margin-top:10px">Genetic details are never displayed — not to you, not to ${u.name}, not to anyone. Carrier information is used solely to compute this single factor.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="card">
+          <h3 style="font-size:1.25rem;margin-bottom:6px">Why you two score ${res.total}%</h3>
+          <p class="small muted" style="margin-bottom:18px">${explainMatch(u,res)}</p>
+          ${breakdownRows(res)}
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:1.1rem;margin-bottom:14px">Areas of alignment</h3>
+          <div class="values-chips" style="margin-bottom:14px">${sv.map(v=>`<span class="chip">${v.label}</span>`).join('')}</div>
+          ${u.greens.map(g=>`<div class="flag-line" style="padding:5px 0"><span class="flag-dot" style="background:var(--green)"></span>${g}</div>`).join('')}
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:1.1rem;margin-bottom:4px">To discuss before marriage</h3>
+          <p class="tiny" style="margin-bottom:14px">Private to you. Differences aren't dealbreakers — undiscussed differences are.</p>
+          ${u.discuss.map(d=>`<div class="flag-line" style="padding:5px 0"><span class="flag-dot" style="background:var(--amber)"></span>${d}</div>`).join('')}
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="toast('Introduction request sent to ${u.name} 💌 (demo)')">Send introduction</button>
+          <button class="btn btn-secondary" onclick="toast('Saved to favorites (demo)')">Save for later</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =====================================================
+   DNA / REPRODUCTIVE HEALTH
+   ===================================================== */
+function viewDna(){
+  return `
+  <div class="container-narrow">
+    <div class="eyebrow">Our signature feature</div>
+    <h1 style="font-size:2rem;margin-bottom:8px">Health Reports</h1>
+    <p class="muted" style="margin-bottom:20px">This is what sets Helix Hearts apart. Reproductive carrier screening is the centerpiece — worth 20% of your compatibility score — and every additional report you add completes your picture. Nothing you upload is <strong>ever displayed to anyone</strong>: not your matches, not on your profile. Reports become private matching inputs and "full picture" credibility, that's all.</p>
+    <div class="callout callout-rose" style="margin-bottom:28px"><strong style="flex-shrink:0">♥</strong> This does not determine whether you should date someone. It simply helps identify whether a couple may want professional reproductive counseling.</div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:1.15rem;margin-bottom:4px">Before you begin: your consent</h3>
+      <p class="small muted" style="margin-bottom:14px">By using this feature you agree that Helix Hearts may store summaries of your reports and use them solely to compute compatibility factors with other opted-in members. You can revoke consent and permanently delete this data at any time. We never sell health data, never display it to anyone, and never use it for anything beyond this feature.</p>
+      <label class="small" style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" id="dnaConsent" style="margin-top:4px"><span>I understand and give explicit consent. <span class="muted">(Required before any upload.)</span></span></label>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:1.15rem;margin-bottom:4px">Upload your reports</h3>
+      <p class="small muted" style="margin-bottom:14px">The more you share, the fuller your picture — and the more confident your matches can be that what they see is real. Any official test that helps paint the full picture of who you are is welcome.</p>
+      <div class="dropzone" onclick="dnaUpload()" style="margin-bottom:16px">
+        <div style="font-size:1.8rem;margin-bottom:6px">📄</div>
+        <strong>Drop any report here</strong> or click to browse<div class="tiny" style="margin-top:4px">PDF, images, or lab exports · encrypted at rest · never displayed to anyone</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        ${REPORT_TYPES.map(r=>`
+          <div class="connect-card">
+            <div class="connect-logo" style="background:linear-gradient(135deg,var(--teal-soft),var(--rose-soft));font-size:1.3rem">${r.icon}</div>
+            <div style="flex:1"><strong>${r.name}</strong> <span class="badge ${r.badge}" style="margin-left:4px">${r.tag}</span><div class="tiny">${r.ex}</div></div>
+            <button class="btn btn-secondary btn-sm" onclick="reportUpload('${r.name}')">Upload</button>
+          </div>`).join('')}
+      </div>
+      <p class="tiny" style="margin-top:12px">23andMe, AncestryDNA, and MyHeritage users: download your data from your account (Settings → Download raw data) and upload the file here. Clinical reports are the most reliable source for carrier status.</p>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="card">
+        <h3 style="font-size:1.05rem;margin-bottom:12px">Reports on file</h3>
+        ${(state.reports&&state.reports.length)?`
+        <div style="margin-bottom:10px">${state.reports.map(r=>`<div class="flag-line" style="padding:3px 0"><span class="flag-dot" style="background:var(--green)"></span>${r.kind}<span class="tiny" style="margin-left:auto">${(r.uploaded_at||'').slice(0,10)}</span></div>`).join('')}</div>
+        <span class="badge badge-green">${state.reports.length} report${state.reports.length>1?'s':''} on file</span>`
+        :`<p class="small muted" style="margin-bottom:10px">Nothing uploaded yet. Your first report — ideally carrier screening — activates the signature 20% factor and your "full picture" badge.</p>
+        <span class="badge badge-gray">0 reports on file</span>`}
+      </div>
+      <div class="card">
+        <h3 style="font-size:1.05rem;margin-bottom:12px">Or enter known carrier status manually</h3>
+        <div class="field"><label>Condition <span class="hint">from your clinician or report</span></label>
+          <select class="input"><option>Select a condition…</option><option>Cystic fibrosis (CFTR)</option><option>Spinal muscular atrophy (SMN1)</option><option>Sickle cell / beta-thalassemia (HBB)</option><option>Tay-Sachs (HEXA)</option><option>Fragile X (FMR1)</option><option>Alpha-thalassemia</option><option>Other / not listed</option></select></div>
+        <div class="field"><label>Status</label>
+          <select class="input"><option>Carrier</option><option>Not a carrier</option><option>Uncertain / VUS</option></select></div>
+        <button class="btn btn-teal btn-sm" onclick="dnaManual()">Add to my summary</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:1.15rem;margin-bottom:14px">What happens to your data</h3>
+      <div class="completion-list">
+        <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">1</span>Each report is encrypted and reduced to a private summary. The raw file can be deleted immediately.</div>
+        <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">2</span>When you and another opted-in member appear in each other's matches, our engine compares summaries privately.</div>
+        <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">3</span>The comparison becomes a single 0–100 factor in your compatibility score. That number is all anyone ever sees.</div>
+        <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">4</span>No conditions, genes, or carrier details are ever displayed — to you, your match, or anyone else.</div>
+      </div>
+      <div class="callout callout-teal small" style="margin-top:16px">🩺 <span><strong>Considering family planning with a serious partner?</strong> A licensed genetic counselor can give a complete picture — the NSGC directory (findageneticcounselor.nsgc.org) lists telehealth options.</span></div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:1.15rem;margin-bottom:14px">Your privacy controls</h3>
+      <div class="toggle-row"><div><strong class="small">Use my carrier summary in matching</strong><div class="tiny">Off = the reproductive health factor is skipped for all your matches</div></div>${toggle('dnaUseInMatching')}</div>
+      <div class="toggle-row"><div><strong class="small">Current status</strong><div class="tiny">No DNA data uploaded</div></div><span class="badge badge-gray">No DNA uploaded</span></div>
+      <div class="toggle-row"><div><strong class="small">Delete all genetic data</strong><div class="tiny">Immediate and permanent, including backups</div></div><button class="btn btn-danger btn-sm" onclick="toast('All genetic data permanently deleted (demo)')">Delete</button></div>
+    </div>
+    <p class="tiny" style="margin-top:18px">Helix Hearts is not a medical provider. Carrier comparisons are informational and may be incomplete; only a licensed genetic counselor or physician can properly assess reproductive risk.</p>
+  </div>`;
+}
+function dnaGuard(){
+  if(!document.getElementById('dnaConsent')?.checked){ toast('Please check the consent box first'); return false; }
+  return true;
+}
+function reportUpload(kindName){
+  if(!dnaGuard()) return;
+  const inp=document.createElement('input');
+  inp.type='file'; inp.accept='.pdf,image/*,.txt,.csv,.zip';
+  inp.onchange=()=>{
+    const f=inp.files[0]; if(!f) return;
+    if(f.size>4*1024*1024){ toast('Please keep reports under 4 MB for now'); return; }
+    const r=new FileReader();
+    r.onload=ev=>{
+      state.reports=state.reports||[];
+      state.reports.unshift({kind:kindName, uploaded_at:new Date().toISOString()});
+      if(sb.on){ nnRest('reports','POST',{kind:kindName,data_url:ev.target.result}); toast(kindName+' uploaded & encrypted ✓'); }
+      else toast(kindName+' added (demo — sign in to save permanently)');
+      render();
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
+}
+function dnaUpload(){ reportUpload('Report'); }
+function dnaManual(){ if(dnaGuard()) toast('Added to your private carrier summary (demo)'); }
+
+/* =====================================================
+   ASSESSMENTS
+   ===================================================== */
+function viewQuestionnaire(){
+  return `
+  <div class="container-narrow">
+    <h1 style="font-size:2rem;margin-bottom:6px">Assessments</h1>
+    <p class="muted" style="margin-bottom:8px">This is where matches are made. Answer honestly — the goal is that nothing about either of you is a surprise three months in.</p>
+    <p class="tiny" style="margin-bottom:20px">≈ 52 minutes total across all seven · progress saves automatically · slide anywhere from 0–100 to weight your answer exactly how you feel</p>
+    <div class="tabs">${ASSESS_META.map(t=>`<button class="tab ${state.qTab===t.tab?'active':''}" onclick="state.qTab='${t.tab}';render()">${t.name} <span style="opacity:.65;font-weight:500">· ${t.time}</span></button>`).join('')}</div>
+    <div class="card">${qSection()}</div>
+  </div>`;
+}
+function qSection(){
+  const t = state.qTab;
+  if(t==='values') return `
+    <h3 style="margin-bottom:4px">Core values <span class="badge badge-gray">≈ 4 min</span></h3>
+    <p class="small muted" style="margin-bottom:6px">How central is each value to the life you want to build?</p>
+    <div class="callout callout-amber small" style="margin-bottom:10px">⚖️ Be ruthless: if everything is 100, nothing is. Your matches come from the <em>shape</em> of your answers, not their height.</div>
+    ${VALUE_KEYS.map(v=>`<div class="q-item"><div class="q-text">${v.label}</div>${slider('val_'+v.key,(ME.values[v.key]-1)*25)}</div>`).join('')}
+    <h3 style="margin:26px 0 4px">Values in the real world</h3>
+    <p class="small muted" style="margin-bottom:6px">There's no right answer — only your answer.</p>
+    ${VALUE_SCENARIOS.map(sc=>scenario(sc.key,sc)).join('')}`;
+  if(t==='eq') return `
+    <h3 style="margin-bottom:4px">Emotional maturity <span class="badge badge-gray">≈ 6 min</span></h3>
+    <p class="small muted" style="margin-bottom:10px">Nobody scores perfectly here — and admitting your rough edges is exactly what makes matching work. Mismatched expectations sink marriages, not imperfections.</p>
+    ${EQ_SLIDERS.map(v=>`<div class="q-item"><div class="q-text">${v.t}</div>${slider('eq_'+v.key)}</div>`).join('')}
+    <h3 style="margin:26px 0 4px">How you actually react</h3>
+    <p class="small muted" style="margin-bottom:6px">Pick what you'd <em>really</em> do — not the textbook answer.</p>
+    ${EQ_SCENARIOS.map(sc=>scenario(sc.key,sc)).join('')}`;
+  if(t==='comm') return `
+    <h3 style="margin-bottom:4px">Communication &amp; conflict <span class="badge badge-gray">≈ 6 min</span></h3>
+    <p class="small muted" style="margin-bottom:10px">Think of your last three real disagreements as you answer — not the person you aspire to be.</p>
+    ${COMM_SLIDERS.map(v=>`<div class="q-item"><div class="q-text">${v.t}</div>${slider('comm_'+v.key)}</div>`).join('')}
+    <h3 style="margin:26px 0 4px">Conflict in practice</h3>
+    ${COMM_SCENARIOS.map(sc=>scenario(sc.key,sc)).join('')}`;
+  if(t==='family') return `
+    <h3 style="margin-bottom:4px">Family &amp; life goals <span class="badge badge-gray">≈ 5 min</span></h3>
+    <p class="small muted" style="margin-bottom:10px">These carry 20% of your match score — the tough questions now, so they're not surprises later.</p>
+    ${FAMILY_ITEMS.map(f=>`<div class="q-item"><div class="q-text">${f.label}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${f.options.map(o=>{
+        const cur = state.answers['fam_'+f.key] ?? ME.family[f.key];
+        return `<button class="tab ${cur===o?'active':''}" style="font-size:.8rem;padding:7px 14px" onclick="answer('fam_${f.key}','${o.replace(/'/g,"\\'")}')">${o}</button>`;
+      }).join('')}</div></div>`).join('')}`;
+  if(t==='thinking') return `
+    <h3 style="margin-bottom:4px">Thinking style &amp; problem-solving <span class="badge badge-gray">optional · ≈ 3 min</span></h3>
+    <p class="small muted" style="margin-bottom:6px">How you approach problems — planning, curiosity, decision pace. Used only to suggest day-to-day chemistry.</p>
+    <div class="callout callout-teal small" style="margin-bottom:10px">This measures <strong>style, not smarts</strong>. There are no better or worse answers — just how your approaches might mesh.</div>
+    ${THINKING_SLIDERS.map(v=>`<div class="q-item"><div class="q-text">${v.t}</div>${slider('think_'+v.key)}</div>`).join('')}
+    ${THINKING_SCENARIOS.map(sc=>scenario(sc.key,sc)).join('')}`;
+  if(t==='iq'){
+    const answered = IQ_ITEMS.filter((_,i)=>state.answers['iq_'+i]!==undefined).length;
+    const doneAll = answered===IQ_ITEMS.length;
+    return `
+    <h3 style="margin-bottom:4px">Quick cognitive test <span class="badge badge-gray">≈ 8 min</span></h3>
+    <div class="callout callout-rose small" style="margin-bottom:14px">🔒 <span><strong>Your results are never displayed — to you, your matches, or anyone.</strong> They're sealed the moment you finish and used only as one quiet input to problem-solving-style pairing. No scores, percentiles, or rankings exist anywhere in the app.</span></div>
+    <p class="small muted" style="margin-bottom:6px">Ten quick puzzles. Work at your own pace — ${answered}/10 answered.</p>
+    ${doneAll?`<div class="callout callout-teal small" style="margin-bottom:10px">✓ Complete. Your results are sealed. That's all anyone — including you — will ever see of them.</div>`:''}
+    ${IQ_ITEMS.map((it,i)=>`<div class="q-item"><div class="q-text">${i+1}. ${it.q}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${it.opts.map((o,j)=>`
+        <button class="tab ${state.answers['iq_'+i]===j?'active':''}" style="font-size:.85rem;padding:8px 16px" onclick="answer('iq_${i}',${j})">${o}</button>`).join('')}</div></div>`).join('')}`;
+  }
+  // flags
+  const answered = Object.keys(state.answers).filter(k=>k.startsWith('flag_')).length;
+  return `
+    <h3 style="margin-bottom:4px">Red / green flag inventory <span class="badge badge-gray">≈ 20 min</span></h3>
+    <p class="small muted" style="margin-bottom:6px">100 statements about how you actually behave in relationships. Some are phrased so that honest people agree, others so that honest people disagree — read each one.</p>
+    <div class="callout callout-teal small" style="margin-bottom:8px">Progress: <strong style="margin-left:4px">${answered} / 100 answered this session</strong></div>
+    ${FLAG_THEMES.green.map((th,ti)=>`
+      <div style="margin-top:22px"><span class="q-tag" style="color:var(--green)">Green · ${th.theme}</span></div>
+      ${th.items.map((p,pi)=>`<div class="q-item"><div class="q-text">${p.t}</div>${slider(`flag_g${ti}_${pi}`)}</div>`).join('')}`).join('')}
+    ${FLAG_THEMES.red.map((th,ti)=>`
+      <div style="margin-top:22px"><span class="q-tag" style="color:var(--rose-deep)">Red · ${th.theme}</span></div>
+      ${th.items.map((p,pi)=>`<div class="q-item"><div class="q-text">${p.t}</div>${slider(`flag_r${ti}_${pi}`)}</div>`).join('')}`).join('')}`;
+}
+
+/* =====================================================
+   SETTINGS
+   ===================================================== */
+function toggle(key){
+  return `<div class="switch ${state.settings[key]?'on':''}" onclick="state.settings['${key}']=!state.settings['${key}'];render();toast('Setting saved')"><div class="track"></div><div class="knob"></div></div>`;
+}
+function viewSettings(){
+  return `
+  <div class="container-narrow">
+    <h1 style="font-size:2rem;margin-bottom:6px">Settings & privacy</h1>
+    <p class="muted" style="margin-bottom:28px">Sensitive information is private by default. You decide what matches can see.</p>
+
+    <div class="card" style="margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px">
+        <h3 style="font-size:1.15rem">Your plan</h3>
+        <span class="badge badge-gold">★ Founder — Full Access</span>
+      </div>
+      <p class="small muted" style="margin-bottom:14px">You're founding member <strong>#2,847</strong>. Every feature is free until we reach 10,000 members — then you get 1 more month of full access free, plus 1 additional month for every friend who joins on your invite, before moving to the Free plan (or Full Access, $24/mo). Your founder badge is permanent.</p>
+      <div style="display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;margin-bottom:6px"><span>2,847 / 10,000 founder spots claimed</span><span>28%</span></div>
+      <div class="founder-bar"><div class="founder-fill" style="width:28.5%"></div></div>
+      <div class="toggle-row" style="margin-top:14px;border-top:1px solid #F2EDE8">
+        <div><strong class="small">Invite friends, earn months</strong><div class="tiny">2 invites accepted · +2 bonus months banked</div></div>
+        <button class="btn btn-secondary btn-sm" onclick="toast('Invite link copied: helixhearts.app/i/stefan-2847 (demo)')">Copy invite link</button>
+      </div>
+      <div class="toggle-row" style="margin-top:14px;border-top:1px solid #F2EDE8;border-bottom:none">
+        <div><strong class="small">Backend</strong><div class="tiny">${sb.on?'Neon project connected — data syncs live via the Data API':'Neon — create a project, run neon-schema.sql in the SQL Editor, enable the Data API (with Neon Auth), then connect below'}</div></div>
+        <span class="badge ${sb.on?'badge-green':'badge-gray'}">${sb.on?'Connected':'Demo mode'}</span>
+      </div>
+      ${sb.on?`
+      <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap">
+        ${nnJwt?'<button class="btn btn-secondary btn-sm" onclick="nnSignOut()">Sign out</button>':''}
+        <button class="btn btn-danger btn-sm" onclick="sbDisconnect()">Disconnect backend</button>
+      </div>`
+      :`
+      <div class="grid-2" style="gap:12px;margin-top:6px">
+        <div class="field" style="margin-bottom:0"><label>Data API URL</label><input class="input" id="nnDataUrl" placeholder="https://ep-….apirest.….aws.neon.tech/neondb/rest/v1"></div>
+        <div class="field" style="margin-bottom:0"><label>Auth URL</label><input class="input" id="nnAuthUrl" placeholder="https://ep-….neonauth.….aws.neon.tech/neondb/auth"></div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-teal btn-sm" onclick="sbConfigure()">Connect</button>
+        <span class="tiny">Data API URL: Data API page. Auth URL: Auth page → Configuration. Both are safe in the browser — row-level security does the guarding.</span>
+      </div>`}
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:1.15rem;margin-bottom:8px">Visibility</h3>
+      <div class="toggle-row"><div><strong class="small">Profile visible in matching</strong><div class="tiny">Pause anytime without losing data</div></div>${toggle('profileVisible')}</div>
+      <div class="toggle-row"><div><strong class="small">Show faith / spirituality on profile</strong><div class="tiny">Private by default</div></div>${toggle('showFaith')}</div>
+      <div class="toggle-row"><div><strong class="small">Show politics / worldview on profile</strong><div class="tiny">Private by default</div></div>${toggle('showPolitics')}</div>
+      <div class="toggle-row"><div><strong class="small">Use my carrier summary in matching</strong><div class="tiny">Never displayed to anyone — used only to compute your compatibility factor</div></div>${toggle('dnaUseInMatching')}</div>
+      <div class="toggle-row"><div><strong class="small">Show "last active"</strong></div>${toggle('showLastActive')}</div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:1.15rem;margin-bottom:8px">Your data</h3>
+      <div class="toggle-row"><div><strong class="small">Download my data</strong><div class="tiny">Full export of profile, answers, and matches</div></div><button class="btn btn-secondary btn-sm" onclick="toast('Export requested — we\\'ll email a link (demo)')">Export</button></div>
+      <div class="toggle-row"><div><strong class="small">Delete genetic data only</strong><div class="tiny">Keeps your profile; removes all carrier information permanently</div></div><button class="btn btn-danger btn-sm" onclick="toast('Genetic data permanently deleted (demo)')">Delete DNA</button></div>
+      <div class="toggle-row"><div><strong class="small">Delete account</strong><div class="tiny">Everything, permanently, within 30 days</div></div><button class="btn btn-danger btn-sm" onclick="toast('Account deletion flow would start here (demo)')">Delete account</button></div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:1.15rem;margin-bottom:8px">Our promises, in writing</h3>
+      <div class="ethics-list" style="grid-template-columns:1fr">
+        <div class="ethics-item"><span class="ico ico-yes">✓</span>Genetic data is never displayed to anyone — not you, not your matches. It is used solely as a private factor in compatibility scoring.</div>
+        <div class="ethics-item"><span class="ico ico-yes">✓</span>If you skip the DNA feature, your 0–100 score is computed from the remaining categories; sharing it unlocks the full formula and priority placement.</div>
+        <div class="ethics-item"><span class="ico ico-yes">✓</span>Cognitive test results are sealed permanently — no scores, percentiles, or rankings exist anywhere in the app.</div>
+        <div class="ethics-item"><span class="ico ico-yes">✓</span>Your carrier summary is encrypted, never sold, and deletable in one tap.</div>
+        <div class="ethics-item"><span class="ico ico-yes">✓</span>Helix Hearts is not medical advice, genetic counseling, or a guarantee of relationship or reproductive outcomes.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =====================================================
+   ROUTER
+   ===================================================== */
+function render(){
+  const views = {
+    landing:viewLanding, onboarding:viewOnboarding, dashboard:viewDashboard,
+    matches:viewMatches, matchDetail:viewMatchDetail, dna:viewDna,
+    questionnaire:viewQuestionnaire, settings:viewSettings
+  };
+  app.innerHTML = `<div class="page visible">${(views[state.route]||viewLanding)()}</div>`;
+  navHighlight();
+}
+render();
+
+/* Session restore: if a Neon Auth cookie is present, everything the
+   user saved (profile, answers, photo, reports) comes right back. */
+if(sb.on){
+  nnSession(true).then(async jwt=>{
+    if(jwt){
+      await nnLoadAll();
+      state.signedIn=true;
+      if(state.route==='landing') state.route='dashboard';
+      render();
+    }
+  });
+}
+</script>
+</body>
+</html>
