@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Helix Hearts — Date for marriage. Match on values.</title>
+<title>Helix Hearts: Date for marriage. Match on values.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -287,16 +287,16 @@ input.hslider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;backgro
   <div class="container" style="padding-top:0;padding-bottom:0">
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:24px">
       <div class="logo" style="font-size:1.05rem">Helix Hearts</div>
-      <div class="small muted">Serious dating for marriage &amp; family — built on transparency and consent.</div>
+      <div class="small muted">Serious dating for marriage &amp; family, built on transparency and consent.</div>
     </div>
-    <p class="footer-disclaimer"><strong>Important:</strong> Helix Hearts is not medical advice, genetic counseling, or a guarantee of relationship or reproductive outcomes. Compatibility scores describe assessment alignment between two people — they do not measure human worth, predict love, or evaluate anyone's genes as "better" or "worse." Genetic information is never displayed to anyone — not even your matches. It is used solely as a private factor in compatibility scoring and can be deleted at any time. Please consult qualified professionals (counselors, physicians, licensed genetic counselors) before making relationship or reproductive decisions.</p>
+    <p class="footer-disclaimer"><strong>Important:</strong> Helix Hearts is not medical advice, genetic counseling, or a guarantee of relationship or reproductive outcomes. Compatibility scores describe assessment alignment between two people. They do not measure human worth, predict love, or evaluate anyone's genes as "better" or "worse." Genetic information is never displayed to anyone, not even your matches. It is used solely as a private factor in compatibility scoring and can be deleted at any time. Please consult qualified professionals (counselors, physicians, licensed genetic counselors) before making relationship or reproductive decisions.</p>
   </div>
 </footer>
 
 <div class="toast" id="toast"></div>
 <script>
 /* =====================================================
-   HELIX HEARTS — DATA
+   HELIX HEARTS DATA
    ===================================================== */
 
 // ---------- Scoring weights (transparent, always shown to users) ----------
@@ -332,10 +332,10 @@ const FLAG_THEMES = {
   green: [
     {theme:'Keeps promises', items:[
       {t:'I’ve canceled plans last-minute more than once this year simply because I didn’t feel like going.', r:true},
-      {t:'If I say I’ll do something, it happens — even after it stops being convenient.'},
+      {t:'If I say I’ll do something, it happens, even after it stops being convenient.'},
       {t:'I sometimes agree to things just to end the conversation, then quietly let them slide.', r:true},
       {t:'Friends would name me as the one who always follows through.'},
-      {t:'Small promises — calling back, picking something up — tend to slip through the cracks with me.', r:true}]},
+      {t:'Small promises, like calling back or picking something up, tend to slip through the cracks with me.', r:true}]},
     {theme:'Takes accountability', items:[
       {t:'When I’m accused of something, my first instinct is to point out what the other person did.', r:true},
       {t:'I can apologize without adding “…but you”.'},
@@ -380,7 +380,7 @@ const FLAG_THEMES = {
       {t:'I regularly review whether my life is on the track I want.'}]},
     {theme:'Respects boundaries', items:[
       {t:'When a partner asks for space, I keep checking in anyway.', r:true},
-      {t:'A “no” is a complete answer — I accept it the first time.'},
+      {t:'A “no” is a complete answer. I accept it the first time.'},
       {t:'I have read a partner’s messages without asking.', r:true},
       {t:'I actively encourage my partner’s friendships and time away from me.'},
       {t:'If a boundary doesn’t make sense to me, I push back on it.', r:true}]},
@@ -469,24 +469,24 @@ const VALUE_KEYS = [
   {key:'generosity',label:'Generosity'},
 ];
 const VALUE_SCENARIOS = [
-  {key:'vs1', q:'You’re offered a promotion that doubles your income but demands 65-hour weeks for three years — right when you hoped to start a family.', opts:[
-    'Take it — financial security is the foundation of family life',
+  {key:'vs1', q:'You’re offered a promotion that doubles your income but demands 65-hour weeks for three years, right when you hoped to start a family.', opts:[
+    'Take it: financial security is the foundation of family life',
     'Negotiate a middle path, even if it stalls my career',
-    'Decline — the family window matters more than the money',
+    'Decline: the family window matters more than the money',
     'Take it and push the family timeline back']},
   {key:'vs2', q:'An aging parent can no longer live alone. What feels most right?', opts:[
     'They move in with us, period',
     'We fund good professional care nearby',
     'We relocate to be closer to them',
-    'Care should be shared across siblings — I’d coordinate, not carry it alone']},
+    'Care should be shared across siblings; I’d coordinate, not carry it alone']},
   {key:'vs3', q:'Your partner’s dream job is across the country. Your career, friends, and family are all here.', opts:[
-    'We go — a spouse’s dream outranks my comfort zone',
+    'We go: a spouse’s dream outranks my comfort zone',
     'We go only if my career survives the move',
-    'They should turn it down — we’re building roots here',
+    'They should turn it down; we’re building roots here',
     'Long-distance temporarily while we figure it out']},
   {key:'vs4', q:'A surprise $50,000 windfall lands in your account. Honestly, what happens to it?', opts:[
     'Nearly all of it invested or saved',
-    'Half saved, half enjoyed — you only live once',
+    'Half saved, half enjoyed. You only live once',
     'Straight to the house / family fund',
     'A chunk given to family or charity, the rest saved']},
 ];
@@ -495,7 +495,7 @@ const VALUE_SCENARIOS = [
 const EQ_SLIDERS = [
   {key:'e1', t:'When criticized, my first instinct is to explain why the other person is wrong.', r:true},
   {key:'e2', t:'I can say “I was wrong” within a day of realizing it.'},
-  {key:'e3', t:'When I’m stressed, the people around me can tell — I get short with them.', r:true},
+  {key:'e3', t:'When I’m stressed, the people around me can tell. I get short with them.', r:true},
   {key:'e4', t:'I need several days of space before I can discuss a conflict.', r:true},
   {key:'e5', t:'Crying in front of a partner is difficult for me.', r:true},
   {key:'e6', t:'I replay arguments in my head long after they’re resolved.', r:true},
@@ -503,8 +503,8 @@ const EQ_SLIDERS = [
 const EQ_SCENARIOS = [
   {key:'eqs1', q:'Your partner comes home visibly upset but says “I’m fine.” You…', opts:[
     'Give them space until they bring it up',
-    'Gently name it: “You seem off — want to talk or want quiet?”',
-    'Press a little — “fine” clearly isn’t true',
+    'Gently name it: “You seem off. Want to talk or want quiet?”',
+    'Press a little, since “fine” clearly isn’t true',
     'Lighten the mood and try to cheer them up']},
   {key:'eqs2', q:'Mid-argument, you realize you’re actually the one in the wrong. What really happens?', opts:[
     'I stop and admit it on the spot',
@@ -514,22 +514,22 @@ const EQ_SCENARIOS = [
   {key:'eqs3', q:'Your partner pokes fun at a sensitive spot of yours in front of friends. You…', opts:[
     'Laugh along, raise it privately later that night',
     'Signal discomfort in the moment, discuss at home',
-    'Say nothing — bringing it up feels petty',
+    'Say nothing; bringing it up feels petty',
     'Fire back with a joke at their expense']},
   {key:'eqs4', q:'Brutal day at work. Your partner is excited to discuss wedding plans tonight. You…', opts:[
-    'Push through and engage — their excitement matters',
+    'Push through and engage; their excitement matters',
     'Ask for an hour to decompress, then give real attention',
     'Ask to reschedule to tomorrow when I can be present',
     'Sit through it, though my mind will be elsewhere']},
   {key:'eqs5', q:'Your partner is deeply anxious about something you consider objectively minor. You…', opts:[
-    'Take the worry seriously — it’s big to them',
+    'Take the worry seriously; it’s big to them',
     'Comfort first, then gently offer perspective',
     'Reassure them it’s not a big deal',
     'Help solve the practical problem so the worry goes away']},
   {key:'eqs6', q:'A flash of jealousy hits when your partner warmly mentions an attractive coworker. You…', opts:[
     'Name it honestly right away, without accusation',
     'Sit with it; mention it only if it keeps growing',
-    'Say nothing — my feeling, my job to manage',
+    'Say nothing. My feeling, my job to manage',
     'Make a light joke that hints at how I feel']},
 ];
 
@@ -547,29 +547,29 @@ const COMM_SCENARIOS = [
     'Raise it that day, calmly and directly',
     'Wait for a natural moment, then ask about it',
     'Watch whether it becomes a pattern before saying anything',
-    'Say nothing — their money is their business until we merge finances']},
+    'Say nothing; their money is their business until we merge finances']},
   {key:'cs2', q:'Third night in a row your partner is on their phone through dinner. You…', opts:[
     'Say something in the moment, kindly',
     'Make a joke about it and see if they get the hint',
     'Plan a proper conversation about phones and presence',
-    'Let it go — everyone has phases']},
+    'Let it go; everyone has phases']},
   {key:'cs3', q:'It’s 11pm, you’re both exhausted, and a disagreement is going in circles. You…', opts:[
-    'Keep going — never go to bed angry',
+    'Keep going. Never go to bed angry',
     'Pause it and set a specific time tomorrow to finish',
-    'Sleep on it — most fights look smaller in the morning',
+    'Sleep on it; most fights look smaller in the morning',
     'Depends entirely on who started it']},
   {key:'cs4', q:'At a family dinner, your partner’s parent criticizes how you two plan to raise kids. You…', opts:[
     'Respond politely but firmly at the table',
     'Let it pass, align with my partner privately afterward',
     'Expect my partner to handle their own parent',
-    'Engage the debate — ideas should be defended']},
-  {key:'cs5', q:'You strongly disagree with something your partner just said — in front of friends. You…', opts:[
+    'Engage the debate; ideas should be defended']},
+  {key:'cs5', q:'You strongly disagree with something your partner just said, in front of friends. You…', opts:[
     'Voice the disagreement openly; healthy couples debate',
     'Give a neutral response, discuss it later privately',
     'Stay quiet; public disagreement embarrasses everyone',
     'Make a light contrary comment and move on']},
-  {key:'cs6', q:'Your partner asks “what’s wrong?” — something is, but you can’t articulate it yet. You…', opts:[
-    'Say exactly that: “Something, but I can’t name it yet — give me time”',
+  {key:'cs6', q:'Your partner asks “what’s wrong?” Something is, but you can’t articulate it yet. You…', opts:[
+    'Say exactly that: “Something, but I can’t name it yet. Give me time”',
     'Say “nothing” until I understand it myself',
     'Talk it through out loud, messy and unfinished',
     'Deflect now, bring it up days later once it’s clear']},
@@ -586,7 +586,7 @@ const FAMILY_ITEMS = [
   {key:'faithHome',  label:'Role of faith in your future home', type:'choice', options:['None','Holidays & traditions only','Regular practice','Central to daily life','Open to partner’s lead']},
   {key:'childcare',  label:'Ideal childcare in the first two years', type:'choice', options:['One parent home full-time','Both reduce schedules and split','Grandparents / family help','Professional childcare, both careers continue']},
   {key:'money',      label:'How should married finances work?', type:'choice', options:['Fully merged','Merged + personal allowances','Proportional split by income','Mostly separate']},
-  {key:'inlaws',     label:'Your in-laws drop by unannounced — again. You…', type:'choice', options:['Always welcome, that’s family','Fine occasionally, but we set expectations','Partner must handle their own parents','Clear boundary: call first, every time']},
+  {key:'inlaws',     label:'Your in-laws drop by unannounced, again. You…', type:'choice', options:['Always welcome, that’s family','Fine occasionally, but we set expectations','Partner must handle their own parents','Clear boundary: call first, every time']},
   {key:'sickNight',  label:'Sick child at 3am; you both work tomorrow. Who gets up?', type:'choice', options:['Whoever has the lighter morning','We alternate, strictly fair','Probably me, honestly','Probably my partner, honestly']},
   {key:'fertility',  label:'If conceiving naturally proved difficult, you’d lean toward…', type:'choice', options:['Fertility treatment as far as it takes','Some treatment, then adoption','Adoption early on','Accepting life without children','Haven’t thought about it']},
 ];
@@ -632,12 +632,12 @@ const CITIES = ['Albuquerque, NM','Atlanta, GA','Austin, TX','Baltimore, MD','Bo
 
 // ---------- Uploadable report types (all optional; never displayed to anyone) ----------
 const REPORT_TYPES = [
-  {icon:'🧬', name:'Carrier screening', ex:'Invitae, Natera, Fulgent, Labcorp — or your 23andMe / AncestryDNA / MyHeritage raw-data download', tag:'Signature · 20% factor', badge:'badge-rose'},
+  {icon:'🧬', name:'Carrier screening', ex:'Invitae, Natera, Fulgent, Labcorp, or your 23andMe / AncestryDNA / MyHeritage raw-data download', tag:'Signature · 20% factor', badge:'badge-rose'},
   {icon:'🛡️', name:'Recent STD panel', ex:'Full panel from your clinic or an at-home lab, ideally within the last 6 months', tag:'Strongly encouraged', badge:'badge-teal'},
   {icon:'📊', name:'Comprehensive biomarker panel', ex:'Function Health, Rhythm, Lifeforce, InsideTracker, or a full metabolic + hormone panel from your doctor', tag:'Encouraged', badge:'badge-teal'},
   {icon:'🦴', name:'DEXA scan', ex:'Body composition & bone density report from any imaging center', tag:'Optional', badge:'badge-gray'},
-  {icon:'🧠', name:'Official cognitive / IQ test', ex:'WAIS, Stanford-Binet, or other proctored results — sealed on upload exactly like our in-app test, never displayed', tag:'Sealed on upload', badge:'badge-gold'},
-  {icon:'📄', name:'Any other official report', ex:'Fitness assessments, sleep studies, wellness panels — anything official that completes your picture', tag:'Optional', badge:'badge-gray'},
+  {icon:'🧠', name:'Official cognitive / IQ test', ex:'WAIS, Stanford-Binet, or other proctored results, sealed on upload exactly like our in-app test, never displayed', tag:'Sealed on upload', badge:'badge-gold'},
+  {icon:'📄', name:'Any other official report', ex:'Fitness assessments, sleep studies, wellness panels, or anything official that completes your picture', tag:'Optional', badge:'badge-gray'},
 ];
 
 // ---------- Current (demo) user ----------
@@ -655,7 +655,7 @@ const ME = {
 };
 
 // ---------- Sample matches ----------
-// dnaState: 'clear' | 'shared-risk' | 'incomplete' | 'declined'  (INTERNAL ONLY — never displayed)
+// dnaState: 'clear' | 'shared-risk' | 'incomplete' | 'declined'  (INTERNAL ONLY, never displayed)
 const USERS = [
   {
     id:'maya', name:'Maya', age:32, location:'Boulder, CO', gender:'Woman', pronoun:'she',
@@ -668,24 +668,24 @@ const USERS = [
     lifestyle:{activity:4,social:3,routine:4,travel:4,thrift:3},
     greenAvg:4.5, redAvg:1.5, dnaState:'clear',
     greens:['Apologizes first and means it','Five-year plan includes family, not just career','Friends describe her as "the reliable one"'],
-    cautions:['Prefers to save aggressively; you spend more freely on travel','Open to relocating — you lean toward staying near Denver'],
+    cautions:['Prefers to save aggressively; you spend more freely on travel','Open to relocating, while you lean toward staying near Denver'],
     discuss:['Household budget philosophy and savings targets','Whether "open to discussion" on relocation means the same thing to both of you'],
-    starters:['Ask about the family tradition she most wants to carry forward.','She rates "community & service" higher than most — ask what she volunteers for.','You both chose "Balanced" parenting — swap stories about how you were raised.']
+    starters:['Ask about the family tradition she most wants to carry forward.','She rates "community & service" higher than most, so ask what she volunteers for.','You both chose "Balanced" parenting, so swap stories about how you were raised.']
   },
   {
     id:'elena', name:'Elena', age:35, location:'Denver, CO', gender:'Woman', pronoun:'she',
     grad1:'#37716F', grad2:'#7FB5A8', intention:'Dating for marriage', kids:'Wants children soon',
-    tagline:'Architect. Direct communicator. Building things that last — buildings and marriages.',
+    tagline:'Architect. Direct communicator. Building things that last: buildings and marriages.',
     values:{family:4,honesty:5,growth:5,stability:4,faith:2,adventure:3,community:3,health:4,ambition:5,generosity:4},
     eq:{selfAwareness:4,regulation:4,empathy:4,accountability:5,repair:4},
     comm:{directness:5,listening:4,calm:4,repairSpeed:5,openness:4},
     family:{kidsTiming:'Within 1–2 years',kidCount:'2',parenting:'Structured & consistent',relocation:'Open to discussion',roles:'Fully shared / egalitarian'},
     lifestyle:{activity:4,social:4,routine:4,travel:3,thrift:4},
     greenAvg:4.3, redAvg:1.7, dnaState:'shared-risk',
-    greens:['Repairs conflict fast — never lets things fester','Financially meticulous; zero hidden debt','Says exactly what she means, kindly'],
-    cautions:['Wants children sooner than your stated window','Rates faith lower than you — worth a values conversation'],
-    discuss:['Timeline for children — hers is 1–2 years, yours is 2–5','What role, if any, faith plays in the home you’d build'],
-    starters:['Ask what "structured parenting" looked like in her childhood home.','You both scored high on accountability — trade stories of apologies done right.','She’s an architect: ask what a "home built for a family" means to her.']
+    greens:['Repairs conflict fast and never lets things fester','Financially meticulous; zero hidden debt','Says exactly what she means, kindly'],
+    cautions:['Wants children sooner than your stated window','Rates faith lower than you, worth a values conversation'],
+    discuss:['Timeline for children: hers is 1–2 years, yours is 2–5','What role, if any, faith plays in the home you’d build'],
+    starters:['Ask what "structured parenting" looked like in her childhood home.','You both scored high on accountability, so trade stories of apologies done right.','She’s an architect: ask what a "home built for a family" means to her.']
   },
   {
     id:'priya', name:'Priya', age:31, location:'Fort Collins, CO', gender:'Woman', pronoun:'she',
@@ -698,9 +698,9 @@ const USERS = [
     lifestyle:{activity:5,social:3,routine:4,travel:4,thrift:4},
     greenAvg:4.1, redAvg:1.6, dnaState:'incomplete',
     greens:['Remarkably calm under stress','Listens fully before responding','Health & wellness is a shared top value'],
-    cautions:['Softer communicator — may hint where you state directly','Family timing is "someday" vs your 2–5 year window'],
+    cautions:['Softer communicator who may hint where you state directly','Family timing is "someday" vs your 2–5 year window'],
     discuss:['Whether "flexible" on children converges with your timeline','How you’ll bridge direct vs gentle communication styles'],
-    starters:['Ask what she’s training for right now.','She listens first, speaks second — give her space and you’ll learn a lot.','Ask what "warm and flexible" parenting means to her in practice.']
+    starters:['Ask what she’s training for right now.','She listens first, speaks second. Give her space and you’ll learn a lot.','Ask what "warm and flexible" parenting means to her in practice.']
   },
   {
     id:'sarah', name:'Sarah', age:36, location:'Colorado Springs, CO', gender:'Woman', pronoun:'she',
@@ -712,10 +712,10 @@ const USERS = [
     family:{kidsTiming:'Within 1–2 years',kidCount:'3',parenting:'Structured & consistent',relocation:'Prefer to stay rooted',roles:'Lean traditional'},
     lifestyle:{activity:3,social:4,routine:5,travel:2,thrift:5},
     greenAvg:3.9, redAvg:2.1, dnaState:'declined',
-    greens:['Deeply consistent — same person on good and bad days','Generosity is her defining trait','Crystal-clear about wanting family'],
+    greens:['Deeply consistent: same person on good and bad days','Generosity is her defining trait','Crystal-clear about wanting family'],
     cautions:['Faith is central for her, moderate for you','Prefers traditional roles; you chose egalitarian','Needs more time to re-engage after conflict'],
-    discuss:['How faith would shape weekly family life','Household roles — your assessments differ meaningfully here','Conflict recovery pace and what each of you needs'],
-    starters:['Ask about the community project she’s proudest of.','Ask what a meaningful Sunday looks like in her ideal family.','You both value stability highly — talk about what "rooted" means.']
+    discuss:['How faith would shape weekly family life','Household roles: your assessments differ meaningfully here','Conflict recovery pace and what each of you needs'],
+    starters:['Ask about the community project she’s proudest of.','Ask what a meaningful Sunday looks like in her ideal family.','You both value stability highly. Talk about what "rooted" means.']
   },
   {
     id:'jordan', name:'Jordan', age:33, location:'Denver, CO', gender:'Woman', pronoun:'she',
@@ -727,10 +727,10 @@ const USERS = [
     family:{kidsTiming:'Unsure',kidCount:'Flexible',parenting:'Haven’t decided',relocation:'Very willing',roles:'Fully shared / egalitarian'},
     lifestyle:{activity:5,social:4,routine:2,travel:5,thrift:3},
     greenAvg:4.0, redAvg:1.9, dnaState:'clear',
-    greens:['Radically honest — including about being unsure','Strong self-awareness','Zero controlling tendencies in flag responses'],
-    cautions:['Unsure about children — you’re clearly open to them','Higher novelty-seeking vs your steadier lifestyle'],
+    greens:['Radically honest, including about being unsure','Strong self-awareness','Zero controlling tendencies in flag responses'],
+    cautions:['Unsure about children, while you’re clearly open to them','Higher novelty-seeking vs your steadier lifestyle'],
     discuss:['The children question, early and honestly','Whether her flexibility and your routine can share a calendar'],
-    starters:['Ask what would help her get clarity on the family question.','You both prize honesty above all — ask what honesty cost her once.','Ask about her favorite climb — then whether she’d take you.']
+    starters:['Ask what would help her get clarity on the family question.','You both prize honesty above all. Ask what honesty cost her once.','Ask about her favorite climb, then whether she’d take you.']
   },
   {
     id:'amara', name:'Amara', age:30, location:'Aurora, CO', gender:'Woman', pronoun:'she',
@@ -743,9 +743,9 @@ const USERS = [
     lifestyle:{activity:4,social:4,routine:3,travel:3,thrift:3},
     greenAvg:3.6, redAvg:2.4, dnaState:'incomplete',
     greens:['Optimistic and warm in conflict descriptions','Health values align strongly with yours'],
-    cautions:['Flag responses suggest conflict-avoidance patterns','Accountability scores lower — worth observing early','Timing for children less defined'],
+    cautions:['Flag responses suggest conflict-avoidance patterns','Accountability scores lower, worth observing early','Timing for children less defined'],
     discuss:['How each of you raises problems before they grow','Her honest timeline for family','What accountability looks like day-to-day'],
-    starters:['Ask what her five-year plan actually says.','Ask how she recharges after a hard hospital week.','You share "health & wellness" — plan an active first date.']
+    starters:['Ask what her five-year plan actually says.','Ask how she recharges after a hard hospital week.','You share "health & wellness", so plan an active first date.']
   },
 ];
 
@@ -790,7 +790,7 @@ function computeCategories(me, u){
   c.lifestyle = Math.round(likertSim(me.lifestyle, u.lifestyle, ['activity','social','routine','travel','thrift'])*100);
   c.redflag   = Math.round((1 - (u.redAvg-1)/4)*100);
   c.greenflag = Math.round(((u.greenAvg-1)/4)*100);
-  // DNA: internal factor only. Never displayed as carrier detail — surfaces solely as this category score.
+  // DNA: internal factor only. Never displayed as carrier detail; surfaces solely as this category score.
   c.dna = u.dnaState==='clear' ? 100 : (u.dnaState==='shared-risk' ? 70 : null); // null = not scored
   return c;
 }
@@ -813,7 +813,7 @@ function computeScore(me, u){
 </script>
 <script>
 /* =====================================================
-   HELIX HEARTS — APP (router + views)
+   HELIX HEARTS APP (router + views)
    ===================================================== */
 const app = document.getElementById('app');
 const state = {
@@ -829,7 +829,7 @@ const state = {
    3. Enable the Data API (sidebar): check "Use Neon Auth" and
       "Grant public schema access"
    4. Settings → Backend → paste the Data API URL + Auth URL → Connect.
-   Neon Auth is Better Auth over REST; the Data API is PostgREST —
+   Neon Auth is Better Auth over REST; the Data API is PostgREST;
    both are called with plain fetch(). Until connected, everything
    runs in demo mode with in-memory data. */
 // Pre-configured for the "Helix Hearts" Neon project (Settings → Backend to change)
@@ -876,11 +876,11 @@ async function nnSignUp(email,password,name){
     });
     if(!r.ok){ const e=await r.json().catch(()=>({})); toast(e.message||'Sign-up failed'); return null; }
     await nnSession(true);
-    // Create the profile row — the DB trigger assigns founder number & plan
+    // Create the profile row; the DB trigger assigns founder number & plan
     await nnRest('profiles','POST',{full_name:name},{Prefer:'resolution=merge-duplicates'});
     await nnLoadAll();
     return true;
-  }catch(e){ toast('Sign-up failed — check the Auth URL'); return null; }
+  }catch(e){ toast('Sign-up failed. Check the Auth URL'); return null; }
 }
 async function nnSignIn(email,password){
   if(!sb.on) return null;
@@ -890,11 +890,11 @@ async function nnSignIn(email,password){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({email,password})
     });
-    if(!r.ok){ const e=await r.json().catch(()=>({})); toast(e.message||'Sign-in failed — check email and password'); return null; }
+    if(!r.ok){ const e=await r.json().catch(()=>({})); toast(e.message||'Sign-in failed. Check email and password'); return null; }
     await nnSession(true);
     await nnLoadAll();
     return true;
-  }catch(e){ toast('Sign-in failed — check the Auth URL'); return null; }
+  }catch(e){ toast('Sign-in failed. Check the Auth URL'); return null; }
 }
 async function nnSignOut(){
   try{ await fetch(NEON_AUTH_URL+'/sign-out',{method:'POST',credentials:'include'}); }catch(e){}
@@ -951,15 +951,15 @@ function sbConfigure(){
     .then(async r=>{
       const t=await r.text();
       if(r.ok || t.includes('authorization') || t.includes('JWT')){ toast('Neon connected ✓'); }
-      else{ toast('Reached the server, but the reply looks wrong — double-check the Data API URL'); }
+      else{ toast('Reached the server, but the reply looks wrong. Double-check the Data API URL'); }
       render();
     })
-    .catch(()=>{ toast('Could not reach the Data API — check the URL'); render(); });
+    .catch(()=>{ toast('Could not reach the Data API. Check the URL'); render(); });
 }
 function sbDisconnect(){
   localStorage.removeItem('hh_neon_data'); localStorage.removeItem('hh_neon_auth');
   NEON_DATA_URL=''; NEON_AUTH_URL=''; nnJwt=null;
-  render(); toast('Disconnected — back to demo mode');
+  render(); toast('Disconnected. Back to demo mode');
 }
 
 function go(route, param){
@@ -1005,8 +1005,8 @@ function breakdownRows(result){
     </div>`).join('') +
     result.skipped.map(w=>`
     <div class="bd-row" style="opacity:.55">
-      <div>${w.label}<span class="tiny" style="display:block">not scored — weight redistributed</span></div>
-      <div class="bd-bar"></div><div class="bd-score">—</div>
+      <div>${w.label}<span class="tiny" style="display:block">not scored; weight redistributed</span></div>
+      <div class="bd-bar"></div><div class="bd-score">–</div>
     </div>`).join('');
 }
 function sharedValues(u, n){
@@ -1022,8 +1022,8 @@ function explainMatch(u, res){
   const weak = res.rows.filter(r=>r.catScore<70 && r.key!=='dna').sort((a,b)=>a.catScore-b.catScore).slice(0,2);
   let s = `You and ${u.name} score ${res.total}% because you share ${strong.join(', ')}.`;
   if(res.cats.dna===100) s += ` Your reproductive health compatibility is excellent.`;
-  else if(res.cats.dna===70) s += ` Your reproductive health compatibility is partial — if things get serious, a licensed genetic counselor can help you plan a family with confidence.`;
-  if(weak.length) s += ` Before getting serious, it’s worth discussing ${weak.map(w=>w.label.toLowerCase()).join(' and ')}${u.discuss?.length? ' — see the discussion guide below':''}.`;
+  else if(res.cats.dna===70) s += ` Your reproductive health compatibility is partial. If things get serious, a licensed genetic counselor can help you plan a family with confidence.`;
+  if(weak.length) s += ` Before getting serious, it’s worth discussing ${weak.map(w=>w.label.toLowerCase()).join(' and ')}${u.discuss?.length? '; see the discussion guide below':''}.`;
   return s;
 }
 function navHighlight(){
@@ -1125,15 +1125,15 @@ function viewLanding(){
       <div>
         <div class="eyebrow">For intentional daters</div>
         <h1>Date for marriage. <em>Love with your eyes open.</em></h1>
-        <p class="lead">Helix Hearts is the first marriage-focused matchmaker with <strong>reproductive health compatibility</strong> built in. Match on values, maturity, and family goals — and learn early whether family planning together deserves a conversation with a genetic counselor, while it's still just a conversation.</p>
+        <p class="lead">Helix Hearts is the first marriage-focused matchmaker with <strong>reproductive health compatibility</strong> built in. Match on values, maturity, and family goals, and learn early whether family planning together deserves a conversation with a genetic counselor, while it's still just a conversation.</p>
         <div style="display:flex;gap:14px;flex-wrap:wrap">
           <button class="btn btn-primary" onclick="go('onboarding')">Find My Match →</button>
           <button class="btn btn-secondary" onclick="document.getElementById('how').scrollIntoView()">How it works</button>
         </div>
         <div class="hero-badges">
-          <span class="badge badge-rose">✓ Reproductive health matching — our signature</span>
+          <span class="badge badge-rose">✓ Reproductive health matching, our signature</span>
           <span class="badge badge-teal">✓ Full-picture profiles appear first</span>
-          <span class="badge badge-gold">✓ Transparent scoring — no black box</span>
+          <span class="badge badge-gold">✓ Transparent scoring, no black box</span>
         </div>
       </div>
       <div class="hero-visual">
@@ -1146,7 +1146,7 @@ function viewLanding(){
           <div class="values-chips" style="margin-bottom:14px">
             <span class="chip">Family closeness</span><span class="chip">Honesty</span><span class="chip">Stability</span>
           </div>
-          <div class="small muted" style="font-style:italic">“You share marriage goals, parenting plans, strong communication — and your reproductive health compatibility is excellent.”</div>
+          <div class="small muted" style="font-style:italic">“You share marriage goals, parenting plans, strong communication, and your reproductive health compatibility is excellent.”</div>
         </div>
       </div>
     </div>
@@ -1157,9 +1157,9 @@ function viewLanding(){
     <h2 class="section-title">Compatibility you can actually read</h2>
     <p class="section-sub">No mystery algorithms, no "perfect match" promises. Every score comes with a full breakdown you can inspect line by line.</p>
     <div class="grid-3">
-      <div class="card-soft"><div class="step-num">1</div><h3 style="font-size:1.15rem;margin-bottom:8px">Answer honestly</h3><p class="small muted">Seven assessments built to surface who you really are — real-world scenarios, tough questions, and a 100-item red/green flag inventory. About 50 minutes total, saved as you go.</p></div>
+      <div class="card-soft"><div class="step-num">1</div><h3 style="font-size:1.15rem;margin-bottom:8px">Answer honestly</h3><p class="small muted">Seven assessments built to surface who you really are: real-world scenarios, tough questions, and a 100-item red/green flag inventory. About 50 minutes total, saved as you go.</p></div>
       <div class="card-soft"><div class="step-num">2</div><h3 style="font-size:1.15rem;margin-bottom:8px">See why you match</h3><p class="small muted">Every match includes a 0–100 score with weighted categories, areas of alignment, and the exact topics to discuss before getting serious.</p></div>
-      <div class="card-soft"><div class="step-num">3</div><h3 style="font-size:1.15rem;margin-bottom:8px">Reproductive health — our signature</h3><p class="small muted">Upload a carrier report — never displayed to anyone, it simply becomes a private factor worth 20% of your score and unlocks priority placement. Add STD panels, biomarker tests (Function, Rhythm, Lifeforce), DEXA scans, or any official report to complete your picture.</p></div>
+      <div class="card-soft"><div class="step-num">3</div><h3 style="font-size:1.15rem;margin-bottom:8px">Reproductive health, our signature</h3><p class="small muted">Upload a carrier report. It is never displayed to anyone; it simply becomes a private factor worth 20% of your score and unlocks priority placement. Add STD panels, biomarker tests (Function, Rhythm, Lifeforce), DEXA scans, or any official report to complete your picture.</p></div>
     </div>
   </div>
 
@@ -1168,14 +1168,14 @@ function viewLanding(){
       <div>
         <div class="eyebrow">The formula</div>
         <h2 class="section-title">One score, eight weighted parts</h2>
-        <p class="section-sub" style="margin-bottom:24px">The same public formula for every member — and reproductive health leads at 20%, because it's what we're for. Skip it and your score is computed from the remaining categories, but full-picture profiles appear first in matching.</p>
+        <p class="section-sub" style="margin-bottom:24px">The same public formula for every member, and reproductive health leads at 20%, because it's what we're for. Skip it and your score is computed from the remaining categories, but full-picture profiles appear first in matching.</p>
         <div class="card">${weightBars()}</div>
       </div>
       <div class="ethics-panel">
         <h3 style="font-size:1.35rem;margin-bottom:6px">Privacy you can verify</h3>
-        <p class="small muted">Genetic information is powerful — so we handle it with clinical-grade care and total transparency.</p>
+        <p class="small muted">Genetic information is powerful, so we handle it with clinical-grade care and total transparency.</p>
         <div class="ethics-list">
-          <div class="ethics-item"><span class="ico ico-no">✕</span>Genetic data is never displayed to anyone — it only informs your score</div>
+          <div class="ethics-item"><span class="ico ico-no">✕</span>Genetic data is never displayed to anyone; it only informs your score</div>
           <div class="ethics-item"><span class="ico ico-no">✕</span>No selling or sharing of genetic data, ever</div>
           <div class="ethics-item"><span class="ico ico-yes">✓</span>Explicit consent before any health data is used</div>
           <div class="ethics-item"><span class="ico ico-yes">✓</span>Delete your genetic data at any time, permanently</div>
@@ -1189,7 +1189,7 @@ function viewLanding(){
   <div class="container section" style="padding-top:0" id="plans">
     <div class="eyebrow">Founding member program</div>
     <h2 class="section-title">Free full access for our first 10,000 members</h2>
-    <p class="section-sub">Every founding member gets every feature free until we reach 10,000 members — then a month of full access on us, plus another month for every friend you invite who joins. The founder badge is yours forever.</p>
+    <p class="section-sub">Every founding member gets every feature free until we reach 10,000 members, then a month of full access on us, plus another month for every friend you invite who joins. The founder badge is yours forever.</p>
     <div class="card" style="margin-bottom:28px;padding:22px 26px">
       <div style="display:flex;justify-content:space-between;font-size:.88rem;font-weight:600;margin-bottom:8px"><span>2,847 founder spots claimed</span><span>10,000</span></div>
       <div class="founder-bar"><div class="founder-fill" style="width:28.5%"></div></div>
@@ -1206,13 +1206,13 @@ function viewLanding(){
         </ul>
       </div>
       <div class="price-card featured">
-        <div class="ribbon">Founders — free now</div>
+        <div class="ribbon">Founders: free now</div>
         <h3 style="font-size:1.2rem">Founding member</h3>
         <div class="price">$0<span class="per"> until 10,000 members</span></div>
         <ul>
           <li><strong>Everything in Full Access, free</strong></li>
           <li>Free until we reach 10,000 members</li>
-          <li>Then +1 month free — and +1 more month for every friend who joins on your invite</li>
+          <li>Then +1 month free, and +1 more month for every friend who joins on your invite</li>
           <li>Founder badge, forever</li>
         </ul>
         <button class="btn btn-primary" onclick="go('onboarding')">Claim founder access →</button>
@@ -1255,11 +1255,11 @@ function viewOnboarding(){
         ${(state.onboard.mode||'signup')==='signup'?`
         <div class="eyebrow">Step 1 · Account</div>
         <h2 style="font-size:1.7rem;margin-bottom:6px">Create your account</h2>
-        <div class="callout callout-teal small" style="margin-bottom:20px">✨ We auto-filled what we could — just review, add a photo, and set a password.</div>
+        <div class="callout callout-teal small" style="margin-bottom:20px">✨ We auto-filled what we could. Just review, add a photo, and set a password.</div>
         <div class="field"><label>Full name</label><input class="input" id="obName" value="Stefan Oswald" placeholder="Your name"></div>
         <div class="field"><label>Email</label><input class="input" id="obEmail" value="stefanpauloswald@gmail.com" placeholder="you@example.com"></div>
         <div class="field"><label>Password</label><input class="input" id="obPass" type="password" placeholder="Create a password (6+ characters)"></div>
-        <div class="field"><label>Profile photo <span class="hint">at least one to start — more slots coming</span></label>${photoSlots()}</div>
+        <div class="field"><label>Profile photo <span class="hint">at least one to start; more slots coming</span></label>${photoSlots()}</div>
         <label class="small muted" style="display:flex;gap:10px;align-items:flex-start;margin-top:6px"><input type="checkbox" checked style="margin-top:4px">I'm 18+, dating with serious intentions, and I agree to the Terms &amp; Privacy Policy.</label>
         <p class="small" style="margin-top:16px">Already a member? <a style="cursor:pointer;font-weight:600" onclick="state.onboard.mode='signin';render()">Sign in</a></p>`
         :`
@@ -1290,10 +1290,10 @@ function viewOnboarding(){
       <div class="wizard-step ${s===2?'visible':''}">
         <div class="eyebrow">Step 3 · Profile basics</div>
         <h2 style="font-size:1.7rem;margin-bottom:6px">The essentials</h2>
-        <div class="callout callout-teal small" style="margin-bottom:20px">✨ Auto-filled from your account — edit anything that's off.</div>
+        <div class="callout callout-teal small" style="margin-bottom:20px">✨ Auto-filled from your account. Edit anything that's off.</div>
         <div class="grid-2" style="gap:0 20px">
           <div class="field"><label>Date of birth</label><input class="input" id="obDob" type="date" value="1992-03-14"></div>
-          <div class="field"><label>Location <span class="hint">start typing — we'll complete it</span></label>
+          <div class="field"><label>Location <span class="hint">start typing and we'll complete it</span></label>
             <div class="ac-wrap">
               <input class="input" id="locInput" value="Denver, CO" placeholder="e.g. Den…" oninput="cityInput(this)" autocomplete="off">
               <div class="ac-list" id="acList" style="display:none"></div>
@@ -1302,10 +1302,10 @@ function viewOnboarding(){
           <div class="field"><label>Gender</label><select class="input" id="obGender"><option>Man</option><option>Woman</option><option>Non-binary</option><option>Prefer to self-describe</option></select></div>
           <div class="field"><label>Orientation</label><select class="input" id="obOrient"><option>Straight</option><option>Gay</option><option>Lesbian</option><option>Bisexual</option><option>Other</option></select></div>
           <div class="field"><label>Relationship goal</label><select class="input" id="obGoal"><option>Marriage within 1 year</option><option>Marriage in 1–2 years</option><option selected>Marriage within 2–3 years</option><option>Marriage, no rush</option><option>Long-term partnership</option></select></div>
-          <div class="field"><label>Career / ambition level</label><select class="input" id="obCareer"><option>Balanced — career matters, family first</option><option>Highly ambitious</option><option>Work to live</option></select></div>
-          <div class="field"><label>Faith / spirituality <span class="hint">optional</span></label><select class="input" id="obFaith"><option>Prefer not to say</option><option>Spiritual, not religious</option><option>Practicing — Christian</option><option>Practicing — Jewish</option><option>Practicing — Muslim</option><option>Practicing — Hindu</option><option>Practicing — Buddhist</option><option>Atheist / agnostic</option><option>Other</option></select></div>
+          <div class="field"><label>Career / ambition level</label><select class="input" id="obCareer"><option>Balanced: career matters, family first</option><option>Highly ambitious</option><option>Work to live</option></select></div>
+          <div class="field"><label>Faith / spirituality <span class="hint">optional</span></label><select class="input" id="obFaith"><option>Prefer not to say</option><option>Spiritual, not religious</option><option>Practicing: Christian</option><option>Practicing: Jewish</option><option>Practicing: Muslim</option><option>Practicing: Hindu</option><option>Practicing: Buddhist</option><option>Atheist / agnostic</option><option>Other</option></select></div>
           <div class="field"><label>Politics / worldview <span class="hint">optional</span></label><select class="input" id="obPolitics"><option>Prefer not to say</option><option>Progressive</option><option>Liberal</option><option>Moderate</option><option>Conservative</option><option>Indifferent</option><option>Apolitical</option><option>Other</option></select></div>
-          <div class="field"><label>How often do you follow the news? <span class="hint">optional</span></label><select class="input" id="obNews"><option>Prefer not to say</option><option>Multiple times a day</option><option>Daily</option><option>A few times a week</option><option>Rarely</option><option>Never — I tune it out</option></select></div>
+          <div class="field"><label>How often do you follow the news? <span class="hint">optional</span></label><select class="input" id="obNews"><option>Prefer not to say</option><option>Multiple times a day</option><option>Daily</option><option>A few times a week</option><option>Rarely</option><option>Never; I tune it out</option></select></div>
           <div class="field"><label>Education <span class="hint">optional</span></label><select class="input" id="obEdu"><option>Prefer not to say</option><option>High school</option><option>Some college</option><option>Bachelor's</option><option>Master's</option><option>Doctorate / professional</option></select></div>
           <div class="field"><label>Lifestyle</label><select class="input" id="obLifestyle"><option>Active &amp; outdoorsy</option><option>Homebody &amp; cozy</option><option>Social &amp; out often</option><option>Balanced mix</option></select></div>
         </div>
@@ -1315,7 +1315,7 @@ function viewOnboarding(){
       <div class="wizard-step ${s===3?'visible':''}">
         <div class="eyebrow">Step 4 · Assessments</div>
         <h2 style="font-size:1.7rem;margin-bottom:6px">Your compatibility assessments</h2>
-        <p class="muted small" style="margin-bottom:24px">Seven assessments, about 50 minutes total. Progress saves automatically — finish anytime from your dashboard. Matches improve as you complete them.</p>
+        <p class="muted small" style="margin-bottom:24px">Seven assessments, about 50 minutes total. Progress saves automatically; finish anytime from your dashboard. Matches improve as you complete them.</p>
         ${ASSESS_META.map(x=>`<div class="completion-item" style="padding:10px 0;border-bottom:1px solid #F2EDE8">
           <span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">→</span>
           <div style="flex:1"><strong>${x.name}</strong><div class="tiny">${x.detail}</div></div>
@@ -1325,20 +1325,20 @@ function viewOnboarding(){
       <div class="wizard-step ${s===4?'visible':''}">
         <div class="eyebrow">Step 5 · Our signature</div>
         <h2 style="font-size:1.7rem;margin-bottom:6px">Reproductive health compatibility</h2>
-        <p class="muted small" style="margin-bottom:18px">The reason most members choose Helix Hearts. Connect a carrier report and it becomes one private factor in your compatibility score — worth 20% of the formula. It is <strong>never displayed to anyone</strong>, including your matches. Full-picture profiles get the most complete score and appear first in matching.</p>
+        <p class="muted small" style="margin-bottom:18px">The reason most members choose Helix Hearts. Connect a carrier report and it becomes one private factor in your compatibility score, worth 20% of the formula. It is <strong>never displayed to anyone</strong>, including your matches. Full-picture profiles get the most complete score and appear first in matching.</p>
         <div class="callout callout-rose small" style="margin-bottom:18px">This does not determine whether you should date someone. It simply helps identify whether a couple may want professional reproductive counseling.</div>
         <div class="opt-grid">
           <div class="opt-card ${state.onboard.dnaChoice==='later'?'selected':''}" onclick="pickDna('later')"><div class="t">Decide later</div><div class="d">Explore the feature from your dashboard</div></div>
           <div class="opt-card ${state.onboard.dnaChoice==='setup'?'selected':''}" onclick="pickDna('setup')"><div class="t">Set up after onboarding</div><div class="d">Connect a testing service or upload a report</div></div>
-          <div class="opt-card ${state.onboard.dnaChoice==='decline'?'selected':''}" onclick="pickDna('decline')"><div class="t">No thanks</div><div class="d">Skip — your score is computed from the other categories; full-picture profiles rank first</div></div>
+          <div class="opt-card ${state.onboard.dnaChoice==='decline'?'selected':''}" onclick="pickDna('decline')"><div class="t">No thanks</div><div class="d">Skip; your score is computed from the other categories; full-picture profiles rank first</div></div>
         </div>
       </div>
 
       <div class="wizard-step ${s===5?'visible':''}" style="text-align:center;padding:20px 0">
         <div style="font-size:3rem;margin-bottom:10px">🎉</div>
         <h2 style="font-size:1.8rem;margin-bottom:10px">Welcome to Helix Hearts, Stefan</h2>
-        <p class="muted" style="max-width:32em;margin:0 auto 14px">You're founding member <strong>#2,847</strong> — every feature is free until we reach 10,000 members, then a month on us plus a month for each friend who joins with your invite. We've pre-filled your assessments with sample answers so you can explore the demo.</p>
-        <span class="badge badge-gold">★ Founder — Full Access</span>
+        <p class="muted" style="max-width:32em;margin:0 auto 14px">You're founding member <strong>#2,847</strong>. Every feature is free until we reach 10,000 members, then a month on us plus a month for each friend who joins with your invite. We've pre-filled your assessments with sample answers so you can explore the demo.</p>
+        <span class="badge badge-gold">★ Founder: Full Access</span>
       </div>
 
       <div class="wizard-nav">
@@ -1365,11 +1365,11 @@ function obNext(){
       return;
     }
     if(sb.on && em && pw && pw.length>=6){
-      nnSignUp(em,pw,nm).then(d=>{ if(d) toast('Account created ✓ — everything you enter is now saved'); });
+      nnSignUp(em,pw,nm).then(d=>{ if(d) toast('Account created ✓. Everything you enter is now saved'); });
     }
   }
   if(s===2) nnSaveProfile();
-  if(s>=OB_STEPS-1){ state.signedIn=true; go('dashboard'); toast('Profile created — welcome!'); return; }
+  if(s>=OB_STEPS-1){ state.signedIn=true; go('dashboard'); toast('Profile created. Welcome!'); return; }
   state.onboardStep++; render(); window.scrollTo({top:0});
 }
 function obPrev(){ if(state.onboardStep>0){state.onboardStep--; render();} }
@@ -1432,7 +1432,7 @@ function viewDashboard(){
         </div>
 
         <div class="card">
-          <h3 style="font-size:1.2rem;margin-bottom:4px">Why ${top.u.name} is your top match — ${top.res.total}%</h3>
+          <h3 style="font-size:1.2rem;margin-bottom:4px">Why ${top.u.name} is your top match: ${top.res.total}%</h3>
           <p class="small muted" style="margin-bottom:16px">${explainMatch(top.u, top.res)}</p>
           ${breakdownRows(top.res)}
           <div style="margin-top:18px"><button class="btn btn-primary btn-sm" onclick="go('matchDetail','${top.u.id}')">See ${top.u.name}'s full profile →</button></div>
@@ -1451,7 +1451,7 @@ function viewMatches(){
   <div class="container">
     <div style="margin-bottom:28px">
       <h1 style="font-size:2rem">Your matches</h1>
-      <p class="muted">Full-picture profiles — where both reproductive health summaries are on file — appear first, then by Helix score. Click any card for the full breakdown.</p>
+      <p class="muted">Full-picture profiles, where both reproductive health summaries are on file, appear first, then by Helix score. Click any card for the full breakdown.</p>
     </div>
     <div class="match-grid">
       ${ranked.map(({u,res})=>{
@@ -1488,7 +1488,7 @@ function viewMatches(){
         </div>`;
       }).join('')}
     </div>
-    <p class="tiny" style="margin-top:24px;max-width:56em">"Areas to explore" notes are visible only to you, are phrased from assessment differences — never accusations — and exist to help you have better early conversations.</p>
+    <p class="tiny" style="margin-top:24px;max-width:56em">"Areas to explore" notes are visible only to you, are phrased from assessment differences, never accusations, and exist to help you have better early conversations.</p>
   </div>`;
 }
 
@@ -1517,7 +1517,7 @@ function viewMatchDetail(){
           </div>
           <p class="small muted" style="font-style:italic;margin-bottom:20px">"${u.tagline}"</p>
           ${ring(res.total,130,11)}
-          <p class="tiny" style="margin-top:12px">Helix score — every point explained on the right</p>
+          <p class="tiny" style="margin-top:12px">Helix score, with every point explained on the right</p>
         </div>
 
         <div class="card">
@@ -1534,8 +1534,8 @@ function viewMatchDetail(){
             <div class="bd-score">${dnaScore}</div>
           </div>
           ${dnaScore===70?`<div class="callout callout-teal small" style="margin-top:10px">🩺 If this connection gets serious, a licensed genetic counselor can help you plan a family with confidence. The NSGC directory (findageneticcounselor.nsgc.org) lists telehealth options.</div>`:''}`
-          :`<p class="small muted">Not scored — one or both of you hasn't added reproductive health data. The 20% weight is redistributed across the other categories.</p>`}
-          <p class="tiny" style="margin-top:10px">Genetic details are never displayed — not to you, not to ${u.name}, not to anyone. Carrier information is used solely to compute this single factor.</p>
+          :`<p class="small muted">Not scored: one or both of you hasn't added reproductive health data. The 20% weight is redistributed across the other categories.</p>`}
+          <p class="tiny" style="margin-top:10px">Genetic details are never displayed: not to you, not to ${u.name}, not to anyone. Carrier information is used solely to compute this single factor.</p>
         </div>
       </div>
 
@@ -1554,7 +1554,7 @@ function viewMatchDetail(){
 
         <div class="card">
           <h3 style="font-size:1.1rem;margin-bottom:4px">To discuss before marriage</h3>
-          <p class="tiny" style="margin-bottom:14px">Private to you. Differences aren't dealbreakers — undiscussed differences are.</p>
+          <p class="tiny" style="margin-bottom:14px">Private to you. Differences aren't dealbreakers. Undiscussed differences are.</p>
           ${u.discuss.map(d=>`<div class="flag-line" style="padding:5px 0"><span class="flag-dot" style="background:var(--amber)"></span>${d}</div>`).join('')}
         </div>
 
@@ -1575,7 +1575,7 @@ function viewDna(){
   <div class="container-narrow">
     <div class="eyebrow">Our signature feature</div>
     <h1 style="font-size:2rem;margin-bottom:8px">Health Reports</h1>
-    <p class="muted" style="margin-bottom:20px">This is what sets Helix Hearts apart. Reproductive carrier screening is the centerpiece — worth 20% of your compatibility score — and every additional report you add completes your picture. Nothing you upload is <strong>ever displayed to anyone</strong>: not your matches, not on your profile. Reports become private matching inputs and "full picture" credibility, that's all.</p>
+    <p class="muted" style="margin-bottom:20px">This is what sets Helix Hearts apart. Reproductive carrier screening is the centerpiece, worth 20% of your compatibility score, and every additional report you add completes your picture. Nothing you upload is <strong>ever displayed to anyone</strong>: not your matches, not on your profile. Reports become private matching inputs and "full picture" credibility, that's all.</p>
     <div class="callout callout-rose" style="margin-bottom:28px"><strong style="flex-shrink:0">♥</strong> This does not determine whether you should date someone. It simply helps identify whether a couple may want professional reproductive counseling.</div>
 
     <div class="card" style="margin-bottom:24px">
@@ -1586,7 +1586,7 @@ function viewDna(){
 
     <div class="card" style="margin-bottom:24px">
       <h3 style="font-size:1.15rem;margin-bottom:4px">Upload your reports</h3>
-      <p class="small muted" style="margin-bottom:14px">The more you share, the fuller your picture — and the more confident your matches can be that what they see is real. Any official test that helps paint the full picture of who you are is welcome.</p>
+      <p class="small muted" style="margin-bottom:14px">The more you share, the fuller your picture, and the more confident your matches can be that what they see is real. Any official test that helps paint the full picture of who you are is welcome.</p>
       <div class="dropzone" onclick="dnaUpload()" style="margin-bottom:16px">
         <div style="font-size:1.8rem;margin-bottom:6px">📄</div>
         <strong>Drop any report here</strong> or click to browse<div class="tiny" style="margin-top:4px">PDF, images, or lab exports · encrypted at rest · never displayed to anyone</div>
@@ -1608,7 +1608,7 @@ function viewDna(){
         ${(state.reports&&state.reports.length)?`
         <div style="margin-bottom:10px">${state.reports.map(r=>`<div class="flag-line" style="padding:3px 0"><span class="flag-dot" style="background:var(--green)"></span>${r.kind}<span class="tiny" style="margin-left:auto">${(r.uploaded_at||'').slice(0,10)}</span></div>`).join('')}</div>
         <span class="badge badge-green">${state.reports.length} report${state.reports.length>1?'s':''} on file</span>`
-        :`<p class="small muted" style="margin-bottom:10px">Nothing uploaded yet. Your first report — ideally carrier screening — activates the signature 20% factor and your "full picture" badge.</p>
+        :`<p class="small muted" style="margin-bottom:10px">Nothing uploaded yet. Your first report, ideally carrier screening, activates the signature 20% factor and your "full picture" badge.</p>
         <span class="badge badge-gray">0 reports on file</span>`}
       </div>
       <div class="card">
@@ -1627,9 +1627,9 @@ function viewDna(){
         <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">1</span>Each report is encrypted and reduced to a private summary. The raw file can be deleted immediately.</div>
         <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">2</span>When you and another opted-in member appear in each other's matches, our engine compares summaries privately.</div>
         <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">3</span>The comparison becomes a single 0–100 factor in your compatibility score. That number is all anyone ever sees.</div>
-        <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">4</span>No conditions, genes, or carrier details are ever displayed — to you, your match, or anyone else.</div>
+        <div class="completion-item"><span class="check-dot" style="background:var(--teal-soft);color:var(--teal-deep)">4</span>No conditions, genes, or carrier details are ever displayed to you, your match, or anyone else.</div>
       </div>
-      <div class="callout callout-teal small" style="margin-top:16px">🩺 <span><strong>Considering family planning with a serious partner?</strong> A licensed genetic counselor can give a complete picture — the NSGC directory (findageneticcounselor.nsgc.org) lists telehealth options.</span></div>
+      <div class="callout callout-teal small" style="margin-top:16px">🩺 <span><strong>Considering family planning with a serious partner?</strong> A licensed genetic counselor can give a complete picture; the NSGC directory (findageneticcounselor.nsgc.org) lists telehealth options.</span></div>
     </div>
 
     <div class="card">
@@ -1657,7 +1657,7 @@ function reportUpload(kindName){
       state.reports=state.reports||[];
       state.reports.unshift({kind:kindName, uploaded_at:new Date().toISOString()});
       if(sb.on){ nnRest('reports','POST',{kind:kindName,data_url:ev.target.result}); toast(kindName+' uploaded & encrypted ✓'); }
-      else toast(kindName+' added (demo — sign in to save permanently)');
+      else toast(kindName+' added (demo; sign in to save permanently)');
       render();
     };
     r.readAsDataURL(f);
@@ -1674,7 +1674,7 @@ function viewQuestionnaire(){
   return `
   <div class="container-narrow">
     <h1 style="font-size:2rem;margin-bottom:6px">Assessments</h1>
-    <p class="muted" style="margin-bottom:8px">This is where matches are made. Answer honestly — the goal is that nothing about either of you is a surprise three months in.</p>
+    <p class="muted" style="margin-bottom:8px">This is where matches are made. Answer honestly. The goal is that nothing about either of you is a surprise three months in.</p>
     <p class="tiny" style="margin-bottom:20px">≈ 52 minutes total across all seven · progress saves automatically · slide anywhere from 0–100 to weight your answer exactly how you feel</p>
     <div class="tabs">${ASSESS_META.map(t=>`<button class="tab ${state.qTab===t.tab?'active':''}" onclick="state.qTab='${t.tab}';render()">${t.name} <span style="opacity:.65;font-weight:500">· ${t.time}</span></button>`).join('')}</div>
     <div class="card">${qSection()}</div>
@@ -1688,24 +1688,24 @@ function qSection(){
     <div class="callout callout-amber small" style="margin-bottom:10px">⚖️ Be ruthless: if everything is 100, nothing is. Your matches come from the <em>shape</em> of your answers, not their height.</div>
     ${VALUE_KEYS.map(v=>`<div class="q-item"><div class="q-text">${v.label}</div>${slider('val_'+v.key,(ME.values[v.key]-1)*25)}</div>`).join('')}
     <h3 style="margin:26px 0 4px">Values in the real world</h3>
-    <p class="small muted" style="margin-bottom:6px">There's no right answer — only your answer.</p>
+    <p class="small muted" style="margin-bottom:6px">There's no right answer, only your answer.</p>
     ${VALUE_SCENARIOS.map(sc=>scenario(sc.key,sc)).join('')}`;
   if(t==='eq') return `
     <h3 style="margin-bottom:4px">Emotional maturity <span class="badge badge-gray">≈ 6 min</span></h3>
-    <p class="small muted" style="margin-bottom:10px">Nobody scores perfectly here — and admitting your rough edges is exactly what makes matching work. Mismatched expectations sink marriages, not imperfections.</p>
+    <p class="small muted" style="margin-bottom:10px">Nobody scores perfectly here, and admitting your rough edges is exactly what makes matching work. Mismatched expectations sink marriages, not imperfections.</p>
     ${EQ_SLIDERS.map(v=>`<div class="q-item"><div class="q-text">${v.t}</div>${slider('eq_'+v.key)}</div>`).join('')}
     <h3 style="margin:26px 0 4px">How you actually react</h3>
-    <p class="small muted" style="margin-bottom:6px">Pick what you'd <em>really</em> do — not the textbook answer.</p>
+    <p class="small muted" style="margin-bottom:6px">Pick what you'd <em>really</em> do, not the textbook answer.</p>
     ${EQ_SCENARIOS.map(sc=>scenario(sc.key,sc)).join('')}`;
   if(t==='comm') return `
     <h3 style="margin-bottom:4px">Communication &amp; conflict <span class="badge badge-gray">≈ 6 min</span></h3>
-    <p class="small muted" style="margin-bottom:10px">Think of your last three real disagreements as you answer — not the person you aspire to be.</p>
+    <p class="small muted" style="margin-bottom:10px">Think of your last three real disagreements as you answer, not the person you aspire to be.</p>
     ${COMM_SLIDERS.map(v=>`<div class="q-item"><div class="q-text">${v.t}</div>${slider('comm_'+v.key)}</div>`).join('')}
     <h3 style="margin:26px 0 4px">Conflict in practice</h3>
     ${COMM_SCENARIOS.map(sc=>scenario(sc.key,sc)).join('')}`;
   if(t==='family') return `
     <h3 style="margin-bottom:4px">Family &amp; life goals <span class="badge badge-gray">≈ 5 min</span></h3>
-    <p class="small muted" style="margin-bottom:10px">These carry 20% of your match score — the tough questions now, so they're not surprises later.</p>
+    <p class="small muted" style="margin-bottom:10px">These carry 20% of your match score: the tough questions now, so they're not surprises later.</p>
     ${FAMILY_ITEMS.map(f=>`<div class="q-item"><div class="q-text">${f.label}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">${f.options.map(o=>{
         const cur = state.answers['fam_'+f.key] ?? ME.family[f.key];
@@ -1713,8 +1713,8 @@ function qSection(){
       }).join('')}</div></div>`).join('')}`;
   if(t==='thinking') return `
     <h3 style="margin-bottom:4px">Thinking style &amp; problem-solving <span class="badge badge-gray">optional · ≈ 3 min</span></h3>
-    <p class="small muted" style="margin-bottom:6px">How you approach problems — planning, curiosity, decision pace. Used only to suggest day-to-day chemistry.</p>
-    <div class="callout callout-teal small" style="margin-bottom:10px">This measures <strong>style, not smarts</strong>. There are no better or worse answers — just how your approaches might mesh.</div>
+    <p class="small muted" style="margin-bottom:6px">How you approach problems: planning, curiosity, decision pace. Used only to suggest day-to-day chemistry.</p>
+    <div class="callout callout-teal small" style="margin-bottom:10px">This measures <strong>style, not smarts</strong>. There are no better or worse answers, just how your approaches might mesh.</div>
     ${THINKING_SLIDERS.map(v=>`<div class="q-item"><div class="q-text">${v.t}</div>${slider('think_'+v.key)}</div>`).join('')}
     ${THINKING_SCENARIOS.map(sc=>scenario(sc.key,sc)).join('')}`;
   if(t==='iq'){
@@ -1722,9 +1722,9 @@ function qSection(){
     const doneAll = answered===IQ_ITEMS.length;
     return `
     <h3 style="margin-bottom:4px">Quick cognitive test <span class="badge badge-gray">≈ 8 min</span></h3>
-    <div class="callout callout-rose small" style="margin-bottom:14px">🔒 <span><strong>Your results are never displayed — to you, your matches, or anyone.</strong> They're sealed the moment you finish and used only as one quiet input to problem-solving-style pairing. No scores, percentiles, or rankings exist anywhere in the app.</span></div>
-    <p class="small muted" style="margin-bottom:6px">Ten quick puzzles. Work at your own pace — ${answered}/10 answered.</p>
-    ${doneAll?`<div class="callout callout-teal small" style="margin-bottom:10px">✓ Complete. Your results are sealed. That's all anyone — including you — will ever see of them.</div>`:''}
+    <div class="callout callout-rose small" style="margin-bottom:14px">🔒 <span><strong>Your results are never displayed to you, your matches, or anyone.</strong> They're sealed the moment you finish and used only as one quiet input to problem-solving-style pairing. No scores, percentiles, or rankings exist anywhere in the app.</span></div>
+    <p class="small muted" style="margin-bottom:6px">Ten quick puzzles. Work at your own pace. ${answered}/10 answered.</p>
+    ${doneAll?`<div class="callout callout-teal small" style="margin-bottom:10px">✓ Complete. Your results are sealed. That's all anyone, including you, will ever see of them.</div>`:''}
     ${IQ_ITEMS.map((it,i)=>`<div class="q-item"><div class="q-text">${i+1}. ${it.q}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">${it.opts.map((o,j)=>`
         <button class="tab ${state.answers['iq_'+i]===j?'active':''}" style="font-size:.85rem;padding:8px 16px" onclick="answer('iq_${i}',${j})">${o}</button>`).join('')}</div></div>`).join('')}`;
@@ -1733,7 +1733,7 @@ function qSection(){
   const answered = Object.keys(state.answers).filter(k=>k.startsWith('flag_')).length;
   return `
     <h3 style="margin-bottom:4px">Red / green flag inventory <span class="badge badge-gray">≈ 20 min</span></h3>
-    <p class="small muted" style="margin-bottom:6px">100 statements about how you actually behave in relationships. Some are phrased so that honest people agree, others so that honest people disagree — read each one.</p>
+    <p class="small muted" style="margin-bottom:6px">100 statements about how you actually behave in relationships. Some are phrased so that honest people agree, others so that honest people disagree, so read each one.</p>
     <div class="callout callout-teal small" style="margin-bottom:8px">Progress: <strong style="margin-left:4px">${answered} / 100 answered this session</strong></div>
     ${FLAG_THEMES.green.map((th,ti)=>`
       <div style="margin-top:22px"><span class="q-tag" style="color:var(--green)">Green · ${th.theme}</span></div>
@@ -1758,9 +1758,9 @@ function viewSettings(){
     <div class="card" style="margin-bottom:24px">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px">
         <h3 style="font-size:1.15rem">Your plan</h3>
-        <span class="badge badge-gold">★ Founder — Full Access</span>
+        <span class="badge badge-gold">★ Founder: Full Access</span>
       </div>
-      <p class="small muted" style="margin-bottom:14px">You're founding member <strong>#2,847</strong>. Every feature is free until we reach 10,000 members — then you get 1 more month of full access free, plus 1 additional month for every friend who joins on your invite, before moving to the Free plan (or Full Access, $24/mo). Your founder badge is permanent.</p>
+      <p class="small muted" style="margin-bottom:14px">You're founding member <strong>#2,847</strong>. Every feature is free until we reach 10,000 members. Then you get 1 more month of full access free, plus 1 additional month for every friend who joins on your invite, before moving to the Free plan (or Full Access, $24/mo). Your founder badge is permanent.</p>
       <div style="display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;margin-bottom:6px"><span>2,847 / 10,000 founder spots claimed</span><span>28%</span></div>
       <div class="founder-bar"><div class="founder-fill" style="width:28.5%"></div></div>
       <div class="toggle-row" style="margin-top:14px;border-top:1px solid #F2EDE8">
@@ -1768,7 +1768,7 @@ function viewSettings(){
         <button class="btn btn-secondary btn-sm" onclick="toast('Invite link copied: helixhearts.app/i/stefan-2847 (demo)')">Copy invite link</button>
       </div>
       <div class="toggle-row" style="margin-top:14px;border-top:1px solid #F2EDE8;border-bottom:none">
-        <div><strong class="small">Backend</strong><div class="tiny">${sb.on?'Neon project connected — data syncs live via the Data API':'Neon — create a project, run neon-schema.sql in the SQL Editor, enable the Data API (with Neon Auth), then connect below'}</div></div>
+        <div><strong class="small">Backend</strong><div class="tiny">${sb.on?'Neon project connected; data syncs live via the Data API':'Neon: create a project, run neon-schema.sql in the SQL Editor, enable the Data API (with Neon Auth), then connect below'}</div></div>
         <span class="badge ${sb.on?'badge-green':'badge-gray'}">${sb.on?'Connected':'Demo mode'}</span>
       </div>
       ${sb.on?`
@@ -1783,7 +1783,7 @@ function viewSettings(){
       </div>
       <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <button class="btn btn-teal btn-sm" onclick="sbConfigure()">Connect</button>
-        <span class="tiny">Data API URL: Data API page. Auth URL: Auth page → Configuration. Both are safe in the browser — row-level security does the guarding.</span>
+        <span class="tiny">Data API URL: Data API page. Auth URL: Auth page → Configuration. Both are safe in the browser; row-level security does the guarding.</span>
       </div>`}
     </div>
 
@@ -1792,13 +1792,13 @@ function viewSettings(){
       <div class="toggle-row"><div><strong class="small">Profile visible in matching</strong><div class="tiny">Pause anytime without losing data</div></div>${toggle('profileVisible')}</div>
       <div class="toggle-row"><div><strong class="small">Show faith / spirituality on profile</strong><div class="tiny">Private by default</div></div>${toggle('showFaith')}</div>
       <div class="toggle-row"><div><strong class="small">Show politics / worldview on profile</strong><div class="tiny">Private by default</div></div>${toggle('showPolitics')}</div>
-      <div class="toggle-row"><div><strong class="small">Use my carrier summary in matching</strong><div class="tiny">Never displayed to anyone — used only to compute your compatibility factor</div></div>${toggle('dnaUseInMatching')}</div>
+      <div class="toggle-row"><div><strong class="small">Use my carrier summary in matching</strong><div class="tiny">Never displayed to anyone; used only to compute your compatibility factor</div></div>${toggle('dnaUseInMatching')}</div>
       <div class="toggle-row"><div><strong class="small">Show "last active"</strong></div>${toggle('showLastActive')}</div>
     </div>
 
     <div class="card" style="margin-bottom:24px">
       <h3 style="font-size:1.15rem;margin-bottom:8px">Your data</h3>
-      <div class="toggle-row"><div><strong class="small">Download my data</strong><div class="tiny">Full export of profile, answers, and matches</div></div><button class="btn btn-secondary btn-sm" onclick="toast('Export requested — we\\'ll email a link (demo)')">Export</button></div>
+      <div class="toggle-row"><div><strong class="small">Download my data</strong><div class="tiny">Full export of profile, answers, and matches</div></div><button class="btn btn-secondary btn-sm" onclick="toast('Export requested. We\\'ll email a link (demo)')">Export</button></div>
       <div class="toggle-row"><div><strong class="small">Delete genetic data only</strong><div class="tiny">Keeps your profile; removes all carrier information permanently</div></div><button class="btn btn-danger btn-sm" onclick="toast('Genetic data permanently deleted (demo)')">Delete DNA</button></div>
       <div class="toggle-row"><div><strong class="small">Delete account</strong><div class="tiny">Everything, permanently, within 30 days</div></div><button class="btn btn-danger btn-sm" onclick="toast('Account deletion flow would start here (demo)')">Delete account</button></div>
     </div>
@@ -1806,9 +1806,9 @@ function viewSettings(){
     <div class="card">
       <h3 style="font-size:1.15rem;margin-bottom:8px">Our promises, in writing</h3>
       <div class="ethics-list" style="grid-template-columns:1fr">
-        <div class="ethics-item"><span class="ico ico-yes">✓</span>Genetic data is never displayed to anyone — not you, not your matches. It is used solely as a private factor in compatibility scoring.</div>
+        <div class="ethics-item"><span class="ico ico-yes">✓</span>Genetic data is never displayed to anyone: not you, not your matches. It is used solely as a private factor in compatibility scoring.</div>
         <div class="ethics-item"><span class="ico ico-yes">✓</span>If you skip the DNA feature, your 0–100 score is computed from the remaining categories; sharing it unlocks the full formula and priority placement.</div>
-        <div class="ethics-item"><span class="ico ico-yes">✓</span>Cognitive test results are sealed permanently — no scores, percentiles, or rankings exist anywhere in the app.</div>
+        <div class="ethics-item"><span class="ico ico-yes">✓</span>Cognitive test results are sealed permanently; no scores, percentiles, or rankings exist anywhere in the app.</div>
         <div class="ethics-item"><span class="ico ico-yes">✓</span>Your carrier summary is encrypted, never sold, and deletable in one tap.</div>
         <div class="ethics-item"><span class="ico ico-yes">✓</span>Helix Hearts is not medical advice, genetic counseling, or a guarantee of relationship or reproductive outcomes.</div>
       </div>
