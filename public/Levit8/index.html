@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Levit8 Learning Lab</title>
+<style>
+  :root{
+    --bg:#0a0d14; --panel:#111725; --panel2:#18202f; --line:#243044;
+    --accent:#38bdf8; --accent2:#818cf8; --gold:#f5c542; --green:#34d399;
+    --amber:#fbbf24; --dim:#8b9bb4; --text:#e8eefc; --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:radial-gradient(1100px 600px at 30% -10%, #16233c 0%, var(--bg) 60%);
+    color:var(--text); min-height:100vh; padding:0 22px 90px;
+  }
+  .wrap{max-width:980px; margin:0 auto;}
+  header{padding:56px 0 10px;}
+  .kicker{color:var(--accent); font-weight:800; letter-spacing:3px; font-size:12px; text-transform:uppercase;}
+  h1{font-size:38px; margin:10px 0 14px; letter-spacing:.5px;}
+  h1 .eight{color:var(--accent);}
+  .tagline{color:var(--dim); font-size:17px; line-height:1.6; max-width:680px;}
+  .flow{
+    margin:26px 0 8px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    font-size:13px; font-weight:700; color:var(--dim);
+  }
+  .flow .chip{background:var(--panel2); border:1px solid var(--line); padding:6px 14px; border-radius:99px; color:var(--text);}
+  .flow .arrow{color:var(--accent);}
+  .private{
+    display:inline-block; margin-top:18px; font-size:12px; font-weight:700;
+    color:var(--amber); border:1px solid var(--amber); border-radius:99px; padding:4px 12px;
+  }
+  h2{font-size:15px; text-transform:uppercase; letter-spacing:2px; color:var(--dim); margin:46px 0 16px;}
+  .exp{
+    display:block; text-decoration:none; color:var(--text);
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 24px; margin-bottom:14px; transition:transform .15s, border-color .15s;
+  }
+  a.exp:hover{transform:translateY(-3px); border-color:var(--accent);}
+  .exp-top{display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .exp-num{font-family:ui-monospace, monospace; font-weight:800; color:var(--accent); font-size:14px; letter-spacing:1px;}
+  .exp-name{font-size:19px; font-weight:800;}
+  .status{margin-left:auto; font-size:11px; font-weight:800; letter-spacing:1px; padding:5px 12px; border-radius:99px; text-transform:uppercase;}
+  .status.testing{color:var(--green); border:1px solid var(--green); background:rgba(52,211,153,.08);}
+  .status.next{color:var(--amber); border:1px solid var(--amber); background:rgba(251,191,36,.08);}
+  .status.backlog{color:var(--dim); border:1px solid var(--line); background:var(--panel2);}
+  .exp-body{margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:700px){.exp-body{grid-template-columns:1fr;}}
+  .field .label{font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent2); margin-bottom:4px;}
+  .field p{font-size:14px; line-height:1.55; color:var(--dim);}
+  .field p b{color:var(--text);}
+  .principles{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px;}
+  .principle{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px;}
+  .principle h3{font-size:14px; margin-bottom:6px; color:var(--text);}
+  .principle p{font-size:13px; color:var(--dim); line-height:1.5;}
+  footer{margin-top:60px; color:var(--dim); font-size:13px; line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Levit8 Learning Lab</div>
+    <h1>Where learning experiments earn their place in Nexus<span class="eight">.</span></h1>
+    <p class="tagline">Nexus is the operating system between humans and complicated knowledge. This lab is where we test AI-guided learning experiences with real users, measure what actually teaches, and advance the winners into the platform.</p>
+    <div class="flow">
+      <span class="chip">Prototype</span><span class="arrow">→</span>
+      <span class="chip">Test with real users</span><span class="arrow">→</span>
+      <span class="chip">Measure learning</span><span class="arrow">→</span>
+      <span class="chip">Advance or discard</span>
+    </div>
+    <span class="private">🔒 Internal · unlisted</span>
+  </header>
+
+  <h2>Experiments</h2>
+
+  <a class="exp" href="/NexusCoach">
+    <div class="exp-top">
+      <span class="exp-num">EXP 001</span>
+      <span class="exp-name">🎩 NexusCoach</span>
+      <span class="status testing">Testing</span>
+    </div>
+    <div class="exp-body">
+      <div class="field">
+        <div class="label">Hypothesis</div>
+        <p>A one-on-one AI mentor with adaptive micro-steps and gamified missions gets a beginner to their first successful rep <b>faster than video instructions alone</b>, with less overwhelm.</p>
+      </div>
+      <div class="field">
+        <div class="label">Measures</div>
+        <p><b>Time to first completed mission</b> · struggle-button usage · lesson completion rate · return visits. Mentor is scripted in this build; live AI lands in a later iteration.</p>
+      </div>
+    </div>
+  </a>
+
+  <div class="exp">
+    <div class="exp-top">
+      <span class="exp-num">EXP 002</span>
+      <span class="exp-name">🧭 Intent Intake</span>
+      <span class="status next">Up next</span>
+    </div>
+    <div class="exp-body">
+      <div class="field">
+        <div class="label">Hypothesis</div>
+        <p>Opening with <b>"What do you want to accomplish?"</b> and generating a personal path beats a fixed course menu on engagement and confidence.</p>
+      </div>
+      <div class="field">
+        <div class="label">Measures</div>
+        <p>Intake completion rate · match between stated goal and first lesson chosen · self-reported confidence before and after session one.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="exp">
+    <div class="exp-top">
+      <span class="exp-num">EXP 003</span>
+      <span class="exp-name">🎚️ Adaptive Difficulty Engine</span>
+      <span class="status backlog">Backlog</span>
+    </div>
+    <div class="exp-body">
+      <div class="field">
+        <div class="label">Hypothesis</div>
+        <p>Auto-adjusting step size from struggle signals (not quiz scores) keeps learners in flow and reduces drop-off at the hardest lesson.</p>
+      </div>
+      <div class="field">
+        <div class="label">Measures</div>
+        <p>Drop-off point migration · micro-step entry rate · completion rate for the historically hardest lesson.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Lab principles</h2>
+  <div class="principles">
+    <div class="principle"><h3>Move fast, expect failure</h3><p>Most experiments will not survive. That is the point of a lab.</p></div>
+    <div class="principle"><h3>Measure learning, not completion</h3><p>Time to first success and confidence growth beat checkmarks.</p></div>
+    <div class="principle"><h3>Build a platform, not a product</h3><p>Every component must be reusable for the next domain: magic today, golf and enterprise onboarding tomorrow.</p></div>
+    <div class="principle"><h3>Teach only the next step</h3><p>Confidence first. No lectures, no overload, no manuals.</p></div>
+  </div>
+
+  <footer>
+    Levit8 Learning Lab · an experimentation sandbox for the Nexus vision.<br>
+    Domain one is magic. The engine is domain-agnostic by design.
+  </footer>
+</div>
+</body>
+</html>
