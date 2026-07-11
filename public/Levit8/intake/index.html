@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Nexus — Let's Get You Started</title>
+<style>
+  :root{
+    --bg:#0d0a1a; --panel:#171230; --panel2:#1f1840; --line:#2e2560;
+    --gold:#f5c542; --purple:#8b5cf6; --purple2:#a78bfa; --green:#34d399;
+    --amber:#fbbf24; --text:#ede9fe; --dim:#9d94c4; --lab:#38bdf8; --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:radial-gradient(1200px 700px at 70% -10%, #241a4d 0%, var(--bg) 60%);
+    color:var(--text); min-height:100vh;
+  }
+  button{font-family:inherit; cursor:pointer; border:none;}
+  .labbar{
+    display:flex; align-items:center; gap:10px; padding:10px 20px;
+    border-bottom:1px solid var(--line); font-size:11px; font-weight:800;
+    letter-spacing:1.5px; text-transform:uppercase; color:var(--lab);
+  }
+  .labbar a{color:var(--lab); text-decoration:none; opacity:.8;}
+  .labbar a:hover{opacity:1;}
+  .labbar .variant{margin-left:auto; color:var(--dim);}
+  .screen{display:none; max-width:640px; margin:0 auto; padding:40px 22px 90px;}
+  .screen.active{display:block; animation:fadeUp .4s ease;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(14px);} to{opacity:1;}}
+
+  .orb{
+    width:90px; height:90px; border-radius:50%; margin:0 auto 18px;
+    background:radial-gradient(circle at 35% 30%, #c4b5fd, var(--purple) 45%, #4c1d95 80%);
+    box-shadow:0 0 46px rgba(139,92,246,.5), inset 0 0 22px rgba(255,255,255,.15);
+    position:relative; animation:float 4s ease-in-out infinite;
+  }
+  @keyframes float{50%{transform:translateY(-8px);}}
+  .orb .eye{position:absolute; top:34px; width:10px; height:14px; background:var(--bg); border-radius:50%;}
+  .orb .eye.l{left:27px;} .orb .eye.r{right:27px;}
+  h1{font-size:26px; text-align:center; margin-bottom:10px; line-height:1.3;}
+  .sub{color:var(--dim); text-align:center; margin-bottom:26px; line-height:1.55; font-size:15px;}
+
+  .confidence{display:flex; gap:10px; justify-content:center; margin:18px 0 6px;}
+  .conf-btn{
+    width:52px; height:52px; border-radius:14px; font-size:22px;
+    background:var(--panel2); border:1px solid var(--line); transition:transform .12s, border-color .12s;
+  }
+  .conf-btn:hover{transform:translateY(-3px); border-color:var(--purple);}
+  .conf-labels{display:flex; justify-content:space-between; max-width:310px; margin:0 auto; font-size:11px; color:var(--dim);}
+
+  .goal-box{display:flex; gap:8px; margin-bottom:14px;}
+  .goal-box input{
+    flex:1; background:var(--panel2); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; color:var(--text); font-size:15px; font-family:inherit;
+  }
+  .goal-box input:focus{outline:none; border-color:var(--purple);}
+  .goal-box button{
+    padding:0 20px; border-radius:12px; font-weight:800; font-size:15px;
+    background:linear-gradient(90deg,var(--purple),#7c3aed); color:#fff;
+  }
+  .chips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center;}
+  .chip{
+    background:var(--panel2); border:1px solid var(--line); color:var(--dim);
+    padding:9px 14px; border-radius:99px; font-size:13px; transition:.12s;
+  }
+  .chip:hover{color:var(--text); border-color:var(--purple); transform:translateY(-2px);}
+
+  .menu-item{
+    display:block; width:100%; text-align:left; background:var(--panel);
+    border:1px solid var(--line); border-radius:14px; padding:16px 18px;
+    margin-bottom:10px; color:var(--text); transition:.12s;
+  }
+  .menu-item:hover{border-color:var(--purple); transform:translateY(-2px);}
+  .menu-item .m-name{font-weight:800; font-size:15px;}
+  .menu-item .m-sub{font-size:13px; color:var(--dim); margin-top:3px;}
+
+  .thinking{text-align:center; padding:70px 0;}
+  .dots{display:flex; gap:8px; justify-content:center; margin-top:22px;}
+  .dots span{width:12px; height:12px; border-radius:50%; background:var(--purple); animation:bounce 1s infinite;}
+  .dots span:nth-child(2){animation-delay:.15s;} .dots span:nth-child(3){animation-delay:.3s;}
+  @keyframes bounce{50%{transform:translateY(-10px); background:var(--gold);}}
+
+  .goal-echo{
+    background:rgba(139,92,246,.1); border:1px solid var(--purple); border-radius:12px;
+    padding:12px 16px; text-align:center; font-size:14px; color:var(--purple2); margin-bottom:20px;
+  }
+  .path-step{
+    display:flex; gap:14px; align-items:flex-start; background:var(--panel);
+    border:1px solid var(--line); border-radius:14px; padding:15px 16px; margin-bottom:10px;
+  }
+  .path-step .num{
+    width:30px; height:30px; border-radius:50%; background:var(--panel2); border:1px solid var(--line);
+    display:grid; place-items:center; font-weight:800; font-size:13px; flex-shrink:0; color:var(--purple2);
+  }
+  .path-step.first{border-color:var(--gold); box-shadow:0 0 16px rgba(245,197,66,.18);}
+  .path-step.first .num{background:var(--gold); color:#1c1400; border:none;}
+  .path-step .p-name{font-weight:700; font-size:15px;}
+  .path-step .p-sub{font-size:13px; color:var(--dim); margin-top:2px; line-height:1.45;}
+  .path-step .tag{font-size:10px; font-weight:800; letter-spacing:1px; color:var(--gold); text-transform:uppercase;}
+
+  .big-btn{
+    display:block; width:100%; padding:16px; border-radius:14px; font-size:16px; font-weight:800;
+    background:linear-gradient(90deg,var(--gold),#eab308); color:#1c1400; margin-top:18px;
+    transition:transform .12s;
+  }
+  .big-btn:hover{transform:translateY(-2px);}
+  .big-btn.purple{background:linear-gradient(90deg,var(--purple),#7c3aed); color:#fff;}
+
+  .task-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; margin-bottom:14px;
+  }
+  .task-card h3{font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); margin-bottom:10px;}
+  .task-card p{font-size:15px; line-height:1.6; color:var(--text);}
+  .task-card p b{color:var(--gold);}
+  .timer{font-size:13px; color:var(--dim); text-align:center; margin-top:8px;}
+
+  .win{text-align:center;}
+  .win .big{font-size:64px; margin:20px 0 8px;}
+  .delta{
+    display:inline-block; margin:14px auto; padding:10px 22px; border-radius:99px;
+    background:rgba(52,211,153,.12); border:1px solid var(--green); color:var(--green);
+    font-weight:800; font-size:15px;
+  }
+  .metrics{
+    background:var(--panel); border:1px solid var(--lab); border-radius:14px;
+    padding:16px 18px; margin-top:22px; text-align:left; font-size:13px;
+  }
+  .metrics h3{color:var(--lab); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:10px;}
+  .metrics .row{display:flex; justify-content:space-between; padding:4px 0; color:var(--dim);}
+  .metrics .row b{color:var(--text);}
+  .confetti{position:fixed; top:-12px; font-size:20px; z-index:98; animation:fall linear forwards; pointer-events:none;}
+  @keyframes fall{to{transform:translateY(105vh) rotate(720deg); opacity:.6;}}
+</style>
+</head>
+<body>
+
+<div class="labbar">
+  <a href="/Levit8">← Levit8 Lab</a>
+  <span>· Exp 002 · Intent Intake</span>
+  <span class="variant" id="variantTag"></span>
+</div>
+
+<!-- 1. Confidence before -->
+<div class="screen active" id="s-conf1">
+  <div class="orb"><div class="eye l"></div><div class="eye r"></div></div>
+  <h1>Quick pulse check</h1>
+  <p class="sub">Before we start: how confident do you feel with Nexus right now?<br>No wrong answers. This just helps me meet you where you are.</p>
+  <div class="confidence" id="confBefore"></div>
+  <div class="conf-labels"><span>Totally lost</span><span>Very confident</span></div>
+</div>
+
+<!-- 2a. Intent intake -->
+<div class="screen" id="s-intent">
+  <div class="orb"><div class="eye l"></div><div class="eye r"></div></div>
+  <h1>What would you like to accomplish?</h1>
+  <p class="sub">Not "which chapter." What's the moment you want to create?<br>Say it in your own words.</p>
+  <div class="goal-box">
+    <input id="goalInput" placeholder="e.g. read someone's mind on stage" onkeydown="if(event.key==='Enter')submitGoal()">
+    <button onclick="submitGoal()">→</button>
+  </div>
+  <div class="chips">
+    <button class="chip" onclick="pickChip('Read someone\'s mind on stage')">🔮 Read a mind on stage</button>
+    <button class="chip" onclick="pickChip('Duplicate a drawing they made in secret')">✏️ Duplicate a secret drawing</button>
+    <button class="chip" onclick="pickChip('Blow minds at a party without a stage')">🍸 Casual miracle at a party</button>
+    <button class="chip" onclick="pickChip('A phone call that reveals their thought')">📞 Phone call reveal</button>
+    <button class="chip" onclick="pickChip('I just want to explore what Nexus can do')">🧭 Just exploring</button>
+  </div>
+</div>
+
+<!-- 2b. Menu variant -->
+<div class="screen" id="s-menu">
+  <div class="orb"><div class="eye l"></div><div class="eye r"></div></div>
+  <h1>Choose a course</h1>
+  <p class="sub">Select a module to begin your Nexus training.</p>
+  <div id="menuList"></div>
+</div>
+
+<!-- 3. Generating -->
+<div class="screen" id="s-think">
+  <div class="thinking">
+    <div class="orb"><div class="eye l"></div><div class="eye r"></div></div>
+    <h1 id="thinkLine">Building your path…</h1>
+    <div class="dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- 4. Path -->
+<div class="screen" id="s-path">
+  <h1 id="pathTitle">Your path</h1>
+  <div class="goal-echo" id="goalEcho"></div>
+  <div id="pathSteps"></div>
+  <button class="big-btn" onclick="startFirstWin()">Start step 1 · about 3 minutes ⚡</button>
+</div>
+
+<!-- 5. First win task -->
+<div class="screen" id="s-task">
+  <h1 id="taskTitle">Step 1</h1>
+  <p class="sub">Small on purpose. Win first, expand later.</p>
+  <div class="task-card">
+    <h3>Your first win</h3>
+    <p id="taskBody"></p>
+  </div>
+  <button class="big-btn purple" onclick="firstWinDone()">✅ Done, that was easy</button>
+  <div class="timer" id="taskTimer"></div>
+</div>
+
+<!-- 6. Win + confidence after -->
+<div class="screen" id="s-win">
+  <div class="win">
+    <div class="big">🎉</div>
+    <h1>First win, banked.</h1>
+    <p class="sub" id="winLine">That took you minutes, not months. This is how the whole journey works: one small win at a time.</p>
+    <p class="sub"><b>Same pulse check, after one step:</b></p>
+    <div class="confidence" id="confAfter"></div>
+    <div class="conf-labels"><span>Totally lost</span><span>Very confident</span></div>
+  </div>
+</div>
+
+<!-- 7. Summary -->
+<div class="screen" id="s-done">
+  <div class="win">
+    <div class="big">📈</div>
+    <h1>Session one, complete</h1>
+    <div class="delta" id="deltaBadge"></div>
+    <p class="sub">Your path is saved. Next session picks up exactly where you left off, at step 2.</p>
+    <div class="metrics" id="metricsBox"></div>
+    <button class="big-btn" onclick="location.href='/Levit8'">Back to the Lab →</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   LABKIT — reusable experiment telemetry (Levit8 Learning Lab)
+   Reused by future experiments. Events persist in localStorage.
+   ===================================================================== */
+const LabKit = {
+  key: "levit8_exp002",
+  t0: Date.now(),
+  log(event, data={}){
+    const rec = { event, t: Date.now()-this.t0, ts:new Date().toISOString(), ...data };
+    try{
+      const all = JSON.parse(localStorage.getItem(this.key)||"[]");
+      all.push(rec);
+      localStorage.setItem(this.key, JSON.stringify(all));
+    }catch(e){}
+    console.log("[LabKit]", rec);
+  },
+  variant(){
+    const url = new URLSearchParams(location.search).get("variant");
+    if(url==="intake"||url==="menu") return url;
+    try{
+      let v = localStorage.getItem(this.key+"_variant");
+      if(!v){ v = Math.random()<.5 ? "intake":"menu"; localStorage.setItem(this.key+"_variant", v); }
+      return v;
+    }catch(e){ return "intake"; }
+  }
+};
+
+/* =====================================================================
+   DOMAIN PACK — Nexus. Swap this object to teach golf, onboarding, etc.
+   ===================================================================== */
+const DOMAIN = {
+  name:"Nexus",
+  menuCourses:[
+    {name:"Nexus Fundamentals", sub:"Module 1: interface, settings, and setup (12 lessons)", path:"explore"},
+    {name:"Eavesdrop Essentials", sub:"Module 2: audio input techniques (9 lessons)", path:"party"},
+    {name:"Outputs and Reveals", sub:"Module 3: Autocrib, Lumen, Hydra, The Stranger (14 lessons)", path:"stage"},
+    {name:"Advanced Routining", sub:"Module 4: Switchboard and custom pathways (11 lessons)", path:"stage"},
+  ],
+  paths:{
+    stage:{
+      title:"Your Stage Mindreading path",
+      steps:[
+        ["Say the spine out loud","Input flows through a pathway to an output. Master sentence of everything in Nexus.","first"],
+        ["Meet Eavesdrop","Start and pause listening from your Apple Watch. Your invisible ear."],
+        ["The peek that nobody sees","Autocrib and the peek screen, timed to your natural glance."],
+        ["The pause that sells it","Reveal pacing: struggle first, then the hit. Human beats instant."],
+        ["Full routine, on your feet","Chain it end to end at performance speed, mic'd and moving."],
+      ]
+    },
+    draw:{
+      title:"Your Drawing Duplication path",
+      steps:[
+        ["Say the spine out loud","Input flows through a pathway to an output. Master sentence of everything in Nexus.","first"],
+        ["Meet Lumen","The drawing duplication engine and its settings PDF."],
+        ["Capture without suspicion","Getting their sketch into the system while attention stays on them."],
+        ["Duplicate like a human","Sketch the reveal with hesitation and personality, never like a printer."],
+        ["The Stranger finale","Optional: route the reveal through a phone call for a two-phase killer."],
+      ]
+    },
+    phone:{
+      title:"Your Phone Call Miracle path",
+      steps:[
+        ["Say the spine out loud","Input flows through a pathway to an output. Master sentence of everything in Nexus.","first"],
+        ["Meet The Stranger","The phone call output and when it hits hardest."],
+        ["Feed it invisibly","Eavesdrop as your input, paused and sent from the Watch."],
+        ["Script the call","Timing, speakerphone choreography, and the reveal beat."],
+        ["Run it live","Full rehearsal with a friend as the voice on the line."],
+      ]
+    },
+    party:{
+      title:"Your Casual Miracle path",
+      steps:[
+        ["Say the spine out loud","Input flows through a pathway to an output. Master sentence of everything in Nexus.","first"],
+        ["Eavesdrop in conversation","Conversation Mode: the input that looks like small talk."],
+        ["The bored phone","Natural handling so your phone reads as furniture, not prop."],
+        ["Reveal without a stage","Close-up pacing: quiet, personal, devastating."],
+        ["Your pocket opener","One 90-second routine you can fire anywhere, anytime."],
+      ]
+    },
+    explore:{
+      title:"Your Nexus Explorer path",
+      steps:[
+        ["Say the spine out loud","Input flows through a pathway to an output. Master sentence of everything in Nexus.","first"],
+        ["Tour the pathways","Browse Pathway Sets and expand one to see inputs and outputs."],
+        ["One input: Eavesdrop","Hear how information gets in without a trace."],
+        ["One output: Autocrib","See how information comes back to you invisibly."],
+        ["Pick your first miracle","Choose the routine that fits your style; the path rebuilds around it."],
+      ]
+    },
+  },
+  firstWin:{
+    title:"The Nexus Spine",
+    body:'Say this out loud, three times, like you\'re teaching it to a friend: <b>"Input flows through a pathway to an output."</b><br><br>That\'s it. That sentence is the entire architecture of Nexus. Eavesdrop is an input. Autocrib, Lumen, and The Stranger are outputs. Pathways connect them. Every lesson from here is just new vocabulary inside a sentence you already own.'
+  },
+  keywords:{
+    draw:["draw","sketch","duplicat","picture","art"],
+    phone:["phone","call","stranger","voice"],
+    stage:["stage","mind","read","parlor","audience","theater"],
+    party:["party","casual","friend","bar","walk","strol","close","impromptu","table"],
+  }
+};
+
+/* ===================================================================== */
+let state = { variant: LabKit.variant(), confBefore:null, confAfter:null, goal:"", pathKey:"explore", taskStart:0 };
+document.getElementById("variantTag").textContent = "variant: " + state.variant;
+LabKit.log("session_start", {variant: state.variant});
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+function confetti(){
+  const emo=["✨","🎉","⭐","💜","🃏","🎩"];
+  for(let i=0;i<26;i++){
+    const c=document.createElement("div");
+    c.className="confetti"; c.textContent=emo[Math.floor(Math.random()*emo.length)];
+    c.style.left=Math.random()*100+"vw"; c.style.animationDuration=(2+Math.random()*2)+"s";
+    document.body.appendChild(c); setTimeout(()=>c.remove(),4200);
+  }
+}
+
+/* confidence widgets */
+const EMOJI = ["😵","😬","😐","🙂","😎"];
+function buildConf(elId, cb){
+  const el = document.getElementById(elId);
+  el.innerHTML = EMOJI.map((e,i)=>`<button class="conf-btn" onclick="${cb}(${i+1})">${e}</button>`).join("");
+}
+buildConf("confBefore","setConfBefore");
+buildConf("confAfter","setConfAfter");
+
+function setConfBefore(n){
+  state.confBefore = n;
+  LabKit.log("confidence_before", {value:n});
+  if(state.variant==="intake"){ show("s-intent"); LabKit.log("intake_shown"); document.getElementById("goalInput").focus(); }
+  else { renderMenu(); show("s-menu"); LabKit.log("menu_shown"); }
+}
+
+/* variant A: intent */
+function pickChip(txt){ document.getElementById("goalInput").value = txt; submitGoal(); }
+function submitGoal(){
+  const g = document.getElementById("goalInput").value.trim();
+  if(!g) return;
+  state.goal = g;
+  state.pathKey = matchPath(g);
+  LabKit.log("intake_completed", {goal:g, matched:state.pathKey});
+  think(`Got it. Building the shortest path to that moment…`);
+}
+function matchPath(g){
+  const lc = g.toLowerCase();
+  for(const [key, words] of Object.entries(DOMAIN.keywords)){
+    if(words.some(w=>lc.includes(w))) return key;
+  }
+  return "explore";
+}
+
+/* variant B: menu */
+function renderMenu(){
+  document.getElementById("menuList").innerHTML = DOMAIN.menuCourses.map((c,i)=>`
+    <button class="menu-item" onclick="pickCourse(${i})">
+      <div class="m-name">${c.name}</div><div class="m-sub">${c.sub}</div>
+    </button>`).join("");
+}
+function pickCourse(i){
+  const c = DOMAIN.menuCourses[i];
+  state.goal = c.name;
+  state.pathKey = c.path;
+  LabKit.log("menu_completed", {course:c.name, matched:c.path});
+  think("Loading your course…");
+}
+
+/* thinking → path */
+function think(line){
+  document.getElementById("thinkLine").textContent = line;
+  show("s-think");
+  setTimeout(renderPath, 1700);
+}
+function renderPath(){
+  const p = DOMAIN.paths[state.pathKey];
+  document.getElementById("pathTitle").textContent = p.title;
+  document.getElementById("goalEcho").textContent =
+    state.variant==="intake" ? `Your goal: "${state.goal}"` : `Course: ${state.goal}`;
+  document.getElementById("pathSteps").innerHTML = p.steps.map((s,i)=>`
+    <div class="path-step ${i===0?"first":""}">
+      <div class="num">${i+1}</div>
+      <div>
+        ${i===0?'<div class="tag">Start here · your first win</div>':""}
+        <div class="p-name">${s[0]}</div>
+        <div class="p-sub">${s[1]}</div>
+      </div>
+    </div>`).join("");
+  LabKit.log("path_shown", {path:state.pathKey});
+  show("s-path");
+}
+
+/* first win */
+function startFirstWin(){
+  state.taskStart = Date.now();
+  document.getElementById("taskTitle").textContent = DOMAIN.firstWin.title;
+  document.getElementById("taskBody").innerHTML = DOMAIN.firstWin.body;
+  LabKit.log("first_step_started");
+  show("s-task");
+  let s = 0;
+  clearInterval(startFirstWin._t);
+  startFirstWin._t = setInterval(()=>{
+    s++;
+    document.getElementById("taskTimer").textContent = `${s}s in. No rush.`;
+  },1000);
+}
+function firstWinDone(){
+  clearInterval(startFirstWin._t);
+  confetti();
+  LabKit.log("first_win", {taskSeconds: Math.round((Date.now()-state.taskStart)/1000)});
+  show("s-win");
+}
+function setConfAfter(n){
+  state.confAfter = n;
+  LabKit.log("confidence_after", {value:n, delta:n-state.confBefore});
+  renderSummary();
+}
+function renderSummary(){
+  const d = state.confAfter - state.confBefore;
+  const mins = Math.round((Date.now()-LabKit.t0)/6000)/10;
+  document.getElementById("deltaBadge").textContent =
+    d>0 ? `Confidence +${d} in one session ⚡` : d===0 ? "Confidence held steady" : "Confidence dipped. We adapt next session.";
+  document.getElementById("metricsBox").innerHTML = `
+    <h3>🔬 Lab telemetry (this device)</h3>
+    <div class="row"><span>Variant</span><b>${state.variant}</b></div>
+    <div class="row"><span>Time to first win</span><b>${mins} min</b></div>
+    <div class="row"><span>Confidence before → after</span><b>${state.confBefore} → ${state.confAfter}</b></div>
+    <div class="row"><span>Path</span><b>${DOMAIN.paths[state.pathKey].title}</b></div>`;
+  confetti();
+  show("s-done");
+}
+</script>
+</body>
+</html>
