@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/willowbrook", "destination": "/Willowbrook", "permanent": true },
+    { "source": "/willowbrook/:path*", "destination": "/Willowbrook/:path*", "permanent": true }
+  ]
+}
