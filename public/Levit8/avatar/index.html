@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Vega — Your Nexus Mentor</title>
+<style>
+  :root{
+    --bg:#0d0a1a; --panel:#171230; --panel2:#1f1840; --line:#2e2560;
+    --gold:#f5c542; --purple:#8b5cf6; --purple2:#a78bfa; --green:#34d399;
+    --amber:#fbbf24; --red:#f87171; --text:#ede9fe; --dim:#9d94c4; --lab:#38bdf8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:radial-gradient(1200px 700px at 70% -10%, #241a4d 0%, var(--bg) 60%);
+    color:var(--text); min-height:100vh; display:flex; flex-direction:column;
+  }
+  button{font-family:inherit; cursor:pointer; border:none;}
+  .labbar{
+    display:flex; align-items:center; gap:10px; padding:10px 20px;
+    border-bottom:1px solid var(--line); font-size:11px; font-weight:800;
+    letter-spacing:1.5px; text-transform:uppercase; color:var(--lab);
+  }
+  .labbar a{color:var(--lab); text-decoration:none; opacity:.8;}
+  .labbar a:hover{opacity:1;}
+  .labbar .state-tag{margin-left:auto; color:var(--dim);}
+
+  .stage-area{
+    flex:1; max-width:760px; width:100%; margin:0 auto; padding:26px 20px 20px;
+    display:flex; flex-direction:column;
+  }
+  .avatar-zone{text-align:center; position:relative;}
+  .avatar-frame{
+    width:210px; height:210px; margin:0 auto; position:relative;
+    animation:breathe 4.5s ease-in-out infinite;
+  }
+  @keyframes breathe{50%{transform:translateY(-7px) scale(1.012);}}
+  .avatar-frame.celebrating{animation:bounceJoy .55s ease-in-out 3;}
+  @keyframes bounceJoy{50%{transform:translateY(-18px) scale(1.05);}}
+  .avatar-frame img{width:100%; height:100%; object-fit:contain; display:none;}
+  .avatar-frame svg{width:100%; height:100%;}
+  .avatar-name{
+    font-weight:800; letter-spacing:2px; color:var(--purple2); font-size:13px;
+    text-transform:uppercase; margin-top:6px;
+  }
+  .avatar-role{font-size:12px; color:var(--dim);}
+
+  .bubble{
+    background:var(--panel); border:1px solid var(--line); border-radius:18px;
+    padding:18px 22px; margin:18px auto 0; max-width:560px; position:relative;
+    font-size:16px; line-height:1.6; min-height:64px; text-align:left;
+  }
+  .bubble::before{
+    content:""; position:absolute; top:-9px; left:50%; transform:translateX(-50%) rotate(45deg);
+    width:16px; height:16px; background:var(--panel); border-left:1px solid var(--line); border-top:1px solid var(--line);
+  }
+  .bubble b{color:var(--gold);}
+  .bubble .cursor{display:inline-block; width:8px; height:17px; background:var(--purple2); vertical-align:-2px; animation:blink .8s infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .journey-chip{
+    display:inline-flex; gap:8px; align-items:center; margin-top:14px;
+    background:rgba(56,189,248,.08); border:1px solid var(--lab); color:var(--lab);
+    font-size:12px; font-weight:700; padding:6px 14px; border-radius:99px;
+  }
+  .replies{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+    margin:22px auto 0; max-width:600px;
+  }
+  .reply{
+    background:var(--panel2); border:1px solid var(--line); color:var(--text);
+    padding:12px 18px; border-radius:14px; font-size:14px; font-weight:700;
+    transition:transform .12s, border-color .12s;
+  }
+  .reply:hover{transform:translateY(-2px); border-color:var(--purple);}
+  .reply.gold{border-color:var(--gold); color:var(--gold);}
+  .reply.good{border-color:var(--green); color:var(--green);}
+  .reply.bad{border-color:var(--red); color:var(--red);}
+  .confetti{position:fixed; top:-12px; font-size:20px; z-index:98; animation:fall linear forwards; pointer-events:none;}
+  @keyframes fall{to{transform:translateY(105vh) rotate(720deg); opacity:.6;}}
+  .foot{
+    text-align:center; font-size:11px; color:var(--dim); padding:14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="labbar">
+  <a href="/Levit8">← Levit8 Lab</a>
+  <span>· Exp 004 · Avatar Mentor</span>
+  <span class="state-tag" id="stateTag">idle</span>
+</div>
+
+<div class="stage-area">
+  <div class="avatar-zone">
+    <div class="avatar-frame" id="avatarFrame">
+      <img id="avatarImg" alt="Vega">
+      <svg id="avatarSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Placeholder Vega: stylized magician. Replaced by PNGs when present. -->
+        <defs>
+          <radialGradient id="skin" cx="40%" cy="35%"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="70%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#5b21b6"/></radialGradient>
+        </defs>
+        <!-- cape -->
+        <path d="M40 195 Q45 130 100 122 Q155 130 160 195 Z" fill="#2e2560"/>
+        <path d="M52 195 Q57 140 100 132 Q143 140 148 195 Z" fill="#443680"/>
+        <!-- head -->
+        <circle cx="100" cy="92" r="46" fill="url(#skin)"/>
+        <!-- hat -->
+        <g id="hat">
+          <ellipse cx="100" cy="52" rx="52" ry="10" fill="#171230"/>
+          <rect x="72" y="14" width="56" height="40" rx="6" fill="#171230"/>
+          <rect x="72" y="40" width="56" height="9" fill="#f5c542"/>
+        </g>
+        <!-- eyes -->
+        <g id="eyes-open">
+          <ellipse cx="84" cy="92" rx="6.5" ry="9" fill="#0d0a1a"/>
+          <ellipse cx="116" cy="92" rx="6.5" ry="9" fill="#0d0a1a"/>
+          <circle cx="86" cy="89" r="2.2" fill="#fff"/>
+          <circle cx="118" cy="89" r="2.2" fill="#fff"/>
+        </g>
+        <g id="eyes-happy" style="display:none">
+          <path d="M77 92 Q84 84 91 92" stroke="#0d0a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M109 92 Q116 84 123 92" stroke="#0d0a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </g>
+        <g id="eyes-think" style="display:none">
+          <ellipse cx="84" cy="87" rx="6" ry="7" fill="#0d0a1a"/>
+          <ellipse cx="116" cy="87" rx="6" ry="7" fill="#0d0a1a"/>
+          <circle cx="82" cy="84" r="2" fill="#fff"/>
+          <circle cx="114" cy="84" r="2" fill="#fff"/>
+        </g>
+        <g id="brows" style="display:none">
+          <path d="M76 78 Q84 74 92 78" stroke="#0d0a1a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M108 76 Q116 73 124 78" stroke="#0d0a1a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- mouths -->
+        <path id="mouth-smile" d="M86 112 Q100 122 114 112" stroke="#0d0a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <ellipse id="mouth-open" cx="100" cy="115" rx="9" ry="11" fill="#0d0a1a" style="display:none"/>
+        <path id="mouth-flat" d="M88 114 L112 114" stroke="#0d0a1a" stroke-width="4" fill="none" stroke-linecap="round" style="display:none"/>
+        <path id="mouth-grin" d="M82 110 Q100 130 118 110 Z" fill="#0d0a1a" style="display:none"/>
+        <!-- sparkles for celebrate -->
+        <g id="sparkles" style="display:none" fill="#f5c542">
+          <path d="M40 60 l3 7 7 3 -7 3 -3 7 -3-7 -7-3 7-3z"/>
+          <path d="M160 55 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5-6 -6-2.5 6-2.5z"/>
+          <path d="M165 120 l2 5 5 2 -5 2 -2 5 -2-5 -5-2 5-2z"/>
+        </g>
+        <!-- wand for proud/talking -->
+        <g id="wand" style="display:none">
+          <rect x="150" y="140" width="34" height="5" rx="2.5" transform="rotate(-35 150 140)" fill="#171230"/>
+          <rect x="172" y="122" width="10" height="5" rx="2.5" transform="rotate(-35 172 122)" fill="#f5c542"/>
+        </g>
+      </svg>
+    </div>
+    <div class="avatar-name">Vega</div>
+    <div class="avatar-role">Your Nexus mentor · Levit8 Learning Lab</div>
+    <div id="journeyChip"></div>
+  </div>
+
+  <div class="bubble" id="bubble"><span class="cursor"></span></div>
+  <div class="replies" id="replies"></div>
+</div>
+
+<div class="foot">Exp 004 · Stage 0: static expressions. Real conversation, voice, and motion arrive in later stages.</div>
+
+<script>
+/* =====================================================================
+   LABKIT — shared experiment telemetry
+   ===================================================================== */
+const LabKit = {
+  key:"levit8_exp004", t0:Date.now(),
+  log(event, data={}){
+    const rec = {event, t:Date.now()-this.t0, ts:new Date().toISOString(), ...data};
+    try{
+      const all = JSON.parse(localStorage.getItem(this.key)||"[]");
+      all.push(rec); localStorage.setItem(this.key, JSON.stringify(all));
+    }catch(e){}
+    console.log("[LabKit]", rec);
+  }
+};
+
+/* =====================================================================
+   EXPRESSION ENGINE
+   States: idle, talking, thinking, celebrating, concerned, proud
+   If /Levit8/avatar/img/<state>.png exists it is shown; otherwise the
+   SVG placeholder morphs. Drop PNGs in, redeploy, nothing else to do.
+   ===================================================================== */
+const STATES = ["idle","talking","thinking","celebrating","concerned","proud"];
+const imgCache = {};
+STATES.forEach(s=>{
+  const probe = new Image();
+  probe.onload = ()=>{ imgCache[s] = probe.src; };
+  probe.src = "img/"+s+".png";
+});
+function setState(state){
+  document.getElementById("stateTag").textContent = state;
+  const frame = document.getElementById("avatarFrame");
+  frame.classList.toggle("celebrating", state==="celebrating");
+  const img = document.getElementById("avatarImg");
+  const svg = document.getElementById("avatarSvg");
+  if(imgCache[state]){
+    img.src = imgCache[state]; img.style.display="block"; svg.style.display="none"; return;
+  }
+  img.style.display="none"; svg.style.display="block";
+  const show = (id,on)=>{ const el=document.getElementById(id); if(el) el.style.display = on?"":"none"; };
+  // reset
+  show("eyes-open",true); show("eyes-happy",false); show("eyes-think",false);
+  show("brows",false); show("sparkles",false); show("wand",false);
+  show("mouth-smile",true); show("mouth-open",false); show("mouth-flat",false); show("mouth-grin",false);
+  if(state==="talking"){ show("mouth-smile",false); show("mouth-open",true); show("wand",true); }
+  if(state==="thinking"){ show("eyes-open",false); show("eyes-think",true); show("mouth-smile",false); show("mouth-flat",true); }
+  if(state==="celebrating"){ show("eyes-open",false); show("eyes-happy",true); show("mouth-smile",false); show("mouth-grin",true); show("sparkles",true); }
+  if(state==="concerned"){ show("brows",true); show("mouth-smile",false); show("mouth-flat",true); }
+  if(state==="proud"){ show("eyes-open",false); show("eyes-happy",true); show("wand",true); }
+}
+
+/* =====================================================================
+   JOURNEY DETECTION — reads every Lab experiment on this origin
+   ===================================================================== */
+const NEXUS_LESSONS = {
+  f1:"The Big Picture", f2:"Natural Handling", f3:"Attention Off The Tech",
+  i1:"The Core Input Move", i2:"Cover Patter", i3:"Under Pressure",
+  r1:"The Pause That Kills", r2:"Personalizing The Hit", r3:"The Full Routine"
+};
+const LESSON_ORDER = ["f1","f2","f3","i1","i2","i3","r1","r2","r3"];
+function readJourney(){
+  const j = { coach:null, intake:null };
+  try{ j.coach = JSON.parse(localStorage.getItem("nexusCoach")); }catch(e){}
+  try{
+    const ev = JSON.parse(localStorage.getItem("levit8_exp002")||"[]");
+    if(ev.length){
+      j.intake = {
+        goal:(ev.find(e=>e.event==="intake_completed")||{}).goal,
+        path:(ev.find(e=>e.event==="path_shown")||{}).path,
+        confBefore:(ev.find(e=>e.event==="confidence_before")||{}).value,
+        confAfter:(ev.find(e=>e.event==="confidence_after")||{}).value,
+        firstWin:ev.some(e=>e.event==="first_win"),
+      };
+    }
+  }catch(e){}
+  return j;
+}
+function nextLesson(coach){
+  if(!coach || !coach.done) return LESSON_ORDER[0];
+  return LESSON_ORDER.find(id=>!coach.done[id]) || null;
+}
+
+/* =====================================================================
+   DIALOGUE — scripted brain, Stage 0. Stage 1 swaps say()/replies for
+   a live model behind /api/mentor.
+   ===================================================================== */
+let typeTimer = null;
+function say(txt, state="talking", after="idle"){
+  setState(state);
+  const b = document.getElementById("bubble");
+  b.innerHTML = "";
+  let i = 0;
+  clearInterval(typeTimer);
+  typeTimer = setInterval(()=>{
+    i += 2;
+    b.innerHTML = txt.slice(0,i) + '<span class="cursor"></span>';
+    if(i >= txt.length){
+      clearInterval(typeTimer);
+      b.innerHTML = txt;
+      setState(after);
+    }
+  }, 18);
+}
+function replies(list){
+  document.getElementById("replies").innerHTML = list.map(r=>
+    `<button class="reply ${r.cls||""}" onclick="${r.fn}">${r.label}</button>`).join("");
+}
+function confetti(){
+  const emo=["✨","🎉","⭐","💜","🃏","🎩"];
+  for(let i=0;i<26;i++){
+    const c=document.createElement("div");
+    c.className="confetti"; c.textContent=emo[Math.floor(Math.random()*emo.length)];
+    c.style.left=Math.random()*100+"vw"; c.style.animationDuration=(2+Math.random()*2)+"s";
+    document.body.appendChild(c); setTimeout(()=>c.remove(),4200);
+  }
+}
+
+const J = readJourney();
+function greet(){
+  const chip = document.getElementById("journeyChip");
+  if(J.coach && J.coach.xp > 0){
+    const nxt = nextLesson(J.coach);
+    const done = Object.keys(J.coach.done||{}).length;
+    chip.innerHTML = `<span class="journey-chip">🔭 I can see your journey: ${J.coach.xp} XP · ${done} lessons · ${(J.coach.badges||[]).length} badges</span>`;
+    LabKit.log("journey_detected", {source:"nexuscoach", xp:J.coach.xp, done});
+    if(!nxt){
+      say("Stefan's students said it couldn't be done, and yet here you are: every lesson, complete. I'm genuinely proud of you. So, what's next: polish a routine for a real audience, or quiz yourself to keep the edges sharp?", "celebrating", "proud");
+      replies([
+        {label:"🧠 Quiz me", fn:"startQuiz()", cls:"gold"},
+        {label:"🎭 Performance advice", fn:"perfAdvice()"},
+        {label:"🧭 What is this page?", fn:"aboutMe()"},
+      ]);
+    } else {
+      say(`Welcome back. I remember you: ${J.coach.xp} XP banked, and your next lesson is "${NEXUS_LESSONS[nxt]}". That one matters. Want to jump back in, or check in with me first?`, "talking", "idle");
+      replies([
+        {label:"▶ Take me to my lesson", fn:"goCoach()", cls:"gold"},
+        {label:"🧠 Quiz me first", fn:"startQuiz()"},
+        {label:"😮‍💨 I've been struggling", fn:"struggling()", cls:"bad"},
+      ]);
+    }
+  } else if(J.intake && J.intake.path){
+    chip.innerHTML = `<span class="journey-chip">🔭 I can see your journey: the "${J.intake.path}" path, first win ${J.intake.firstWin?"done":"pending"}</span>`;
+    LabKit.log("journey_detected", {source:"exp002", path:J.intake.path});
+    const confNote = (J.intake.confAfter && J.intake.confBefore && J.intake.confAfter > J.intake.confBefore)
+      ? " And your confidence already climbed last session. That's the pattern we ride."
+      : "";
+    say(`Good to see you again. You told me what you wanted to accomplish, and I built you a path. Step 2 is waiting.${confNote} Ready?`, "talking", "idle");
+    replies([
+      {label:"▶ Continue my path", fn:"goIntake()", cls:"gold"},
+      {label:"🎓 Start the full course", fn:"goCoach()"},
+      {label:"🧭 What can you do?", fn:"aboutMe()"},
+    ]);
+  } else {
+    chip.innerHTML = "";
+    LabKit.log("journey_detected", {source:"none"});
+    say("Well hello. I'm Vega, your Nexus mentor. I watch your whole learning journey and guide you one step at a time, so you never face a wall of manuals. We haven't started yet, which is my favorite moment. How do you want to begin?", "talking", "idle");
+    replies([
+      {label:"🧭 Tell me what to do first", fn:"recommend()", cls:"gold"},
+      {label:"🎓 Take the course", fn:"goCoach()"},
+      {label:"🤔 What even is Nexus?", fn:"whatIsNexus()"},
+    ]);
+  }
+}
+
+function recommend(){
+  LabKit.log("clicked", {what:"recommend"});
+  say("Here's my honest recommendation: start by telling me what you want to accomplish, and I'll build a path around it. Five minutes, one small win, and you'll feel the whole system click.", "thinking", "idle");
+  replies([
+    {label:"✨ Let's do it", fn:"goIntake()", cls:"gold"},
+    {label:"🎓 I'd rather browse the course", fn:"goCoach()"},
+  ]);
+}
+function whatIsNexus(){
+  LabKit.log("clicked", {what:"whatIsNexus"});
+  say("One sentence: input flows through a pathway to an output. Nexus hears, routes, and reveals. Learn that sentence and every feature is just new vocabulary. Say it out loud once. Go on, nobody's watching.", "talking", "idle");
+  replies([
+    {label:"😄 Okay, I said it", fn:"saidIt()", cls:"good"},
+    {label:"🧭 Build my path", fn:"goIntake()", cls:"gold"},
+  ]);
+}
+function saidIt(){
+  confetti();
+  LabKit.log("first_win", {via:"avatar"});
+  say("And just like that, you know the architecture of Nexus. That was your first win, and I'm counting it. Ready for a real path?", "celebrating", "proud");
+  replies([
+    {label:"✨ Build my path", fn:"goIntake()", cls:"gold"},
+    {label:"🎓 Take the course", fn:"goCoach()"},
+  ]);
+}
+function struggling(){
+  LabKit.log("clicked", {what:"struggling"});
+  say("Hey. Struggling means you're at the edge of your ability, which is exactly where learning happens. Tell me which flavor of stuck you are, and I'll adjust.", "concerned", "concerned");
+  replies([
+    {label:"🐢 It's moving too fast", fn:"tooFast()"},
+    {label:"🧩 One move won't click", fn:"oneMove()"},
+    {label:"😶 Lost motivation", fn:"lostMojo()"},
+  ]);
+}
+function tooFast(){
+  say("Then we slow down, and I mean really down. Half the speed you think is slow. In your next lesson, use the struggle button freely; it breaks any move into micro-steps. Slow reps wire clean skill. Speed arrives on its own.", "talking", "idle");
+  replies([{label:"▶ Back to my lesson, slower", fn:"goCoach()", cls:"gold"}]);
+}
+function oneMove(){
+  say("Classic, and fixable. Film ten seconds of the move on your phone, then watch it once as yourself and once pretending to be a suspicious spectator. The camera finds what mirrors hide. Then bring it back to the lesson's micro-steps.", "thinking", "idle");
+  replies([{label:"▶ Got it, back to practice", fn:"goCoach()", cls:"gold"}]);
+}
+function lostMojo(){
+  say("Then forget practicing today. Instead, watch one performance video on the member site and let yourself be an audience member again. Remember the feeling you're chasing. The reps will make sense again tomorrow. Deal?", "concerned", "idle");
+  replies([
+    {label:"🤝 Deal", fn:"say('Good. See you tomorrow. I'll remember where we left off, I always do.','proud','idle');replies([])", cls:"good"},
+    {label:"💪 Actually, let's train now", fn:"goCoach()", cls:"gold"},
+  ]);
+}
+function perfAdvice(){
+  say("The pro move at your stage: film a full run-through at performance speed, then watch it with the sound off. Body language tells you everything patter hides. When it looks boring and natural, you're invisible. That's the goal.", "talking", "proud");
+  replies([{label:"🧠 Now quiz me", fn:"startQuiz()", cls:"gold"},{label:"🎓 Revisit a lesson", fn:"goCoach()"}]);
+}
+function aboutMe(){
+  say("I'm the Lab's first attempt at a mentor with a face. I read your progress across every experiment here, greet you where you actually are, and point you at the single next step. Soon I'll hold real conversations, then speak, then move. For now: images and good judgment.", "talking", "idle");
+  replies([
+    {label:"🧭 Guide me", fn:"recommend()", cls:"gold"},
+    {label:"🧠 Quiz me", fn:"startQuiz()"},
+  ]);
+}
+
+/* mini quiz */
+const QUIZ = [
+  {q:"A spectator burns your prop mid-routine. Best response?",
+   opts:["Rush the secret move","Stay on them, ask a question, let the prop go boring","Hide the prop"], correct:1,
+   why:"Attention follows YOUR attention."},
+  {q:"Your patter ends but the input needs two more seconds. What failed?",
+   opts:["The spectator","The choreography of words to action","The hardware"], correct:1,
+   why:"Sync is rehearsable. Time the sentence to the move."},
+  {q:"Why reveal almost-wrong before dead-right?",
+   opts:["Hides latency","Struggle reads as human, so the hit feels psychic","Buys escape time"], correct:1,
+   why:"Perfection feels digital. Effort feels psychic."},
+];
+let qi = 0, qScore = 0;
+function startQuiz(){
+  qi = 0; qScore = 0;
+  LabKit.log("quiz_start");
+  askQ();
+}
+function askQ(){
+  const q = QUIZ[qi];
+  say(`Question ${qi+1} of ${QUIZ.length}: ${q.q}`, "thinking", "thinking");
+  replies(q.opts.map((o,i)=>({label:o, fn:`answerQ(${i})`})));
+}
+function answerQ(i){
+  const q = QUIZ[qi];
+  if(i===q.correct){
+    qScore++;
+    qi++;
+    if(qi < QUIZ.length){
+      say(`Yes. ${q.why} Next one.`, "celebrating", "idle");
+      setTimeout(askQ, 1800);
+    } else {
+      confetti();
+      LabKit.log("quiz_done", {score:qScore, of:QUIZ.length});
+      say(`${qScore} of ${QUIZ.length}. ${qScore===QUIZ.length?"Flawless. You're not just doing the moves, you're thinking like a performer.":"Solid. The misses are tomorrow's easy wins."} What's next?`, "celebrating", "proud");
+      replies([
+        {label:"▶ Back to training", fn:"goCoach()", cls:"gold"},
+        {label:"🧭 Back to the Lab", fn:"location.href='/Levit8'"},
+      ]);
+    }
+  } else {
+    say(`Not quite. ${q.why} Try again.`, "concerned", "thinking");
+  }
+}
+
+/* navigation */
+function goCoach(){ LabKit.log("followed", {to:"nexuscoach"}); location.href = "/NexusCoach"; }
+function goIntake(){ LabKit.log("followed", {to:"intake"}); location.href = "/Levit8/intake"; }
+
+/* boot */
+LabKit.log("session_start");
+setState("idle");
+setTimeout(greet, 400);
+</script>
+</body>
+</html>
