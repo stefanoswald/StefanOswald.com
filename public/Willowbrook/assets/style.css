@@ -91,3 +91,5 @@ img{max-width:100%;height:auto;display:block}
 footer{background:var(--night);color:#bfc6d8;text-align:center;
   padding:2rem 1rem;margin-top:3.5rem;font-size:1rem}
 footer a{color:#d8d2c0}
+.spread .text.verse p{margin:0 0 .4em}
+.spread .text.verse p:first-child::first-letter{font-size:1em;float:none;padding:0;color:inherit;font-weight:400}
