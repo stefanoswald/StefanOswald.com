@@ -112,7 +112,7 @@ export function AcadiaChatbot() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+    <div className="fixed bottom-3 right-1 z-50 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-3 sm:bottom-6 sm:right-6">
       {isOpen ? (
         <section
           className="w-[min(25rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-acadia-moss/30 bg-white shadow-2xl"
@@ -187,11 +187,14 @@ export function AcadiaChatbot() {
       <button
         type="button"
         onClick={() => setIsOpen((current) => !current)}
-        className="relative rounded-full bg-acadia-leaf px-5 py-4 text-base font-bold text-white shadow-2xl transition hover:bg-acadia-ink"
+        className="relative flex h-11 w-11 items-center justify-center rounded-full bg-acadia-leaf text-base font-bold text-white shadow-2xl transition hover:bg-acadia-ink sm:h-auto sm:w-auto sm:px-5 sm:py-4"
         aria-expanded={isOpen}
         aria-label="Open Acadia HOA document helper"
       >
-        Ask HOA docs
+        <span aria-hidden="true" className="text-xl leading-none sm:hidden">
+          💬
+        </span>
+        <span className="hidden sm:inline">Ask HOA docs</span>
         {hasUnreadHint ? (
           <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-amber-300 ring-2 ring-white" />
         ) : null}

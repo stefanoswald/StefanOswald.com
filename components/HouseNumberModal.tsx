@@ -62,7 +62,7 @@ export function HouseNumberModal({
             What is your house number?
           </h2>
           <p className="mt-2 text-sm text-slate-600">
-            House numbers 8000 through 8037 are accepted. Each house can have one
+            House numbers 8000 through 8039 are accepted. Each house can have one
             vote per item, and a new vote updates the previous one.
           </p>
         </div>

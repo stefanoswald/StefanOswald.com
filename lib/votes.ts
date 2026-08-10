@@ -4,7 +4,7 @@ import type { ProjectVoteCounts, Vote, VoteType } from "@/types/acadia";
 
 const STORAGE_KEY = "acadia-estates-votes";
 const HOUSE_MIN = 8000;
-const HOUSE_MAX = 8037;
+const HOUSE_MAX = 8039;
 
 export function isValidHouseNumber(value: string) {
   if (!/^\d+$/.test(value.trim())) {
