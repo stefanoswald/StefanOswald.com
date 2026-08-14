@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import type { ProjectVoteCounts, Vote, VoteType } from "@/types/acadia";
-import { getProjectVoteCounts, readVotes, writeVote } from "@/lib/votes";
+import { useEffect, useState } from "react";
+import type { ProjectVoteCounts, VoteType } from "@/types/acadia";
+import { fetchProjectVoteCounts, writeVote } from "@/lib/votes";
 import { HouseNumberModal } from "@/components/HouseNumberModal";
 
 type VoteButtonsProps = {
@@ -12,28 +12,65 @@ type VoteButtonsProps = {
 };
 
 export function VoteButtons({ projectId, projectTitle, compact = false }: VoteButtonsProps) {
-  const [votes, setVotes] = useState<Vote[]>([]);
+  const [counts, setCounts] = useState<ProjectVoteCounts | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingVote, setPendingVote] = useState<VoteType | null>(null);
   const [confirmation, setConfirmation] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    setVotes(readVotes());
-  }, []);
+    let isActive = true;
 
-  const counts: ProjectVoteCounts = useMemo(
-    () => getProjectVoteCounts(projectId, votes),
-    [projectId, votes]
-  );
+    fetchProjectVoteCounts(projectId)
+      .then((nextCounts) => {
+        if (!isActive) {
+          return;
+        }
 
-  function submitVote(houseNumber: number) {
+        setCounts(nextCounts);
+        setError("");
+      })
+      .catch((loadError: unknown) => {
+        if (!isActive) {
+          return;
+        }
+
+        setError("Live vote totals are temporarily unavailable.");
+      })
+      .finally(() => {
+        if (isActive) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [projectId]);
+
+  async function submitVote(houseNumber: number) {
     if (!pendingVote) {
       return;
     }
 
-    const nextVotes = writeVote(projectId, houseNumber, pendingVote);
-    setVotes(nextVotes);
-    setPendingVote(null);
-    setConfirmation(`Thank you. Your vote has been recorded for house ${houseNumber}.`);
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const nextCounts = await writeVote(projectId, houseNumber, pendingVote);
+      setCounts(nextCounts);
+      setPendingVote(null);
+      setConfirmation(`Thank you. Your vote has been recorded for house ${houseNumber}.`);
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Your vote could not be recorded. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -46,15 +83,15 @@ export function VoteButtons({ projectId, projectTitle, compact = false }: VoteBu
         }
       >
         <div className="rounded-md bg-emerald-50 px-3 py-2 text-emerald-800">
-          <div className="font-bold">{counts.up}</div>
+          <div className="font-bold">{isLoading || !counts ? "-" : counts.up}</div>
           <div className="text-xs font-medium">Upvotes</div>
         </div>
         <div className="rounded-md bg-red-50 px-3 py-2 text-red-800">
-          <div className="font-bold">{counts.down}</div>
+          <div className="font-bold">{isLoading || !counts ? "-" : counts.down}</div>
           <div className="text-xs font-medium">Downvotes</div>
         </div>
         <div className="rounded-md bg-acadia-sky px-3 py-2 text-acadia-ink">
-          <div className="font-bold">{counts.net}</div>
+          <div className="font-bold">{isLoading || !counts ? "-" : counts.net}</div>
           <div className="text-xs font-medium">Net score</div>
         </div>
       </div>
@@ -65,6 +102,7 @@ export function VoteButtons({ projectId, projectTitle, compact = false }: VoteBu
           onClick={() => {
             setPendingVote("up");
             setConfirmation("");
+            setError("");
           }}
           className="flex items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-3 text-base font-bold text-white transition hover:bg-emerald-700"
           aria-label={`Thumbs up for ${projectTitle}`}
@@ -79,6 +117,7 @@ export function VoteButtons({ projectId, projectTitle, compact = false }: VoteBu
           onClick={() => {
             setPendingVote("down");
             setConfirmation("");
+            setError("");
           }}
           className="flex items-center justify-center gap-2 rounded-md bg-red-600 px-4 py-3 text-base font-bold text-white transition hover:bg-red-700"
           aria-label={`Thumbs down for ${projectTitle}`}
@@ -96,10 +135,18 @@ export function VoteButtons({ projectId, projectTitle, compact = false }: VoteBu
         </p>
       ) : null}
 
+      {error && pendingVote === null && !compact ? (
+        <p className="rounded-md bg-red-50 px-3 py-2 text-sm font-medium text-red-700">
+          {error}
+        </p>
+      ) : null}
+
       <HouseNumberModal
         isOpen={pendingVote !== null}
         voteType={pendingVote}
         projectTitle={projectTitle}
+        isSubmitting={isSubmitting}
+        serverError={error}
         onClose={() => setPendingVote(null)}
         onSubmit={submitVote}
       />

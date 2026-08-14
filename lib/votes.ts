@@ -1,65 +1,79 @@
-"use client";
+import type { ProjectVoteCounts, VoteType } from "@/types/acadia";
 
-import type { ProjectVoteCounts, Vote, VoteType } from "@/types/acadia";
+export const HOUSE_MIN = 8000;
+export const HOUSE_MAX = 8039;
 
-const STORAGE_KEY = "acadia-estates-votes";
-const HOUSE_MIN = 8000;
-const HOUSE_MAX = 8039;
+type VoteApiResponse = {
+  counts?: ProjectVoteCounts;
+  countsByProject?: Record<string, ProjectVoteCounts>;
+  error?: string;
+};
 
-export function isValidHouseNumber(value: string) {
-  if (!/^\d+$/.test(value.trim())) {
+let cachedVoteCounts: Record<string, ProjectVoteCounts> | null = null;
+let voteCountsRequest: Promise<Record<string, ProjectVoteCounts>> | null = null;
+
+export function isValidHouseNumber(value: string | number) {
+  const normalized = String(value).trim();
+
+  if (!/^\d+$/.test(normalized)) {
     return false;
   }
 
-  const houseNumber = Number(value);
+  const houseNumber = Number(normalized);
   return houseNumber >= HOUSE_MIN && houseNumber <= HOUSE_MAX;
 }
 
-export function readVotes(): Vote[] {
-  if (typeof window === "undefined") {
-    return [];
-  }
-
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Vote[]) : [];
-  } catch {
-    return [];
-  }
+export function emptyVoteCounts(): ProjectVoteCounts {
+  return { up: 0, down: 0, net: 0 };
 }
 
-export function writeVote(projectId: string, houseNumber: number, voteType: VoteType) {
-  const votes = readVotes();
-  const timestamp = new Date().toISOString();
-  const existingIndex = votes.findIndex(
-    (vote) => vote.projectId === projectId && vote.houseNumber === houseNumber
-  );
-
-  const nextVote: Vote = {
-    projectId,
-    houseNumber,
-    voteType,
-    timestamp
-  };
-
-  if (existingIndex >= 0) {
-    votes[existingIndex] = nextVote;
-  } else {
-    votes.push(nextVote);
+export async function fetchProjectVoteCounts(projectId: string): Promise<ProjectVoteCounts> {
+  if (cachedVoteCounts) {
+    return cachedVoteCounts[projectId] || emptyVoteCounts();
   }
 
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
-  return votes;
+  if (!voteCountsRequest) {
+    voteCountsRequest = fetch("/api/acadia/votes", { cache: "no-store" })
+      .then(async (response) => {
+        const payload = (await response.json()) as VoteApiResponse;
+
+        if (!response.ok || !payload.countsByProject) {
+          throw new Error(payload.error || "Vote totals are temporarily unavailable.");
+        }
+
+        cachedVoteCounts = payload.countsByProject;
+        return payload.countsByProject;
+      })
+      .catch((error) => {
+        voteCountsRequest = null;
+        throw error;
+      });
+  }
+
+  const countsByProject = await voteCountsRequest;
+  return countsByProject[projectId] || emptyVoteCounts();
 }
 
-export function getProjectVoteCounts(projectId: string, votes: Vote[]): ProjectVoteCounts {
-  const projectVotes = votes.filter((vote) => vote.projectId === projectId);
-  const up = projectVotes.filter((vote) => vote.voteType === "up").length;
-  const down = projectVotes.filter((vote) => vote.voteType === "down").length;
+export async function writeVote(
+  projectId: string,
+  houseNumber: number,
+  voteType: VoteType
+): Promise<ProjectVoteCounts> {
+  const response = await fetch("/api/acadia/votes", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ projectId, houseNumber, voteType })
+  });
+  const payload = (await response.json()) as VoteApiResponse;
 
-  return {
-    up,
-    down,
-    net: up - down
+  if (!response.ok || !payload.counts) {
+    throw new Error(payload.error || "Your vote could not be recorded. Please try again.");
+  }
+
+  cachedVoteCounts = {
+    ...(cachedVoteCounts || {}),
+    [projectId]: payload.counts
   };
+
+  return payload.counts;
 }

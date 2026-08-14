@@ -8,10 +8,13 @@ export function ProjectCard({ project }: { project: Project }) {
     <article className="flex h-full flex-col justify-between rounded-lg border border-acadia-moss/20 bg-white p-5 shadow-soft">
       <div>
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-          <h2 className="text-xl font-bold text-acadia-ink">{project.title}</h2>
+          <h2 className="min-w-0 flex-1 text-xl font-bold text-acadia-ink">{project.title}</h2>
           <StatusBadge status={project.status} />
         </div>
         <p className="text-base leading-7 text-slate-700">{project.shortDescription}</p>
+        <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          Reviewed {project.lastReviewed || "August 10, 2026"}
+        </p>
       </div>
 
       <div className="mt-5 space-y-4">

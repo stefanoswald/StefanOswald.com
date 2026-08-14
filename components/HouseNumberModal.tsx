@@ -8,14 +8,18 @@ type HouseNumberModalProps = {
   isOpen: boolean;
   voteType: VoteType | null;
   projectTitle: string;
+  isSubmitting: boolean;
+  serverError: string;
   onClose: () => void;
-  onSubmit: (houseNumber: number) => void;
+  onSubmit: (houseNumber: number) => Promise<void>;
 };
 
 export function HouseNumberModal({
   isOpen,
   voteType,
   projectTitle,
+  isSubmitting,
+  serverError,
   onClose,
   onSubmit
 }: HouseNumberModalProps) {
@@ -65,6 +69,10 @@ export function HouseNumberModal({
             House numbers 8000 through 8039 are accepted. Each house can have one
             vote per item, and a new vote updates the previous one.
           </p>
+          <p className="mt-2 text-xs leading-5 text-slate-500">
+            Your house number is stored privately only to prevent duplicate feedback. It is
+            never shown with the public vote totals.
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -75,6 +83,7 @@ export function HouseNumberModal({
               inputMode="numeric"
               pattern="[0-9]*"
               value={houseNumber}
+              disabled={isSubmitting}
               onChange={(event) => {
                 setHouseNumber(event.target.value);
                 setError("");
@@ -90,19 +99,27 @@ export function HouseNumberModal({
             </p>
           ) : null}
 
+          {serverError ? (
+            <p className="rounded-md bg-red-50 px-3 py-2 text-sm font-medium text-red-700">
+              {serverError}
+            </p>
+          ) : null}
+
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={onClose}
+              disabled={isSubmitting}
               className="rounded-md border border-slate-300 px-5 py-3 font-semibold text-slate-700 transition hover:bg-slate-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="rounded-md bg-acadia-leaf px-5 py-3 font-semibold text-white transition hover:bg-acadia-ink"
+              disabled={isSubmitting}
+              className="rounded-md bg-acadia-leaf px-5 py-3 font-semibold text-white transition hover:bg-acadia-ink disabled:cursor-wait disabled:opacity-60"
             >
-              Record vote
+              {isSubmitting ? "Recording..." : "Record vote"}
             </button>
           </div>
         </form>

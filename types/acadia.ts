@@ -3,6 +3,7 @@ export type ProjectStatus =
   | "Researching"
   | "Quoted"
   | "Attorney Review"
+  | "Negotiating"
   | "Approved"
   | "In Progress"
   | "Complete";
@@ -20,6 +21,30 @@ export type RelatedDocument = {
   title: string;
   href: string;
   fileType: "DOCX" | "PDF";
+  statusLabel?: string;
+  note?: string;
+};
+
+export type SourceStatus = "Verified" | "Estimate" | "Pending" | "Historical";
+
+export type ProjectSourceNote = {
+  title: string;
+  sourceType:
+    | "Board record"
+    | "Vendor information"
+    | "Professional assessment"
+    | "Community feedback"
+    | "Public agency";
+  date: string;
+  status: SourceStatus;
+  summary: string;
+  href?: string;
+};
+
+export type CommunityFeedbackItem = {
+  text: string;
+  source: "Facebook community discussion" | "Homeowner correspondence";
+  date: string;
 };
 
 export type AcadiaGoverningDocument = RelatedDocument & {
@@ -39,6 +64,10 @@ export type Project = {
   boardNotes: string;
   vendorQuoteNotes?: string;
   relatedDocuments?: RelatedDocument[];
+  lastReviewed?: string;
+  sourceNotes?: ProjectSourceNote[];
+  openQuestions?: string[];
+  communityFeedback?: CommunityFeedbackItem[];
 };
 
 export type ProjectVoteCounts = {

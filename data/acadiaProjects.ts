@@ -1,47 +1,7 @@
 import type { Project } from "@/types/acadia";
 import { acadiaGoverningRelatedDocuments } from "@/data/acadiaGoverningDocuments";
 
-const juneProjectUpdate = {
-  title: "June 25, 2026 Project Update",
-  href: "/acadia-documents/june-25-2026-project-update.docx",
-  fileType: "DOCX" as const
-};
-
-const actionTreeOpinion = {
-  title: "Action Environmental Tree Opinion",
-  href: "/acadia-documents/ace-tree-opinion.docx",
-  fileType: "DOCX" as const
-};
-
-const landscapeEstimate = {
-  title: "Action Environmental Landscape Estimate",
-  href: "/acadia-documents/aec-landscape-estimate-all-acadia.pdf",
-  fileType: "PDF" as const
-};
-
-const augustMeetingAgenda = {
-  title: "August 13, 2026 HOA Meeting Agenda",
-  href: "/acadia-documents/august-13-2026-meeting-agenda.docx",
-  fileType: "DOCX" as const
-};
-
-const communityReminders = {
-  title: "Acadia Estates Homeowner Reminders",
-  href: "/acadia-documents/acadia-estates-community-reminders.docx",
-  fileType: "DOCX" as const
-};
-
-const urbanTreeDoctorScope = {
-  title: "Urban Tree Doctor Assessment and Scope of Work",
-  href: "/acadia-documents/urban-tree-doctor-scope-of-work.pdf",
-  fileType: "PDF" as const
-};
-
-const greenrockIrrigationEstimate = {
-  title: "GreenRock Irrigation Repair Estimate 2312",
-  href: "/acadia-documents/greenrock-irrigation-estimate-2312.pdf",
-  fileType: "PDF" as const
-};
+const reviewed = "August 10, 2026";
 
 export const acadiaProjects: Project[] = [
   {
@@ -49,55 +9,128 @@ export const acadiaProjects: Project[] = [
     title: "Security Cameras",
     status: "Quoted",
     shortDescription:
-      "A fourth camera pole is estimated at $15,423 upfront. The board is also comparing the current service agreement with lower-cost support and internet options.",
+      "A fourth camera pole is under review alongside lower-cost support and internet options. The installation total remains an estimate, not an approved final cost.",
     fullDescription:
-      "The HOA is reviewing expanded street-camera coverage and the ongoing cost of the existing system. CSI estimated that a fourth pole would require a new pole and camera, boring and installation, and an upgrade from an 8-channel to a 16-channel NVR. The board is also evaluating whether to keep the full service agreement or pay for service only when needed while maintaining remote access.",
+      "The HOA is evaluating a fourth street-camera pole and the ongoing cost of the existing camera system. CSI provided a equipment quote and a separate installation estimate. The board is also comparing the service agreement with pay-as-needed support while preserving secure remote access.",
     estimatedCost:
-      "Fourth pole: approximately $15,423 upfront. Current service agreement: $260/month. With a fourth pole: $405/month. Service without the agreement starts at $250 for the first 30 minutes plus $95/hour and parts.",
-    estimatedTimeline: "Board discussion and possible vote scheduled for August 13, 2026",
+      "Equipment quote: $13,423 plus sales tax. Boring, installation, and labor: approximately $2,000. Current service agreement: $260 per month; adding the pole would increase it by $145 per month.",
+    estimatedTimeline: "Board decision pending contract and cost verification",
     boardNotes:
-      "Board members already have access to live and recorded video. The board is reviewing past service-call history, camera bandwidth needs, and whether a lower-cost Spectrum plan and static IP service could support the system.",
+      "The board should compare the existing contract, recent invoices, actual service-call history, and camera connectivity requirements before choosing a support model.",
     vendorQuoteNotes:
-      "CSI quoted $13,423 for the pole and camera plus approximately $2,000 for boring, installation, and labor. The additional pole would add $145 per month to the service agreement. Spectrum estimated five static IP addresses at about $30 per month, subject to account verification.",
-    relatedDocuments: [juneProjectUpdate, augustMeetingAgenda]
+      "Without a service agreement, CSI described a $250 initial service charge plus $95 per additional hour and parts. CSI remote-viewing service was described as $30 per pole, while Spectrum discussed a five-static-IP package around $30 per month, both subject to written confirmation.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "What does the signed CSI agreement include, and what has the HOA actually paid during the last 12 months?",
+      "How many service calls occurred, and which alternative connectivity costs are confirmed in writing?"
+    ],
+    sourceNotes: [
+      {
+        title: "CSI fourth-pole proposal",
+        sourceType: "Vendor information",
+        date: "2026",
+        status: "Estimate",
+        summary:
+          "Supports the $13,423 equipment figure, plus sales tax, and the approximately $2,000 installation allowance."
+      },
+      {
+        title: "Board and vendor correspondence",
+        sourceType: "Board record",
+        date: "July-August 2026",
+        status: "Pending",
+        summary:
+          "Monthly service and static-IP options were discussed, but the contract, invoices, and service log still need reconciliation."
+      }
+    ]
   },
   {
     id: "gigapower-fiber",
     title: "GigaPower Fiber",
-    status: "Attorney Review",
+    status: "Negotiating",
     shortDescription:
-      "Board voted to proceed with GigaPower fiber optic installation throughout the community at no cost to the HOA, contingent on HOA attorney review. Signing is paused until the tree, sidewalk, and road project scope is better understood.",
+      "Legal review found no major red flags, and the board is seeking a shorter contract term before signing the no-cost fiber proposal.",
     fullDescription:
-      "The board has voted to move forward with GigaPower fiber optic installation throughout Acadia Estates at no cost to the HOA, subject to attorney review. Signing is currently paused so the board can better understand how this project may interact with tree, sidewalk, and road work.",
-    estimatedCost: "No cost to HOA currently proposed",
-    estimatedTimeline: "Paused pending attorney review and project coordination",
+      "The board voted to proceed with GigaPower fiber installation at no cost to the HOA, contingent on legal review. Counsel completed that review and recommended negotiating the proposed 10-year term down to five to seven years. The agreement has not been signed while those terms and project coordination are addressed.",
+    estimatedCost: "No HOA installation or maintenance cost is currently proposed",
+    estimatedTimeline: "Contract-term negotiation pending",
     boardNotes:
-      "The board wants legal review and better clarity on overlapping infrastructure work before signing.",
+      "The legal contingency has been substantially completed. The remaining decision is whether GigaPower will accept a shorter term and whether the final agreement coordinates adequately with tree, sidewalk, and road work.",
     vendorQuoteNotes:
-      "GigaPower proposal indicates installation throughout the community at no HOA cost, subject to final review.",
-    relatedDocuments: [augustMeetingAgenda]
+      "The proposal calls for underground installation and terminals serving pairs of homes. Counsel also noted renewal and early-termination limitations and that abandoned underground infrastructure could remain in place.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "Will GigaPower accept a five- to seven-year initial term?",
+      "Does the final agreement clearly allocate restoration responsibility and construction coordination?"
+    ],
+    sourceNotes: [
+      {
+        title: "May 28 board vote",
+        sourceType: "Board record",
+        date: "May 28, 2026",
+        status: "Verified",
+        summary: "The board voted to proceed at no HOA cost, contingent on attorney review."
+      },
+      {
+        title: "HOA counsel contract review",
+        sourceType: "Professional assessment",
+        date: "July 21, 2026",
+        status: "Verified",
+        summary:
+          "Counsel reported no major red flags and recommended negotiating the proposed 10-year term to five to seven years."
+      }
+    ]
   },
   {
     id: "landscaping-tree-removal-replacement",
-    title: "Landscaping / Tree Removal and Replacement",
+    title: "Trees and Landscape Renewal",
     status: "Quoted",
     shortDescription:
-      "Urban Tree Doctor supports a long-term preservation plan using targeted root barriers, growth regulation, and careful pruning. Follow-up pricing and treatment details are still being gathered.",
+      "The latest arborist review favors preserving the four previously questioned trees through targeted root work, growth regulation, and careful pruning.",
     fullDescription:
-      "The HOA is comparing tree preservation against full removal and replacement, along with broader landscaping, sod, shrub, and irrigation needs. Urban Tree Doctor evaluated 37 oak trees and confirmed magnolias in front of most homes. The arborist advised that targeted root barriers and tree-growth regulation can reduce future sidewalk risk and provide a long-term preservation approach, with treatment generally repeated every three years.",
+      "The HOA is comparing tree preservation, sidewalk-root mitigation, pruning, sod, shrubs, and broader landscape renewal. Urban Tree Doctor evaluated 37 oak trees and did not recommend removing the four trees previously identified for possible removal. Its current approach uses targeted root pruning and barriers, tree-growth regulation, and pruning appropriate to each tree.",
     estimatedCost:
-      "Tree preservation proposal: $16,653.50. Tree removal proposals currently range from approximately $66,000 to $120,000. Broader landscape estimate: $136,081.05.",
-    estimatedTimeline: "Additional proposals and arborist input being gathered",
+      "Most growth-regulator treatments are listed at $240 per tree. Four root-pruning and barrier locations are approximately $2,000 each. A broader Action Environmental landscape estimate totaled $136,081.05 but expired in July 2026.",
+    estimatedTimeline: "Final preservation scope and comparable current proposals pending",
     boardNotes:
-      "The latest arborist review does not recommend removing four trees previously identified for possible removal. The board is seeking final answers on canopy-pruning timing, magnolia care, lawn viability, recurring treatment costs, and governing-document authority before selecting a scope.",
+      "The later independent assessment supersedes the June assumption that four trees could not be preserved. Tree, sidewalk, irrigation, and landscape decisions should be presented as one coordinated sequence.",
     vendorQuoteNotes:
-      "Urban Tree Doctor recommends end-weight reduction rather than interior thinning for magnolias, says treated oaks have a high likelihood of survival, and lists $240 growth-regulator treatments for most public trees plus approximately $2,000 root-pruning and barrier work at four locations. Canopy-pruning pricing is still being requested.",
-    relatedDocuments: [
-      juneProjectUpdate,
-      actionTreeOpinion,
-      landscapeEstimate,
-      urbanTreeDoctorScope,
-      augustMeetingAgenda
+      "Urban Tree Doctor recommends end-weight reduction rather than interior thinning for magnolias and describes tree-growth regulation as a recurring treatment, generally around every three years. Final pruning percentages, treatment timing, and recurring costs remain open.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "What is the final tree-by-tree scope, including pruning method, treatment timing, and recurring cost?",
+      "Which landscape items remain priorities after tree and sidewalk work, and which proposals must be refreshed?"
+    ],
+    sourceNotes: [
+      {
+        title: "Urban Tree Doctor assessment",
+        sourceType: "Professional assessment",
+        date: "July-August 2026",
+        status: "Verified",
+        summary:
+          "Supports preservation of the four questioned trees using targeted root work, barriers, growth regulation, and monitored pruning."
+      },
+      {
+        title: "Action Environmental landscape estimate",
+        sourceType: "Vendor information",
+        date: "June 16, 2026",
+        status: "Historical",
+        summary:
+          "The $136,081.05 proposal is useful for scope comparison but its 30-day validity period has expired."
+      }
+    ],
+    communityFeedback: [
+      {
+        text:
+          "Neighbors want the board to compare one accountable landscape provider with the current arrangement, including tree care and irrigation responsibilities.",
+        source: "Facebook community discussion",
+        date: "August 2026"
+      },
+      {
+        text:
+          "Several residents favor a preservation-first approach when it can address sidewalk safety without removing healthy trees.",
+        source: "Homeowner correspondence",
+        date: "July-August 2026"
+      }
     ]
   },
   {
@@ -105,37 +138,60 @@ export const acadiaProjects: Project[] = [
     title: "Road Assessment",
     status: "Quoted",
     shortDescription:
-      "A contractor recommends targeted repairs and seal coating to extend the roads for several years, while full milling and paving remains the best long-term option.",
+      "Contractors have outlined short-term repair and seal-coat work versus longer-term milling and paving, but the underlying prices still need reconciliation.",
     fullDescription:
-      "The community roads were last sealed about three and a half years ago, with prior related costs totaling $15,737.60. Florida Sealcoating advised that targeted repairs followed by seal coating could maintain the property for several more years. Its longer-term option would mill one inch of existing asphalt and install a 1.25-inch overlay. Road work must be coordinated with tree, sidewalk, and utility decisions.",
-    estimatedCost: "Prior related costs totaled $15,737.60; current resurfacing cost TBD",
-    estimatedTimeline: "After tree/root work and sidewalk scope are finalized",
+      "The roads were last sealed in 2023. Contractors have described targeted repairs and seal coating as a shorter-term maintenance option and one-inch milling with a 1.25-inch asphalt overlay as the stronger long-term option. Road work should follow decisions that may disturb pavement, including roots, sidewalks, and utilities.",
+    estimatedCost:
+      "Prior related work totaled $15,737.60. Planning discussions reference approximately $12,000 for repairs and seal coating and roughly $80,000 to $90,000 for future resurfacing, but the supporting current proposals must be verified before approval.",
+    estimatedTimeline: "After tree, sidewalk, and utility scopes are settled",
     boardNotes:
-      "Road scope should be coordinated with any tree, sidewalk, or utility work that may affect pavement.",
+      "No road option should be presented as approved until comparable scopes, quote dates, and source proposals are attached.",
     vendorQuoteNotes:
-      "Florida Sealcoating recommends completing arborist-directed trimming and root work before concrete and asphalt repairs. Final pricing and scope comparison remain under review.",
-    relatedDocuments: [juneProjectUpdate, augustMeetingAgenda]
+      "One contractor estimated milling and paving could last 15 to 20 years and a one-inch overlay 5 to 10 years, with reflection-crack risk. Those are vendor estimates rather than warranties.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "Which current signed proposals support the short-term and full-resurfacing figures?",
+      "What work must occur first to avoid cutting a newly repaired road?"
+    ],
+    sourceNotes: [
+      {
+        title: "Road contractor correspondence",
+        sourceType: "Vendor information",
+        date: "2026",
+        status: "Estimate",
+        summary:
+          "Describes the expected life and tradeoffs of repair, seal coating, overlay, and milling options; final comparable proposals remain pending."
+      }
+    ]
   },
   {
     id: "sidewalk-repair",
     title: "Sidewalk Repair",
     status: "Quoted",
     shortDescription:
-      "A contractor identified 17 sidewalk locations, two driveway-apron areas, and about six feet of curb for repair after tree and root work is completed.",
+      "Seventeen sidewalk areas, two driveway aprons, and a small curb section have been identified, with work sequenced after tree-root decisions.",
     fullDescription:
-      "The HOA has received sidewalk proposals, and Florida Sealcoating recommends repairs at 17 sidewalk locations, two driveway-apron areas, and approximately six feet of curb. The board is deferring final action until tree preservation, root mitigation, and possible tree removal questions are resolved because that work affects concrete scope and timing.",
-    estimatedCost: "Two concrete sidewalk proposals received; final cost TBD",
-    estimatedTimeline:
-      "Expected sequence is damaged sidewalk removal, tree/root work, then new sidewalk installation",
+      "The current sidewalk scope identifies 17 sidewalk locations, two driveway-apron areas, and approximately six feet of curb. The anticipated sequence is removal of damaged concrete, arborist-directed root work and barriers, then installation of replacement concrete.",
+    estimatedCost:
+      "A planning comparison cites $28,621.55 for sidewalk work and approximately $2,500 for roots handled during concrete work. The board should attach and confirm the current proposal before approval.",
+    estimatedTimeline: "After final tree and root-mitigation scope",
     boardNotes:
-      "Tree and sidewalk decisions are linked. The board expects damaged concrete removal, arborist-directed root work and barriers, then replacement concrete. A possible vote is scheduled for August 13 if the scope and costs are clear enough.",
-    vendorQuoteNotes:
-      "Two concrete sidewalk proposals have been received. Florida Sealcoating supplied the latest repair-location recommendation, but final pricing is still being compared.",
-    relatedDocuments: [
-      juneProjectUpdate,
-      actionTreeOpinion,
-      urbanTreeDoctorScope,
-      augustMeetingAgenda
+      "Tree and sidewalk work should be approved as a coordinated sequence so root mitigation is completed before replacement concrete is installed.",
+    vendorQuoteNotes: "Two sidewalk proposals were reported received; final scope comparison remains pending.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "Which proposal supports the $28,621.55 figure, and is it still valid?",
+      "Are root barriers, driveway aprons, curb work, restoration, and permits included?"
+    ],
+    sourceNotes: [
+      {
+        title: "Sidewalk planning scope",
+        sourceType: "Vendor information",
+        date: "2026",
+        status: "Estimate",
+        summary:
+          "Identifies the repair locations and sequencing, while the final current quote and inclusions remain to be confirmed."
+      }
     ]
   },
   {
@@ -143,80 +199,157 @@ export const acadiaProjects: Project[] = [
     title: "Pest Control",
     status: "In Progress",
     shortDescription:
-      "Action Environmental confirmed ongoing rodent and fly-control needs and also proposed a community-wide residential pest control program.",
+      "Thirty bait boxes remain in service because activity was observed. Two broader residential proposals conflict, so neither is treated as final.",
     fullDescription:
-      "Pest control work is active. Action Environmental confirmed that 30 rodent bait boxes remain necessary because rodent activity is still present. Trash cans were sprayed on June 4 and fresh bait was added after activity was found. Action Environmental has also proposed an optional community-wide residential pest control program for all 32 properties.",
+      "Rodent and fly-control work remains active. Action Environmental reported ongoing bait consumption and said the 30 bait boxes were still necessary. A broader program covering individual homes was also proposed, but two versions contain different per-home and startup prices.",
     estimatedCost:
-      "Rodent control: $240/month. Fly control: $295/month. Proposed residential pest control: $1,344/month plus $4,448 total initial startup cost for all participating properties.",
-    estimatedTimeline: "Active and ongoing",
+      "Current common-area services were described as $240 per month for rodent control and $295 per month for fly control. Broader residential proposals conflict: one lists $35 per home and a $4,000 startup; another lists $42 per home and a $4,448 startup.",
+    estimatedTimeline: "Common-area service ongoing; residential expansion not approved",
     boardNotes:
-      "The current bait box count remains necessary based on confirmed activity. The board can consider whether a broader community-wide residential pest program is worth pursuing.",
+      "The board should identify the final proposal before considering residential service and obtain homeowner consent before sharing any resident contact information with a vendor.",
     vendorQuoteNotes:
-      "Action Environmental proposed $42/month per property for quarterly residential pest control, with discounted one-time initial interior service of $139 per property. If residential pest control, rodent control, and fly control are all continued, the total monthly investment would be $1,879/month."
+      "Because the June 25 and June 29 versions conflict, neither broader monthly total is presented as current or approved.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "Which proposal is the vendor's final offer, and what exact services, term, and cancellation provisions apply?",
+      "Would participation be mandatory or optional, and how would homeowner privacy and scheduling be handled?"
+    ],
+    sourceNotes: [
+      {
+        title: "May 28 meeting minutes",
+        sourceType: "Board record",
+        date: "May 28, 2026",
+        status: "Verified",
+        summary: "Records active rodent activity and the recommendation to retain 30 bait boxes."
+      },
+      {
+        title: "Action Environmental residential proposals",
+        sourceType: "Vendor information",
+        date: "June 25 and June 29, 2026",
+        status: "Pending",
+        summary: "The two versions contain different per-home, startup, and combined monthly figures."
+      }
+    ]
   },
   {
     id: "fence-replacement",
     title: "Fence Replacement",
     status: "Proposed",
     shortDescription:
-      "Chain link fence deterioration and vegetation encroachment from Oak Island Harbor are being monitored. Survey markers are in place, but timing is not established.",
+      "A future white-PVC replacement has been discussed at roughly $22,000, but ownership, survey evidence, insurance treatment, and a current quote remain unresolved.",
     fullDescription:
-      "The HOA is monitoring chain link fence deterioration and vegetation encroachment from Oak Island Harbor. Replacement with white PVC fencing is being considered for the future, survey markers are in place, and the board is holding on proceeding while funds are built and competing projects are prioritized.",
-    estimatedCost: "To be determined",
+      "The HOA is monitoring deterioration of the perimeter chain-link fence and vegetation encroachment from the neighboring property. White PVC has been discussed as a future replacement, but the project should not proceed until ownership is documented and a current comparable scope is obtained.",
+    estimatedCost: "Approximately $22,000 appears in planning material; no verified current quote is attached",
     estimatedTimeline: "Timing not established",
     boardNotes:
-      "The board is monitoring deterioration and encroachment before deciding replacement scope. This remains a future priority, but other infrastructure needs may come first.",
-    vendorQuoteNotes: "No current vendor or quote notes are available.",
-    relatedDocuments: [augustMeetingAgenda]
+      "Correspondence conflicts on whether existing survey markers establish HOA ownership. Insurance coverage for deterioration, vegetation, or storm damage is also unconfirmed.",
+    vendorQuoteNotes: "The planning allowance is not a current accepted proposal.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "What recorded survey or title evidence establishes ownership and responsibility?",
+      "What current quote and written insurance determination apply to the actual scope?"
+    ],
+    sourceNotes: [
+      {
+        title: "Board planning correspondence",
+        sourceType: "Board record",
+        date: "July-August 2026",
+        status: "Pending",
+        summary:
+          "Supports the general condition concern and approximate planning allowance, but contains unresolved ownership and insurance questions."
+      }
+    ]
   },
   {
     id: "insurance-review",
     title: "Insurance Review",
     status: "Researching",
     shortDescription:
-      "The board is reviewing current policies and may redirect $11,000 of no-longer-applicable coverage toward replacement protection for community walls and the gate.",
+      "The board is clarifying property schedules and coverage limits. The figures under review are not cash savings or funds available for projects.",
     fullDescription:
-      "The board is reviewing current insurance coverage. The annual liability premium is $442.65, paid yearly in January. A possible change would redirect $11,000 of coverage that is no longer applicable toward replacement-cost protection for the perimeter brick wall, entrance wall, and gate.",
+      "The board is reviewing the HOA's property, liability, crime, and directors-and-officers coverage. A $5,000 unscheduled-maintenance-property limit was described as equipment originally kept in a shed, while a $6,100 irrigation limit remained underwriter review. Coverage limits cannot be treated as money that can be redirected to projects.",
     estimatedCost:
-      "Current annual liability premium is $442.65; $11,000 of existing coverage is under review for reallocation",
-    estimatedTimeline: "Possible board vote scheduled for August 13, 2026",
+      "Reported annual premiums: property $1,316.50, liability $442.65, crime $419, and directors and officers $1,710.59. No confirmed premium savings are currently published.",
+    estimatedTimeline: "Pending carrier and broker clarification",
     boardNotes:
-      "Policies have been gathered for review and possible shopping. Any coverage change remains subject to board approval and insurer confirmation.",
-    vendorQuoteNotes: "No alternate carrier quote has been selected yet.",
-    relatedDocuments: [augustMeetingAgenda]
+      "Any change should be based on updated declarations or a written endorsement showing covered property, replacement values, premium effect, and ownership responsibility.",
+    vendorQuoteNotes:
+      "The broker confirmed the origin of the $5,000 scheduled item. Irrigation treatment was still being clarified with the underwriter, so it should not be described as unnecessary coverage.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "What property is listed on the final current declarations and at what replacement values?",
+      "What premium change, if any, would result from a carrier-approved endorsement?"
+    ],
+    sourceNotes: [
+      {
+        title: "Insurance broker correspondence",
+        sourceType: "Vendor information",
+        date: "July-August 2026",
+        status: "Pending",
+        summary:
+          "Clarifies some scheduled-property history but does not establish $11,000 in savings or fully resolve irrigation coverage."
+      }
+    ]
   },
   {
     id: "gate-code-update",
-    title: "Gate Code Update",
+    title: "Gate Access Update",
     status: "Complete",
     shortDescription:
-      "New gate code 4052 is in effect. Old code 1981 expired August 1, 2026, and the emergency responder and utilities code remains unchanged.",
+      "The homeowner gate-code transition was completed August 1. The active credential is intentionally not published on this public website.",
     fullDescription:
-      "The gate code update is complete. The new gate code is 4052, and the old code 1981 expired August 1, 2026. The emergency responder and utilities code remains unchanged.",
-    estimatedCost: "Minimal signage or communication cost expected",
+      "The scheduled homeowner gate-access update was completed on August 1, 2026. For community security, current and former access credentials are distributed through private HOA communications rather than posted publicly.",
+    estimatedCost: "No material ongoing project cost reported",
     estimatedTimeline: "Completed August 1, 2026",
     boardNotes:
-      "The new homeowner code is active and the transition period for the old code has ended.",
-    vendorQuoteNotes: "No further vendor work is currently required.",
-    relatedDocuments: [augustMeetingAgenda]
+      "Residents who need the current credential should use the HOA's established private contact channel.",
+    vendorQuoteNotes: "No further vendor work is currently reported.",
+    lastReviewed: reviewed,
+    sourceNotes: [
+      {
+        title: "Gate-access transition record",
+        sourceType: "Board record",
+        date: "August 1, 2026",
+        status: "Verified",
+        summary: "Confirms completion without exposing the credential publicly."
+      }
+    ]
   },
   {
     id: "bylaw-review",
-    title: "Bylaw Review",
+    title: "Governing Document Review",
     status: "Researching",
     shortDescription:
-      "The board is reviewing outdated bylaws, tree requirements, design standards, covenants, and master agreement documents, and initial homeowner suggestions have been received.",
+      "The board is reviewing bylaws, covenants, tree requirements, design standards, and the relationship between community and master documents.",
     fullDescription:
-      "The board is reviewing governing documents that may need updates, including outdated bylaws, tree requirements, design standards, covenants, and master agreement documents. Documents are available through the AMG Enumerate portal, though not all documents may be uploaded yet.",
-    estimatedCost: "To be determined",
-    estimatedTimeline: "Proposed for review",
+      "The board is reviewing older governing documents and gathering questions that may warrant a clearer Rules and Regulations document. Draft interpretations and homeowner suggestions are research inputs, not adopted rules, until they receive the required board and legal review.",
+    estimatedCost: "Attorney and document-preparation costs to be determined",
+    estimatedTimeline: "Research and clarification questions in progress",
     boardNotes:
-      "The HOA requested volunteers to review bylaws, covenants, and the master agreement. Initial notes and homeowner suggestions for possible CC&R changes have now been received.",
-    vendorQuoteNotes: "No vendor or attorney quote notes are available yet.",
-    relatedDocuments: [
-      communityReminders,
-      augustMeetingAgenda,
-      ...acadiaGoverningRelatedDocuments
+      "Document hierarchy and enforcement language should be reviewed by HOA counsel before the website describes a disputed interpretation as binding.",
+    vendorQuoteNotes: "No attorney engagement or final drafting quote is attached.",
+    relatedDocuments: acadiaGoverningRelatedDocuments,
+    lastReviewed: reviewed,
+    openQuestions: [
+      "Which practical homeowner questions are not answered clearly by the existing governing documents?",
+      "What adoption, notice, and legal-review process is required for a clarifying Rules and Regulations document?"
+    ],
+    sourceNotes: [
+      {
+        title: "Acadia governing document library",
+        sourceType: "Board record",
+        date: "Various recording dates",
+        status: "Verified",
+        summary:
+          "The recorded declarations, amendments, articles, bylaws, plat, and master documents are available for direct review."
+      },
+      {
+        title: "Draft interpretation correspondence",
+        sourceType: "Board record",
+        date: "2026",
+        status: "Pending",
+        summary: "Working interpretations remain subject to manager and attorney confirmation."
+      }
     ]
   },
   {
@@ -224,107 +357,228 @@ export const acadiaProjects: Project[] = [
     title: "Community Website",
     status: "Complete",
     shortDescription:
-      "The Acadia community website is live with project updates, informal homeowner voting, related documents, and a governing-document assistant.",
+      "The public project website, source-grounded document assistant, and informal homeowner feedback tools are live and will continue to be maintained.",
     fullDescription:
-      "The public-facing Acadia website has launched to share HOA project updates, related documents, informal homeowner voting, and answers grounded in the community's governing documents.",
-    estimatedCost: "Initial website completed; ongoing hosting and AI usage may vary",
-    estimatedTimeline: "Complete and live",
+      "The Acadia website is live with project updates, source status, public documents, informal homeowner feedback, and answers grounded in the governing documents. Project voting is being moved to a shared database so totals persist across devices while house numbers remain private.",
+    estimatedCost: "Initial build completed; hosting, database, and AI usage may vary",
+    estimatedTimeline: "Live, with ongoing maintenance",
     boardNotes:
-      "Votes remain informal feedback and are not a legally binding election system. Project information and documents will continue to be maintained as board work progresses.",
+      "The site separates verified records, estimates, pending questions, and anonymized community feedback. It does not replace official notices, board meetings, legal advice, or legally binding elections.",
     vendorQuoteNotes: "No outside website vendor was required.",
-    relatedDocuments: [augustMeetingAgenda]
+    lastReviewed: reviewed,
+    sourceNotes: [
+      {
+        title: "Live Acadia website",
+        sourceType: "Board record",
+        date: "2026",
+        status: "Verified",
+        summary: "The project page and governing-document assistant are publicly available."
+      }
+    ]
   },
   {
     id: "community-signage-and-appearance",
-    title: "Community Signage and Appearance Items",
+    title: "Community Signage and Appearance",
     status: "Proposed",
     shortDescription:
-      "Several smaller common-area appearance items were raised, including damaged gate signage and bent or leaning no-parking signs.",
+      "Neighbors have raised damaged gate-area signage, bent or leaning parking signs, and street-light appearance as visible maintenance priorities.",
     fullDescription:
-      "Several smaller community appearance items were raised for attention. These include replacing or removing the damaged exit-gate sign, replacing damaged parking signs with more durable options, and improving visible common-area conditions that affect the streetscape.",
+      "Several smaller common-area items have been raised for review, including damaged gate-area signage, aging parking signs, and street-light pole appearance. These can be evaluated as a coordinated maintenance list with clear responsibility and current pricing.",
     estimatedCost: "To be determined",
-    estimatedTimeline: "Proposed for future agenda discussion",
+    estimatedTimeline: "Pending responsibility review and current options",
     boardNotes:
-      "These items are smaller than the major infrastructure projects but may still improve the appearance and consistency of the community.",
-    vendorQuoteNotes:
-      "The prior sign vendor is no longer in business, so the board needs replacement options or a volunteer approach for smaller sign repairs.",
-    relatedDocuments: [augustMeetingAgenda]
+      "These requests are documented community priorities, but no replacement package or budget has been approved.",
+    vendorQuoteNotes: "The prior sign vendor is reportedly no longer available; alternatives are needed.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "Which items are HOA, utility, or vendor responsibilities?",
+      "Can volunteer help be used safely, or should the work be professionally contracted?"
+    ],
+    sourceNotes: [
+      {
+        title: "Community maintenance discussion",
+        sourceType: "Community feedback",
+        date: "August 2026",
+        status: "Verified",
+        summary: "Confirms that multiple residents raised the visible maintenance concerns."
+      }
+    ],
+    communityFeedback: [
+      {
+        text:
+          "Residents specifically called attention to damaged no-parking and gate-area signs and asked whether volunteers could help with smaller appearance projects.",
+        source: "Facebook community discussion",
+        date: "August 2026"
+      }
+    ]
   },
   {
     id: "irrigation-repair-monitoring",
     title: "Irrigation Repair and Monitoring",
     status: "Quoted",
     shortDescription:
-      "A $465 repair estimate was received for an irrigation outage, and the board is clarifying how outages should be diagnosed and handled.",
+      "A $465 repair estimate attributes one outage to damaged control wire, while a field observation suggests a closed valve may be involved.",
     fullDescription:
-      "The HOA received a $465 GreenRock estimate for an irrigation problem affecting one part of the community. The estimate attributes the outage to a broken wire, while a later field note raised the possibility of a closed homeowner irrigation valve. The cause should be confirmed before the repair is finalized, and the board is also reviewing the process for future irrigation outages.",
-    estimatedCost: "$465 current repair estimate",
+      "The HOA received a GreenRock estimate for an irrigation outage. The estimate identifies approximately 125 feet of damaged control wire; a later field observation raised a different possible cause involving a valve. The diagnosis should be reconciled before approval.",
+    estimatedCost: "$465 repair estimate",
     estimatedTimeline: "Diagnosis and approval pending",
     boardNotes:
-      "Working irrigation is necessary for HOA-maintained landscaping. The board wants a clear process for determining whether an outage is in HOA equipment or homeowner-controlled equipment.",
-    vendorQuoteNotes:
-      "GreenRock Landscapes issued Estimate 2312 for $465. The exact cause should be reconciled with the later field observation before approval.",
-    relatedDocuments: [greenrockIrrigationEstimate, augustMeetingAgenda]
+      "The board also needs a repeatable process for determining whether future outages originate in HOA equipment or homeowner-controlled components without publishing house-specific details.",
+    vendorQuoteNotes: "Estimate 2312 should not be approved until the conflicting field observation is resolved.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "What test confirms the actual cause of the outage?",
+      "Who owns and controls each relevant component under the governing documents and property layout?"
+    ],
+    sourceNotes: [
+      {
+        title: "GreenRock Estimate 2312",
+        sourceType: "Vendor information",
+        date: "August 5, 2026",
+        status: "Estimate",
+        summary: "Quotes $465 to address damaged irrigation control wire."
+      },
+      {
+        title: "Follow-up field observation",
+        sourceType: "Board record",
+        date: "August 2026",
+        status: "Pending",
+        summary: "Identifies a possible valve issue that should be reconciled before work is approved."
+      }
+    ]
   },
   {
     id: "landscaping-contract-review",
-    title: "Landscaping Company Contract Review",
-    status: "Researching",
+    title: "Landscaping Contract Review",
+    status: "Quoted",
     shortDescription:
-      "The board is reviewing GreenRock's landscaping, tree-trimming, and irrigation services and considering alternative companies.",
+      "The board is comparing the existing arrangement with proposals reported at $4,250 and $3,700 per month, with service scopes still needing normalization.",
     fullDescription:
-      "The board is evaluating the community's landscaping contract after concerns about the services provided by GreenRock over several years. Before any change, the board wants a side-by-side comparison of service scope, performance, and financial impact from qualified alternatives.",
-    estimatedCost: "To be determined through contract comparison",
-    estimatedTimeline: "Comparison under review; vote possible when adequate information is available",
+      "The board is reviewing landscaping, tree-trimming, fertilizer, weed-control, and irrigation responsibilities across current and prospective providers. A fair decision requires a side-by-side scope that distinguishes routine maintenance from separate tree and irrigation work.",
+    estimatedCost:
+      "Planning correspondence reports one alternative at $4,250 per month and an Action Environmental proposal at $3,700 per month. The Action proposal was dated June 16, 2026; current pricing and terms should be refreshed.",
+    estimatedTimeline: "Comparable current scopes and board decision pending",
     boardNotes:
-      "Any vendor change should compare like-for-like landscaping, tree-trimming, and irrigation responsibilities so service levels and costs are clear.",
-    vendorQuoteNotes: "Alternative company proposals have not yet been finalized.",
-    relatedDocuments: [augustMeetingAgenda]
+      "Vendor performance claims from community discussion should be treated as feedback unless supported by contracts, work orders, and documented service history.",
+    vendorQuoteNotes:
+      "The Action proposal was described as $3,350 per month for weekly service plus $350 for fertilizer and weed control. A fresh incumbent proposal was not identified in the reviewed record.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "What exact services, exclusions, visit frequency, licensing, insurance, and termination terms apply to each proposal?",
+      "What documented performance measures will the board use after selection?"
+    ],
+    sourceNotes: [
+      {
+        title: "Action Environmental maintenance proposal",
+        sourceType: "Vendor information",
+        date: "June 16, 2026",
+        status: "Historical",
+        summary: "Lists $3,700 per month and needs pricing and term confirmation before reliance."
+      },
+      {
+        title: "Community vendor discussion",
+        sourceType: "Community feedback",
+        date: "August 2026",
+        status: "Pending",
+        summary: "Shows strong interest in accountability and comparison, but individual performance claims are not independently verified."
+      }
+    ],
+    communityFeedback: [
+      {
+        text:
+          "Neighbors asked for a clear, apples-to-apples comparison and one point of accountability for landscaping, tree care, and irrigation.",
+        source: "Facebook community discussion",
+        date: "August 2026"
+      }
+    ]
   },
   {
     id: "pool-privacy-screening-standards",
-    title: "Pool Privacy Screening and Design Standards",
+    title: "Pool Privacy Screening Standards",
     status: "Proposed",
     shortDescription:
-      "The board is considering consistent, HOA-approved privacy-screening options for pool cages that are visible from community roads.",
+      "The board is considering consistent privacy-screening options for pool enclosures visible from community roads. No standard has been adopted.",
     fullDescription:
-      "Privacy tarps and screening placed on some pool cages have raised questions about appearance, HOA approval, and consistent streetscape standards. The board plans to discuss acceptable alternatives and whether clearer design guidance is needed.",
-    estimatedCost: "Homeowner and HOA costs to be determined based on any approved standard",
-    estimatedTimeline: "Proposed for board and homeowner discussion",
+      "Pool-enclosure screening has raised questions about privacy, appearance, and architectural approval. The next step is to identify practical options and evaluate them consistently under existing design-review authority before proposing any new standard.",
+    estimatedCost: "Homeowner cost depends on any future approved standard",
+    estimatedTimeline: "Board and homeowner discussion pending",
     boardNotes:
-      "No new standard has been adopted. The goal is to identify privacy options that are practical, consistent, and compatible with the community's design requirements.",
-    vendorQuoteNotes: "No vendor or quote has been selected.",
-    relatedDocuments: [augustMeetingAgenda]
+      "No individual property or homeowner should be identified publicly while the board evaluates a community-wide standard.",
+    vendorQuoteNotes:
+      "A screen-repair provider was recommended in the Facebook group, but an active LLC does not by itself verify contractor licensing, insurance, or a current rate.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "Which materials and placement options are allowed under the current documents?",
+      "Would a new standard require legal review, formal notice, or architectural guidelines?"
+    ],
+    sourceNotes: [
+      {
+        title: "Community screening discussion",
+        sourceType: "Community feedback",
+        date: "August 2026",
+        status: "Pending",
+        summary: "Identifies the desire for privacy and consistent appearance; no adopted rule or endorsed vendor resulted."
+      }
+    ]
   },
   {
     id: "street-light-refurbishment",
     title: "Street Light Cleaning and Repainting",
     status: "Researching",
     shortDescription:
-      "Duke Energy has completed an evaluation after a homeowner requested cleaning or repainting of community street-light poles.",
+      "Duke Energy evaluated the request to clean or repaint street-light poles. The available options, responsibility, and cost still need to be documented.",
     fullDescription:
-      "The HOA opened a Duke Energy work order to evaluate whether community street-light poles can be cleaned or repainted. The evaluation is complete, and the board is awaiting the update needed to choose a course of action.",
-    estimatedCost: "To be determined from Duke Energy's evaluation",
-    estimatedTimeline: "Board update and possible vote scheduled for August 13, 2026",
-    boardNotes:
-      "The project is intended to improve common-area appearance while confirming responsibility and available work options with Duke Energy.",
-    vendorQuoteNotes: "Duke Energy completed its evaluation; final options are pending board review.",
-    relatedDocuments: [augustMeetingAgenda]
+      "A work order was opened with Duke Energy after residents raised the appearance of community street-light poles. The evaluation was reported complete, but the resulting options and responsibility determination were not included in the reviewed record.",
+    estimatedCost: "Awaiting Duke Energy options",
+    estimatedTimeline: "Update pending",
+    boardNotes: "The board should publish Duke's written response when available.",
+    vendorQuoteNotes: "No written cost or work option is attached yet.",
+    lastReviewed: reviewed,
+    openQuestions: ["What did Duke Energy authorize, recommend, or price after its evaluation?"],
+    sourceNotes: [
+      {
+        title: "Duke Energy work-order update",
+        sourceType: "Vendor information",
+        date: "August 2026",
+        status: "Pending",
+        summary: "The evaluation was reported complete, but its written outcome is not yet available here."
+      }
+    ],
+    communityFeedback: [
+      {
+        text: "Residents asked whether aging street-light poles could be cleaned or repainted.",
+        source: "Facebook community discussion",
+        date: "August 2026"
+      }
+    ]
   },
   {
     id: "assessment-enforcement-policy",
     title: "Assessment Collection and Enforcement",
     status: "Proposed",
     shortDescription:
-      "The board is considering consistent late-fee and interest enforcement for unpaid assessments beginning with the January 1, 2027 due date.",
+      "Consistent late-fee and interest enforcement was scheduled for discussion, but the reviewed record does not establish that a policy was adopted.",
     fullDescription:
-      "The board plans to consider enforcement of the governing-document provisions for assessments that are not paid on time. If adopted, the proposed approach would apply late fees and interest consistently beginning with assessments due January 1, 2027.",
-    estimatedCost: "Administrative and collection costs to be determined",
-    estimatedTimeline: "Board vote proposed for August 13, 2026; effective date would be January 1, 2027",
+      "The board planned to discuss applying the governing documents consistently to assessments not paid on time, potentially beginning with the January 1, 2027 due date. Until approved minutes or a formal resolution confirm action, this remains a proposal.",
+    estimatedCost: "Administrative, legal, and collection costs to be determined",
+    estimatedTimeline: "Proposed effective date was January 1, 2027; adoption not confirmed",
     boardNotes:
-      "This is a proposed policy and has not yet been adopted. Any final process should follow the governing documents and applicable notice requirements.",
-    vendorQuoteNotes: "No outside collection or legal quote is currently attached.",
-    relatedDocuments: [augustMeetingAgenda]
+      "Any final process should identify the governing authority, amounts, due dates, notices, hearing rights where applicable, and collection steps without publishing any owner's account information.",
+    vendorQuoteNotes: "No outside collection or legal proposal is attached.",
+    lastReviewed: reviewed,
+    openQuestions: [
+      "Did the board adopt a formal policy, and where is the approved resolution or meeting record?",
+      "Has HOA counsel confirmed the notice and collection procedure?"
+    ],
+    sourceNotes: [
+      {
+        title: "August 13 agenda item",
+        sourceType: "Board record",
+        date: "August 13, 2026",
+        status: "Pending",
+        summary: "Shows that a vote was proposed, not that the policy was adopted."
+      }
+    ]
   }
 ];
 
