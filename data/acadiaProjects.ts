@@ -1,5 +1,14 @@
 import type { Project } from "@/types/acadia";
 import { acadiaGoverningRelatedDocuments } from "@/data/acadiaGoverningDocuments";
+import {
+  actionTreeOpinion,
+  augustMeetingAgenda,
+  communityReminders,
+  greenrockIrrigationEstimate,
+  juneProjectUpdate,
+  landscapeEstimate,
+  urbanTreeDoctorScope
+} from "@/data/acadiaPublicDocuments";
 
 const reviewed = "August 10, 2026";
 
@@ -19,6 +28,7 @@ export const acadiaProjects: Project[] = [
       "The board should compare the existing contract, recent invoices, actual service-call history, and camera connectivity requirements before choosing a support model.",
     vendorQuoteNotes:
       "Without a service agreement, CSI described a $250 initial service charge plus $95 per additional hour and parts. CSI remote-viewing service was described as $30 per pole, while Spectrum discussed a five-static-IP package around $30 per month, both subject to written confirmation.",
+    relatedDocuments: [juneProjectUpdate, augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "What does the signed CSI agreement include, and what has the HOA actually paid during the last 12 months?",
@@ -57,6 +67,7 @@ export const acadiaProjects: Project[] = [
       "The legal contingency has been substantially completed. The remaining decision is whether GigaPower will accept a shorter term and whether the final agreement coordinates adequately with tree, sidewalk, and road work.",
     vendorQuoteNotes:
       "The proposal calls for underground installation and terminals serving pairs of homes. Counsel also noted renewal and early-termination limitations and that abandoned underground infrastructure could remain in place.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "Will GigaPower accept a five- to seven-year initial term?",
@@ -95,6 +106,13 @@ export const acadiaProjects: Project[] = [
       "The later independent assessment supersedes the June assumption that four trees could not be preserved. Tree, sidewalk, irrigation, and landscape decisions should be presented as one coordinated sequence.",
     vendorQuoteNotes:
       "Urban Tree Doctor recommends end-weight reduction rather than interior thinning for magnolias and describes tree-growth regulation as a recurring treatment, generally around every three years. Final pruning percentages, treatment timing, and recurring costs remain open.",
+    relatedDocuments: [
+      urbanTreeDoctorScope,
+      actionTreeOpinion,
+      landscapeEstimate,
+      juneProjectUpdate,
+      augustMeetingAgenda
+    ],
     lastReviewed: reviewed,
     openQuestions: [
       "What is the final tree-by-tree scope, including pruning method, treatment timing, and recurring cost?",
@@ -107,7 +125,8 @@ export const acadiaProjects: Project[] = [
         date: "July-August 2026",
         status: "Verified",
         summary:
-          "Supports preservation of the four questioned trees using targeted root work, barriers, growth regulation, and monitored pruning."
+          "Supports preservation of the four questioned trees using targeted root work, barriers, growth regulation, and monitored pruning.",
+        href: urbanTreeDoctorScope.href
       },
       {
         title: "Action Environmental landscape estimate",
@@ -115,21 +134,26 @@ export const acadiaProjects: Project[] = [
         date: "June 16, 2026",
         status: "Historical",
         summary:
-          "The $136,081.05 proposal is useful for scope comparison but its 30-day validity period has expired."
+          "The $136,081.05 proposal is useful for scope comparison but its 30-day validity period has expired.",
+        href: landscapeEstimate.href
       }
     ],
     communityFeedback: [
       {
         text:
-          "Neighbors want the board to compare one accountable landscape provider with the current arrangement, including tree care and irrigation responsibilities.",
+          "We support moving to a new lawn crew. The current one hasn’t taken good care of our neighborhood lawns, trees, irrigation, or right outside our pool enclosures. And it would benefit us to have an arborist oversee our project with the roots and proper tree trimming.",
         source: "Facebook community discussion",
-        date: "August 2026"
+        date: "August 2026",
+        format: "Direct excerpt",
+        redactionNote: "The homeowner's name is withheld. The wording is otherwise unchanged."
       },
       {
         text:
-          "Several residents favor a preservation-first approach when it can address sidewalk safety without removing healthy trees.",
+          "I imagine we will have to lay some sort of soil or sand in an attempt to grow grass under the magnolias. We would not want to do anything that would hurt these trees. What would you suggest?",
         source: "Homeowner correspondence",
-        date: "July-August 2026"
+        date: "August 2026",
+        format: "Direct excerpt",
+        redactionNote: "The writer's name and email address are withheld."
       }
     ]
   },
@@ -148,6 +172,7 @@ export const acadiaProjects: Project[] = [
       "No road option should be presented as approved until comparable scopes, quote dates, and source proposals are attached.",
     vendorQuoteNotes:
       "One contractor estimated milling and paving could last 15 to 20 years and a one-inch overlay 5 to 10 years, with reflection-crack risk. Those are vendor estimates rather than warranties.",
+    relatedDocuments: [juneProjectUpdate, augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "Which current signed proposals support the short-term and full-resurfacing figures?",
@@ -178,6 +203,7 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "Tree and sidewalk work should be approved as a coordinated sequence so root mitigation is completed before replacement concrete is installed.",
     vendorQuoteNotes: "Two sidewalk proposals were reported received; final scope comparison remains pending.",
+    relatedDocuments: [urbanTreeDoctorScope, actionTreeOpinion, juneProjectUpdate, augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "Which proposal supports the $28,621.55 figure, and is it still valid?",
@@ -244,6 +270,7 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "Correspondence conflicts on whether existing survey markers establish HOA ownership. Insurance coverage for deterioration, vegetation, or storm damage is also unconfirmed.",
     vendorQuoteNotes: "The planning allowance is not a current accepted proposal.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "What recorded survey or title evidence establishes ownership and responsibility?",
@@ -275,6 +302,7 @@ export const acadiaProjects: Project[] = [
       "Any change should be based on updated declarations or a written endorsement showing covered property, replacement values, premium effect, and ownership responsibility.",
     vendorQuoteNotes:
       "The broker confirmed the origin of the $5,000 scheduled item. Irrigation treatment was still being clarified with the underwriter, so it should not be described as unnecessary coverage.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "What property is listed on the final current declarations and at what replacement values?",
@@ -304,6 +332,7 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "Residents who need the current credential should use the HOA's established private contact channel.",
     vendorQuoteNotes: "No further vendor work is currently reported.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     sourceNotes: [
       {
@@ -328,7 +357,11 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "Document hierarchy and enforcement language should be reviewed by HOA counsel before the website describes a disputed interpretation as binding.",
     vendorQuoteNotes: "No attorney engagement or final drafting quote is attached.",
-    relatedDocuments: acadiaGoverningRelatedDocuments,
+    relatedDocuments: [
+      communityReminders,
+      augustMeetingAgenda,
+      ...acadiaGoverningRelatedDocuments
+    ],
     lastReviewed: reviewed,
     openQuestions: [
       "Which practical homeowner questions are not answered clearly by the existing governing documents?",
@@ -365,6 +398,7 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "The site separates verified records, estimates, pending questions, and anonymized community feedback. It does not replace official notices, board meetings, legal advice, or legally binding elections.",
     vendorQuoteNotes: "No outside website vendor was required.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     sourceNotes: [
       {
@@ -389,6 +423,7 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "These requests are documented community priorities, but no replacement package or budget has been approved.",
     vendorQuoteNotes: "The prior sign vendor is reportedly no longer available; alternatives are needed.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "Which items are HOA, utility, or vendor responsibilities?",
@@ -406,9 +441,11 @@ export const acadiaProjects: Project[] = [
     communityFeedback: [
       {
         text:
-          "Residents specifically called attention to damaged no-parking and gate-area signs and asked whether volunteers could help with smaller appearance projects.",
+          "The no parking signs just screw in from the back. I took pics of all of them when I was down there after I scrubbed all the green off of them with a scrub brush and water. I think 2 need replaced because they are decaying from the back side.",
         source: "Facebook community discussion",
-        date: "August 2026"
+        date: "August 2026",
+        format: "Direct excerpt",
+        redactionNote: "The homeowner's name and personal scheduling details are withheld."
       }
     ]
   },
@@ -425,6 +462,7 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "The board also needs a repeatable process for determining whether future outages originate in HOA equipment or homeowner-controlled components without publishing house-specific details.",
     vendorQuoteNotes: "Estimate 2312 should not be approved until the conflicting field observation is resolved.",
+    relatedDocuments: [greenrockIrrigationEstimate, augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "What test confirms the actual cause of the outage?",
@@ -462,6 +500,7 @@ export const acadiaProjects: Project[] = [
       "Vendor performance claims from community discussion should be treated as feedback unless supported by contracts, work orders, and documented service history.",
     vendorQuoteNotes:
       "The Action proposal was described as $3,350 per month for weekly service plus $350 for fertilizer and weed control. A fresh incumbent proposal was not identified in the reviewed record.",
+    relatedDocuments: [landscapeEstimate, augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "What exact services, exclusions, visit frequency, licensing, insurance, and termination terms apply to each proposal?",
@@ -486,9 +525,11 @@ export const acadiaProjects: Project[] = [
     communityFeedback: [
       {
         text:
-          "Neighbors asked for a clear, apples-to-apples comparison and one point of accountability for landscaping, tree care, and irrigation.",
+          "We support moving to a new lawn crew. The current one hasn’t taken good care of our neighborhood lawns, trees, irrigation, or right outside our pool enclosures. And it would benefit us to have an arborist oversee our project with the roots and proper tree trimming.",
         source: "Facebook community discussion",
-        date: "August 2026"
+        date: "August 2026",
+        format: "Direct excerpt",
+        redactionNote: "The homeowner's name is withheld. The wording is otherwise unchanged."
       }
     ]
   },
@@ -506,6 +547,7 @@ export const acadiaProjects: Project[] = [
       "No individual property or homeowner should be identified publicly while the board evaluates a community-wide standard.",
     vendorQuoteNotes:
       "A screen-repair provider was recommended in the Facebook group, but an active LLC does not by itself verify contractor licensing, insurance, or a current rate.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "Which materials and placement options are allowed under the current documents?",
@@ -518,6 +560,16 @@ export const acadiaProjects: Project[] = [
         date: "August 2026",
         status: "Pending",
         summary: "Identifies the desire for privacy and consistent appearance; no adopted rule or endorsed vendor resulted."
+      }
+    ],
+    communityFeedback: [
+      {
+        text:
+          "unable to attend the meeting but would like the committee to bring in proper regulations on the tarps that are being used at the back of some of the villas facing the 7/11 garage , these tarps look pure ugly not only for the properties but for guests arriving only to see the tarps after arrival , they are not a nice item to have around the pool areas , if the owners need screening they should plant hedge of trees along the back walls leading to the 7/11 I would be greatful for the committees input on this subject , also you have my vote to move to a new landscaping company asap from [HOUSE NUMBER AND NAMES REDACTED]",
+        source: "Facebook community discussion",
+        date: "August 2026",
+        format: "Direct excerpt",
+        redactionNote: "Only the house number and names are redacted; the wording is unchanged."
       }
     ]
   },
@@ -533,6 +585,7 @@ export const acadiaProjects: Project[] = [
     estimatedTimeline: "Update pending",
     boardNotes: "The board should publish Duke's written response when available.",
     vendorQuoteNotes: "No written cost or work option is attached yet.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: ["What did Duke Energy authorize, recommend, or price after its evaluation?"],
     sourceNotes: [
@@ -542,13 +595,6 @@ export const acadiaProjects: Project[] = [
         date: "August 2026",
         status: "Pending",
         summary: "The evaluation was reported complete, but its written outcome is not yet available here."
-      }
-    ],
-    communityFeedback: [
-      {
-        text: "Residents asked whether aging street-light poles could be cleaned or repainted.",
-        source: "Facebook community discussion",
-        date: "August 2026"
       }
     ]
   },
@@ -565,6 +611,7 @@ export const acadiaProjects: Project[] = [
     boardNotes:
       "Any final process should identify the governing authority, amounts, due dates, notices, hearing rights where applicable, and collection steps without publishing any owner's account information.",
     vendorQuoteNotes: "No outside collection or legal proposal is attached.",
+    relatedDocuments: [augustMeetingAgenda],
     lastReviewed: reviewed,
     openQuestions: [
       "Did the board adopt a formal policy, and where is the approved resolution or meeting record?",

@@ -45,6 +45,8 @@ export type CommunityFeedbackItem = {
   text: string;
   source: "Facebook community discussion" | "Homeowner correspondence";
   date: string;
+  format: "Direct excerpt" | "Summary";
+  redactionNote?: string;
 };
 
 export type AcadiaGoverningDocument = RelatedDocument & {

@@ -100,8 +100,9 @@ export function ProjectDetailPage({ project }: { project: Project }) {
               </p>
               <h2 className="mt-2 text-xl font-bold text-acadia-ink">What neighbors are raising</h2>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                Feedback is anonymized and summarized. It helps frame priorities but is not an HOA
-                decision or a verified vendor claim.
+                Direct excerpts keep the original wording. Names, house numbers, and private
+                contact details are withheld; summaries are explicitly labeled. Community feedback
+                is not an HOA decision or a verified vendor claim.
               </p>
               <div className="mt-4 space-y-3">
                 {project.communityFeedback.map((feedback) => (
@@ -111,8 +112,13 @@ export function ProjectDetailPage({ project }: { project: Project }) {
                   >
                     <p>{feedback.text}</p>
                     <footer className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                      {feedback.source} · {feedback.date}
+                      {feedback.format} · {feedback.source} · {feedback.date}
                     </footer>
+                    {feedback.redactionNote ? (
+                      <p className="mt-2 text-xs italic leading-5 text-slate-500">
+                        {feedback.redactionNote}
+                      </p>
+                    ) : null}
                   </blockquote>
                 ))}
               </div>
@@ -149,11 +155,11 @@ export function ProjectDetailPage({ project }: { project: Project }) {
             ) : (
               <>
                 <p className="mt-3 text-slate-700">
-                  Source records that identify a home, resident, access credential, or private
-                  account are summarized above instead of being published in full.
+                  No source attachment has been received for this item yet. When one is available,
+                  it will be published with only the privacy redactions genuinely required.
                 </p>
                 <div className="mt-4 rounded-md bg-acadia-sky px-4 py-3 text-sm font-medium text-acadia-ink">
-                  No privacy-safe public attachment is available for this item yet.
+                  No public attachment is available for this item yet.
                 </div>
               </>
             )}

@@ -23,8 +23,8 @@ export function AcadiaTransparencyNotice() {
           </p>
           <p>
             <strong className="block text-acadia-ink">Privacy still matters</strong>
-            Access codes, homeowner identities, house-specific matters, and personal financial
-            information are not published.
+            Source documents and direct community excerpts are published with narrow redactions
+            for access codes, private identities, house numbers, direct contacts, and payment data.
           </p>
         </div>
       </div>

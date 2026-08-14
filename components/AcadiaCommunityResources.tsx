@@ -1,5 +1,12 @@
 const resources = [
   {
+    title: "Project source documents",
+    description:
+      "Read the public copies of project updates, agendas, estimates, and professional assessments, along with an exact log of the limited privacy redactions made to each file.",
+    href: "/Acadia/documents",
+    linkText: "Open the transparency library"
+  },
+  {
     title: "Curbside collection and bulk pickup",
     description:
       "Osceola County says eligible unincorporated addresses receive weekly bulk collection on the regular garbage day, generally up to three cubic yards. Appliances require separate scheduling. Confirm the service day for your address before placing items outside.",
@@ -42,8 +49,8 @@ export function AcadiaCommunityResources() {
               <p className="text-sm leading-6 text-slate-700">{resource.description}</p>
               <a
                 href={resource.href}
-                target="_blank"
-                rel="noreferrer"
+                target={resource.href.startsWith("/") ? undefined : "_blank"}
+                rel={resource.href.startsWith("/") ? undefined : "noreferrer"}
                 className="font-bold text-acadia-leaf underline decoration-acadia-moss/50 underline-offset-4 hover:text-acadia-ink"
               >
                 {resource.linkText}
