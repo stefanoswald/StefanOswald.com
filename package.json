@@ -6,7 +6,8 @@
     "lint": "next lint",
     "acadia:rag:prepare": "python3 scripts/acadia-rag/prepare-index.py",
     "acadia:rag:index": "node scripts/acadia-rag/index-to-supabase.mjs",
-    "acadia:rag:evaluate": "node scripts/acadia-rag/evaluate.mjs"
+    "acadia:rag:evaluate": "node scripts/acadia-rag/evaluate.mjs",
+    "acadia:zip": "rm -f public/acadia-documents/acadia-estates-governing-documents.zip && cd public/acadia-documents/governing && zip -X -q -9 ../acadia-estates-governing-documents.zip *.pdf"
   },
   "dependencies": {
     "next": "^15.0.0",

@@ -2,6 +2,7 @@ import { acadiaProjects } from "@/data/acadiaProjects";
 import { ProjectCard } from "@/components/ProjectCard";
 import { AcadiaTransparencyNotice } from "@/components/AcadiaTransparencyNotice";
 import { AcadiaCommunityResources } from "@/components/AcadiaCommunityResources";
+import { AcadiaGoverningDocuments } from "@/components/AcadiaGoverningDocuments";
 
 export const metadata = {
   title: "Acadia Estates HOA Priorities",
@@ -33,6 +34,8 @@ export default function AcadiaHomePage() {
           </div>
         </div>
       </section>
+
+      <AcadiaGoverningDocuments />
 
       <AcadiaTransparencyNotice />
 
