@@ -1,6 +1,29 @@
 {
   "redirects": [
-    { "source": "/willowbrook", "destination": "/Willowbrook", "permanent": true },
-    { "source": "/willowbrook/:path*", "destination": "/Willowbrook/:path*", "permanent": true }
+    {
+      "source": "/willowbrook",
+      "destination": "/Willowbrook",
+      "permanent": true
+    },
+    {
+      "source": "/willowbrook/:path*",
+      "destination": "/Willowbrook/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/yfpapp",
+      "destination": "/YFPapp",
+      "permanent": true
+    },
+    {
+      "source": "/YFPApp",
+      "destination": "/YFPapp",
+      "permanent": true
+    },
+    {
+      "source": "/yfp",
+      "destination": "/YFPapp",
+      "permanent": true
+    }
   ]
 }
