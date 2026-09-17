@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 export const metadata = {
   title: "YFP Privacy Policy",
   description:
-    "How YFP — Your Fullest Potential, the twenty-sided die for your day — handles your data. Everything stays on your phone except the coach."
+    "How YFP — Your Fullest Potential, the twenty-sided die for your day — handles your data. Everything stays on your phone except the Life Coach."
 };
 
 const EFFECTIVE = "17 September 2026";
@@ -20,9 +20,9 @@ const STAYS = [
 ];
 
 const LEAVES = [
-  "What you type to the coach",
+  "What you type to the Life Coach",
   "The rest of that conversation",
-  "A seven-day summary of the data on the left, sent with every coach message",
+  "A seven-day summary of the data on the left, sent with every Life Coach message",
   "Anything you export and hand to someone yourself"
 ];
 
@@ -44,7 +44,7 @@ const CONTROLS: Array<[string, string]> = [
   ["Stop reading Health", "Setup, or iOS Settings"],
   ["Stop reading Calendar", "Setup, or iOS Settings"],
   ["Stop watching for calls", "Setup"],
-  ["Send nothing to any model", "don't use the Coach tab"]
+  ["Send nothing to any model", "don't use the Life Coach tab"]
 ];
 
 function Clause({
@@ -258,7 +258,7 @@ export default function YFPPrivacyPage() {
           </p>
           <p>
             These numbers stay on the phone like everything else — except that a sleep score can
-            appear in the seven-day summary the coach sees, if you use the coach. Clause 06 covers
+            appear in the seven-day summary the Life Coach sees, if you use it. Clause 06 covers
             that.
           </p>
           <p>
@@ -300,13 +300,13 @@ export default function YFPPrivacyPage() {
           </p>
         </Clause>
 
-        <Clause n="06" title="The coach — the one thing that leaves" chip="network">
+        <Clause n="06" title="The Life Coach — the one thing that leaves" chip="network">
           <p className="text-white">
-            The Coach tab talks to a large language model over the internet. This is the only part of
+            The Life Coach tab talks to a large language model over the internet. This is the only part of
             YFP that sends your data anywhere, and it only does so when you send a message.
           </p>
           <p>
-            <strong className="font-semibold text-white">What is sent, on every coach message:</strong>
+            <strong className="font-semibold text-white">What is sent, on every Life Coach message:</strong>
           </p>
           <ul className="list-disc space-y-1 pl-5">
             <li>The message you just typed.</li>
@@ -315,7 +315,7 @@ export default function YFPPrivacyPage() {
               A <strong className="font-semibold text-white">seven-day export of your YFP data</strong>{" "}
               — your day log, your training sessions and their numbers, your food log, your sleep
               score, your standing meal targets, and whatever you have filled in under Tools. The
-              coach gets this every turn, because a coach that can only see your week on the first
+              Life Coach gets this every turn, because a coach that can only see your week on the first
               message of the day spends the rest of the day guessing.
             </li>
           </ul>
@@ -347,16 +347,16 @@ export default function YFPPrivacyPage() {
             >
               terms
             </a>{" "}
-            before you decide how much to tell the coach.
+            before you decide how much to tell the Life Coach.
           </p>
           <blockquote className="max-w-xl space-y-3 rounded-r-md border-l-2 border-[#9478FA] bg-[#1E1B38] px-5 py-4">
             <p className="text-[0.95rem] text-white">
-              <strong className="font-semibold">The practical rule:</strong> treat the coach the way
+              <strong className="font-semibold">The practical rule:</strong> treat the Life Coach the way
               you would treat typing into any AI chat window. Everything else in YFP is as private as
-              a notebook in a drawer. The coach is a phone call to a company.
+              a notebook in a drawer. The Life Coach is a phone call to a company.
             </p>
             <p className="text-[0.95rem] text-white">
-              Never use the Coach tab, and nothing about you ever leaves your phone. Every other
+              Never use the Life Coach tab, and nothing about you ever leaves your phone. Every other
               feature works without it.
             </p>
           </blockquote>
@@ -417,7 +417,7 @@ export default function YFPPrivacyPage() {
 
         <Clause n="11" title="Not medical advice">
           <p className="text-white">
-            YFP tracks training, sleep and food, and its coach will have opinions about all three.
+            YFP tracks training, sleep and food, and its Life Coach will have opinions about all three.
             None of it is medical advice, and none of it comes from a clinician. If something hurts,
             or a number worries you, ask a doctor rather than a die.
           </p>
