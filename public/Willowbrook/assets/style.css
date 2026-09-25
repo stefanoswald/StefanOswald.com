@@ -93,3 +93,15 @@ footer{background:var(--night);color:#bfc6d8;text-align:center;
 footer a{color:#d8d2c0}
 .spread .text.verse p{margin:0 0 .4em}
 .spread .text.verse p:first-child::first-letter{font-size:1em;float:none;padding:0;color:inherit;font-weight:400}
+
+/* grown-up note pages and verse stanzas (added 2026-09-25) */
+.note-page{max-width:40rem;margin:1.5rem auto 0;padding:0 1.2rem}
+.note{background:var(--card);border:1px solid var(--rule);border-radius:.6rem;
+  padding:1.6rem 1.8rem;box-shadow:0 1px 4px rgba(55,47,40,.08)}
+.note p{margin:0 0 1em}
+.note p:last-child{margin-bottom:0}
+@media(max-width:40rem){.note{padding:1.2rem 1.1rem}}
+.toc-note{margin:.5rem 0 0;font-style:italic}
+.btn.ghost-dark{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.btn.ghost-dark:hover{background:rgba(165,119,46,.1)}
+.spread .text.verse p.stanza{margin-top:1em}
