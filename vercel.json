@@ -24,6 +24,16 @@
       "source": "/yfp",
       "destination": "/YFPapp",
       "permanent": true
+    },
+    {
+      "source": "/myperson",
+      "destination": "/MyPerson",
+      "permanent": true
+    },
+    {
+      "source": "/myperson/:path*",
+      "destination": "/MyPerson/:path*",
+      "permanent": true
     }
   ]
 }
