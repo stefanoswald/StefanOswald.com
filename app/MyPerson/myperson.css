@@ -1,0 +1,304 @@
+/* ---------------------------------------------------------------------------
+   Find My Person (stefanoswald.com/MyPerson)
+   One deliberate look: a magician's close-up mat (deep felt green) with warm
+   cream cards dealt onto it. Everything here is scoped to the .mp wrapper in
+   app/MyPerson/layout.tsx, so none of it touches the rest of the site.
+   The same colors are in tailwind.config.ts as mp-* (bg-mp-felt, text-mp-ink...).
+--------------------------------------------------------------------------- */
+
+body:has(.mp) {
+  background-color: #173b33;
+}
+
+.mp {
+  --mp-felt: #173b33;
+  --mp-felt-2: #1d463d;
+  --mp-felt-3: #26594c;
+  --mp-felt-line: #2f6153;
+  --mp-cream: #fffbf3;
+  --mp-cream-2: #f7f0e3;
+  --mp-cream-3: #ebe0ce;
+  --mp-ink: #1b2420;
+  --mp-ink-muted: #5e6862;
+  --mp-mist: #f6f1e7;
+  --mp-sage: #a9c0b7;
+  --mp-ember: #f07a3a;
+  --mp-ember-light: #ff9a62;
+  --mp-ember-deep: #b84a14;
+  --mp-ember-soft: #fbe7d8;
+  --mp-heart: #e0404f;
+  --mp-radius-card: 1.375rem;
+  --mp-radius-pill: 999px;
+  --mp-shadow-card: 0 20px 45px -25px rgb(0 0 0 / 0.65), 0 2px 6px rgb(0 0 0 / 0.16);
+
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--mp-felt);
+  color: var(--mp-mist);
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+.mp h1,
+.mp h2,
+.mp h3 {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.mp em {
+  font-style: italic;
+}
+
+.mp ::selection {
+  background: var(--mp-ember);
+  color: #fff;
+}
+
+/* Two rings, one dark and one light, so the focus outline shows on the felt
+   background and on the cream cards without having to know which one it is on. */
+.mp :focus-visible {
+  outline: 3px solid var(--mp-ink);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgb(246 241 231 / 0.9);
+}
+
+.mp input,
+.mp textarea,
+.mp select,
+.mp button {
+  font: inherit;
+  color: inherit;
+}
+
+/* Keeps iPhones from zooming in when a field is tapped. */
+.mp input,
+.mp textarea,
+.mp select {
+  font-size: 16px;
+}
+
+/* ---------------------------------------------------------------------------
+   Small component classes
+--------------------------------------------------------------------------- */
+.mp .shell {
+  width: 100%;
+  max-width: 34rem;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.mp .card {
+  background: var(--mp-cream);
+  color: var(--mp-ink);
+  border-radius: var(--mp-radius-card);
+  box-shadow: var(--mp-shadow-card);
+  position: relative;
+}
+
+/* The little heart index in a card corner, like a playing card. */
+.mp .card-pip::before,
+.mp .card-pip::after {
+  content: "♥";
+  position: absolute;
+  color: var(--mp-heart);
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.55;
+}
+.mp .card-pip::before {
+  top: 12px;
+  left: 14px;
+}
+.mp .card-pip::after {
+  bottom: 12px;
+  right: 14px;
+}
+
+.mp .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.5rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--mp-radius-pill);
+  font-weight: 600;
+  text-align: center;
+  border: 1.5px solid transparent;
+  transition:
+    transform 0.12s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.mp .btn:active {
+  transform: scale(0.985);
+}
+.mp .btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.mp .btn-primary {
+  background: var(--mp-ember);
+  color: #221008;
+  box-shadow: 0 12px 26px -16px rgb(240 122 58 / 0.9);
+}
+.mp .btn-ghost {
+  background: transparent;
+  color: var(--mp-mist);
+  border-color: rgb(246 241 231 / 0.42);
+}
+.mp .btn-ink {
+  background: var(--mp-ink);
+  color: var(--mp-cream);
+}
+.mp .btn-quiet {
+  background: var(--mp-cream-2);
+  color: var(--mp-ink);
+  border-color: var(--mp-cream-3);
+}
+
+.mp .field {
+  width: 100%;
+  background: var(--mp-cream);
+  color: var(--mp-ink);
+  border: 1.5px solid var(--mp-cream-3);
+  border-radius: 0.875rem;
+  padding: 0.875rem 1rem;
+  line-height: 1.4;
+}
+.mp .field::placeholder {
+  color: rgb(94 104 98 / 0.7);
+}
+.mp .field:focus {
+  border-color: var(--mp-ember);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--mp-ember-soft);
+}
+
+.mp .eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mp .link-quiet {
+  color: var(--mp-sage);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* Hover only where there's a real pointer. On phones a tap would leave it stuck on. */
+@media (hover: hover) {
+  .mp .btn-primary:hover:not(:disabled) {
+    background: var(--mp-ember-light);
+  }
+  .mp .btn-ghost:hover:not(:disabled) {
+    background: rgb(246 241 231 / 0.1);
+  }
+  .mp .btn-ink:hover:not(:disabled) {
+    background: #2b3a34;
+  }
+  .mp .link-quiet:hover {
+    color: var(--mp-mist);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion. Everything is short, and everything stops for reduced motion.
+--------------------------------------------------------------------------- */
+@keyframes mp-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes mp-deal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(26px, 10px, 0) rotate(2.2deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mp .rise {
+  animation: mp-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.mp .rise-1 {
+  animation-delay: 0.06s;
+}
+.mp .rise-2 {
+  animation-delay: 0.14s;
+}
+.mp .rise-3 {
+  animation-delay: 0.22s;
+}
+.mp .deal-in {
+  animation: mp-deal-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.mp .rise-quick {
+  animation: mp-rise 0.4s ease-out both;
+}
+.mp .shuffle {
+  animation: mp-deal-in 0.9s ease-in-out infinite alternate;
+}
+
+/* The playing card that flips over to show the number. */
+.mp .flip-stage {
+  perspective: 1200px;
+}
+.mp .flip-card {
+  position: relative;
+  aspect-ratio: 5 / 7;
+  transform-style: preserve-3d;
+  transition: transform 0.9s ease-out;
+}
+.mp .flip-card.face-down {
+  transform: rotateY(180deg);
+}
+.mp .flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.mp .flip-back {
+  transform: rotateY(180deg);
+}
+.mp .card-back-pattern {
+  background-image:
+    repeating-linear-gradient(45deg, var(--mp-felt-3) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(-45deg, var(--mp-felt-3) 0 6px, transparent 6px 12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mp *,
+  .mp *::before,
+  .mp *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
