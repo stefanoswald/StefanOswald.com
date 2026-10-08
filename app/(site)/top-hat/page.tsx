@@ -27,7 +27,8 @@ export default function TopHatPage() {
       <PageIntro kicker="A future project" title="The Top Hat">
         <p>
           An all-in-one entertainment and hospitality destination, planned for Orlando. Shows, food, art, wellness, and
-          education under one roof, wrapped in an LED exterior you won’t forget.
+          education under one roof, wrapped in an LED exterior you won’t forget. The Orlando flagship comes first, with
+          more cities to follow.
         </p>
       </PageIntro>
 
@@ -58,21 +59,8 @@ export default function TopHatPage() {
           </ul>
         </section>
 
-        <section aria-labelledby="video-heading" className="mt-20 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
-          <div>
-            <h2 id="video-heading" className="font-so-display text-[2.6rem] font-medium leading-tight text-so-paper">
-              The vision
-            </h2>
-            <p className="so-pretty mt-4 text-[1.05rem] leading-[1.8] text-so-mute">
-              The Orlando flagship comes first, with more cities to follow.
-            </p>
-          </div>
-          <div>
-            <YouTubeLite id="nVjgzsZ934U" title="Orlando Top Hat" />
-            <p className="mt-2 text-[0.85rem] text-so-dim">Orlando Top Hat</p>
-          </div>
-        </section>
-
+        {/* The "Orlando Top Hat" video (YouTube nVjgzsZ934U) is set to private as of Oct 2026, so it is left off.
+            Once Stefan makes it public or unlisted, add it back with <YouTubeLite id="nVjgzsZ934U" title="Orlando Top Hat" />. */}
         <section
           id="the-magic-hostel"
           aria-labelledby="hostel-heading"
