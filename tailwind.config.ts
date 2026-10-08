@@ -37,10 +37,37 @@ const config: Config = {
           "ember-deep": "#b84a14",
           "ember-soft": "#fbe7d8",
           heart: "#e0404f"
+        },
+        // StefanOswald.com (app/(site)): a dark stage, MagicTrickGuy gold, and playing-card ivory and red.
+        so: {
+          ink: "#0c0b0a",
+          coal: "#141210",
+          "coal-2": "#1b1916",
+          line: "#2b2824",
+          "line-2": "#3a3631",
+          paper: "#f3eee4",
+          mute: "#aaa396",
+          dim: "#8c8579",
+          gold: "#c9a84c",
+          "gold-2": "#e0c374",
+          ivory: "#f4efe3",
+          "ivory-2": "#e6dfcf",
+          red: "#b0232e",
+          "card-ink": "#1a1714"
         }
       },
       fontFamily: {
-        "mp-display": ["var(--font-fraunces)", "Georgia", "Times New Roman", "serif"]
+        "mp-display": ["var(--font-fraunces)", "Georgia", "Times New Roman", "serif"],
+        "so-display": ["var(--font-so-display)", "Cormorant Garamond", "Georgia", "Times New Roman", "serif"],
+        "so-sans": [
+          "var(--font-so-sans)",
+          "Inter",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "sans-serif"
+        ]
       },
       borderRadius: {
         "mp-card": "1.375rem",
@@ -56,7 +83,9 @@ const config: Config = {
   plugins: [
     // Find My Person: hover styles only on devices with a real pointer, so a tap
     // on a phone doesn't leave an answer looking half-picked.
-    plugin(({ addVariant }) => addVariant("mp-hover", "@media (hover: hover) { &:hover }"))
+    plugin(({ addVariant }) => addVariant("mp-hover", "@media (hover: hover) { &:hover }")),
+    // StefanOswald.com: the same idea for the main site.
+    plugin(({ addVariant }) => addVariant("so-hover", "@media (hover: hover) { &:hover }"))
   ]
 };
 

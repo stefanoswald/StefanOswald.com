@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+// Site-wide fallback only. The main site (app/(site)), Acadia, Find Stefan's Person, and the
+// YFP privacy page each set their own titles and descriptions.
 export const metadata: Metadata = {
-  title: "Acadia Estates HOA Priorities",
-  description:
-    "A community feedback site for Acadia Estates homeowners to review HOA projects and share informal priority votes."
+  metadataBase: new URL("https://www.stefanoswald.com"),
+  title: "Stefan Oswald",
+  description: "Stefan Oswald, AI consultant and corporate entertainer near Orlando, Florida."
 };
 
 export default function RootLayout({
