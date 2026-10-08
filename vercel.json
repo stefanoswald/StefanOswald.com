@@ -39,6 +39,21 @@
       "source": "/aboutme",
       "destination": "/AboutMe",
       "permanent": true
+    },
+    {
+      "source": "/Aboutme",
+      "destination": "/AboutMe",
+      "permanent": true
+    },
+    {
+      "source": "/aboutMe",
+      "destination": "/AboutMe",
+      "permanent": true
+    },
+    {
+      "source": "/ABOUTME",
+      "destination": "/AboutMe",
+      "permanent": true
     }
   ]
 }
