@@ -4,7 +4,7 @@ import type { NextConfig } from "next";
 // These redirects keep every old link and bookmark working.
 const LEGACY_PAGES: Array<[string, string]> = [
   ["/index.html", "/"],
-  ["/projects.html", "/#projects"],
+  ["/projects.html", "/AboutMe#projects"],
   ["/media.html", "/watch"],
   ["/books.html", "/writing"],
   ["/your-fullest-potential.html", "/your-fullest-potential"],
@@ -18,7 +18,11 @@ const LEGACY_PAGES: Array<[string, string]> = [
   ["/media", "/watch"],
   ["/books", "/writing"],
   ["/tophat", "/top-hat"],
-  ["/projects", "/#projects"]
+  ["/projects", "/AboutMe#projects"],
+  // Other ways people might type /AboutMe. "/aboutme" lives in vercel.json instead: these redirects ignore
+  // letter case, so "/aboutme" here would also catch "/AboutMe" and loop forever.
+  ["/about-me", "/AboutMe"],
+  ["/about", "/AboutMe"]
 ];
 
 const nextConfig: NextConfig = {

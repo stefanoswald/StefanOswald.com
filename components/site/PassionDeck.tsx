@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import type { Passion, SuitGroup, SuitName } from "@/data/site/home";
+import type { Passion, SuitGroup, SuitName } from "@/data/site/types";
 import { Suit, isRedSuit } from "@/components/site/Suit";
 
 // Fixed, hand-picked tilts so the server and the browser draw the same "dealt on a table" spread.

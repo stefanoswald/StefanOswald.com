@@ -12,23 +12,23 @@ export const metadata: Metadata = pageMetadata({
 
 const REASONS = [
   { name: "Pure enjoyment", body: "Magic is a fun, rewarding hobby, and it can even become a career." },
-  { name: "Connection", body: "You’ll meet all kinds of people, and every trick is an excuse to start a conversation." },
-  { name: "A rare skill", body: "Very few people can genuinely amaze a room. You can be one of them." },
-  { name: "A way to earn", body: "Good magicians get paid to perform at parties, events, and special occasions." }
+  { name: "Connection", body: "You'll meet all kinds of people, and every trick is an excuse to start a conversation." },
+  { name: "A rare skill", body: "Not many people can amaze a room. You can learn to." },
+  { name: "A way to earn", body: "Good magicians get paid to perform at parties and events." }
 ];
 
 const RULES = [
   {
     name: "Practice makes perfect",
-    body: "After you learn a new trick, practice it ten times before you show a stranger. Then show it to a hundred strangers you’ll never see again before you show friends and family. Trust me on this one."
+    body: "After you learn a new trick, practice it ten times before you show a stranger. Then show it to a hundred strangers you'll never see again before you show friends and family. Trust me on this one."
   },
   {
     name: "Keep secrets secret",
-    body: "People rarely want to know how it’s done. If they did, they could look it up. Revealing the secret steals the wonder you just created."
+    body: "People rarely want to know how it's done. If they did, they could look it up. Revealing the secret steals the wonder you just created."
   },
   {
     name: "One and done",
-    body: "Never do the same trick for the same person twice. The first time is entertainment. The second time, they’re just trying to solve the puzzle."
+    body: "Never do the same trick for the same person twice. The first time is entertainment. The second time, they're just trying to solve the puzzle."
   }
 ];
 
@@ -45,7 +45,7 @@ export default function LearnMagicPage() {
   return (
     <>
       <PageIntro kicker="Learn magic" title="So you want to learn magic">
-        <p>Good choice. Here’s why it’s worth it, three rules to protect the wonder, and a few tricks to start with.</p>
+        <p>Good choice. These are the rules I give every beginner, plus a few easy tricks to start with.</p>
       </PageIntro>
 
       <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:pb-32">
@@ -82,7 +82,7 @@ export default function LearnMagicPage() {
             Start with these
           </h2>
           <p className="mt-3 max-w-2xl text-[1.02rem] leading-[1.8] text-so-mute">
-            I’ll be teaching my own tricks soon. Until then, these lessons from other magicians are great places to begin.
+            I'll be teaching my own tricks soon. Until then, these lessons from other magicians are great places to begin.
           </p>
           <ul className="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {TUTORIALS.map((video) => (

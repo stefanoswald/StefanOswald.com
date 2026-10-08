@@ -34,6 +34,11 @@
       "source": "/myperson/:path*",
       "destination": "/MyPerson/:path*",
       "permanent": true
+    },
+    {
+      "source": "/aboutme",
+      "destination": "/AboutMe",
+      "permanent": true
     }
   ]
 }

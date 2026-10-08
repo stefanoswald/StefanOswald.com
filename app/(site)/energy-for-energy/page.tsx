@@ -19,13 +19,13 @@ export default function EnergyForEnergyPage() {
       blocks={text as LegacyBlock[]}
       intro={
         <p>
-          My motto is “Energy for energy. What I give is always returned to me.” This is the app version of that idea: a
-          place to share skills, lend and borrow, and trade with the people around you.
+          My motto is "Energy for energy. What I give is always returned to me." This is the app version of that idea: a
+          place to trade skills and borrow things from the people around you.
         </p>
       }
       after={
         <p className="text-[1rem] leading-7 text-so-mute">
-          There’s an early prototype you can click around in.{" "}
+          There's an early prototype you can click around in.{" "}
           <a href="/Energy" className="text-so-paper underline decoration-so-gold/60 underline-offset-4 so-hover:text-so-gold-2">
             Try the Energy for Energy prototype
           </a>

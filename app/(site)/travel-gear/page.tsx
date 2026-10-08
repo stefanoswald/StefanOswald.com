@@ -36,7 +36,7 @@ const SECTIONS: { title: string; intro?: string; items: Gear[] }[] = [
       },
       {
         name: "Insta360 ONE RS 1-Inch 360 Edition",
-        body: "Bigger and better in low light than the X4. It isn’t waterproof, so it stays dry.",
+        body: "Bigger and better in low light than the X4. It isn't waterproof, so it stays dry.",
         links: [
           { label: "Insta360 ONE RS 1-Inch 360", href: "https://www.insta360.com/sal/one_rs_1_inch_360?insrc=INRNBXY" },
           { label: "The selfie stick and tripod I use", href: "https://amzn.to/3K8X5B6" }
@@ -83,23 +83,23 @@ const SECTIONS: { title: string; intro?: string; items: Gear[] }[] = [
     items: [
       {
         name: "HoverAir X1",
-        body: "It launches from your palm in about three seconds and frames you as the star. No controller. At 125 grams it folds into a pocket, and the enclosed design makes it safer around crowds and kids. My favorite modes are Dolly, which follows you, and Orbit, which circles you.",
+        body: "It launches from your palm in about three seconds and frames you as the star. You don't need a controller. At 125 grams it folds into a pocket, and the enclosed design makes it safer around crowds and kids. My favorite modes are Dolly, which follows you, and Orbit, which circles you.",
         links: [{ label: "HoverAir X1", href: "https://shareasale.com/u.cfm?d=1071919&m=145704&u=929667&afftrack=" }],
         video: { id: "1D8cnAMuFMA", title: "Hover X1" }
       },
       {
         name: "DJI Mini 4 Pro",
-        body: "Light enough that most places don’t require registration. 4K video at 60 frames per second, 48MP photos, up to 45 minutes of flight, and obstacle sensing on every side.",
+        body: "It's light enough that most places don't require registration. It shoots 4K video at 60 frames per second and 48MP photos, flies for up to 45 minutes, and senses obstacles on every side.",
         links: [{ label: "DJI Mini 4 Pro", href: "https://click.dji.com/AMNv4NC7_gQc8iFsYOBu-g?pm=ad_image" }]
       },
       {
         name: "DJI Mavic 3 Pro",
-        body: "Bigger than the Mini, better at almost everything else. Obstacle sensing all around means no more crashes from flying sideways, and the extra lenses help you tell a story from the air.",
+        body: "It's bigger than the Mini and better at almost everything else. Sensors on every side keep it from crashing when you fly sideways, and the extra lenses help you tell a story from the air.",
         links: [{ label: "DJI Mavic 3 Pro", href: "https://click.dji.com/ADlbfnd1dCrWB-_mTiqbNA?pm=ad_image" }]
       },
       {
         name: "DJI Avata 2",
-        body: "FPV flying made easy. Easy Acro mode is so much fun.",
+        body: "It makes FPV flying easy. Easy Acro mode is so much fun.",
         links: [{ label: "DJI Avata 2", href: "https://click.dji.com/AOaRWlQphN0pULMWudXMaA?pm=link" }]
       },
       {
@@ -123,7 +123,7 @@ const SECTIONS: { title: string; intro?: string; items: Gear[] }[] = [
       },
       {
         name: "Rugged portable SSD",
-        body: "Fast, drop-proof, water and dust resistant, and encrypted. Footage adds up fast.",
+        body: "It's fast and encrypted, and it survives drops, water, and dust. You'll need the space, because footage adds up fast.",
         links: [
           { label: "4 TB", href: "https://amzn.to/3zWn3TQ" },
           { label: "2 TB", href: "https://amzn.to/41UaEM9" }
@@ -136,7 +136,7 @@ const SECTIONS: { title: string; intro?: string; items: Gear[] }[] = [
     items: [
       {
         name: "Kizik shoes",
-        body: "My all-time favorite shoes. You step in and the heel springs back into shape. No laces, no bending over.",
+        body: "My all-time favorite shoes. You just step in, and the heel springs back into shape, so there's no bending over to tie laces.",
         links: [
           {
             label: "$20 off Kizik",
@@ -161,13 +161,13 @@ const SECTIONS: { title: string; intro?: string; items: Gear[] }[] = [
 export default function TravelGearPage() {
   return (
     <>
-      <PageIntro kicker="Travel tech" title="The content creator’s backpack">
+      <PageIntro kicker="Travel tech" title="The content creator's backpack">
         <p>
           I learned the hard way that heavy, awkward gear stays at home. These are the tools I actually travel and film with.
         </p>
         <p>
-          The three that changed everything for me are the Insta360 X4, the DJI Mini 4 Pro, and the HoverAir X1. You won’t need
-          all of it. Pick the few that fit how you shoot, and they’ll fit in one backpack.
+          The three that changed everything for me are the Insta360 X4, the DJI Mini 4 Pro, and the HoverAir X1. You won't need
+          all of it. Pick the few that fit how you shoot, and they'll fit in one backpack.
         </p>
       </PageIntro>
 

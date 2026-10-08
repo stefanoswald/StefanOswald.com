@@ -18,7 +18,7 @@ const VIDEOS = [
   { id: "dUVRMhvR3As", title: "Stefan Oswald, magician" },
   { id: "VW04VYtAeXQ", title: "Magic moments at the Okeechobee Music Festival" },
   { id: "GKapXIQjqh0", title: "Making people happy with magic. This is why I perform." },
-  { id: "2laqGifEHFs", title: "New Year’s party at The Compound" },
+  { id: "2laqGifEHFs", title: "New Year's party at The Compound" },
   { id: "AMdEmVbVJts", title: "Money magic in Utah" },
   { id: "jILT0PnYGk4", title: "Sharing some magic at PopStroke" },
   { id: "y1fvXnA0Sk4", title: "A magical stroll around UCF" },
@@ -31,7 +31,7 @@ export default function WatchPage() {
   return (
     <>
       <PageIntro kicker="Watch" title="Magic, up close">
-        <p>Street shows, festivals, parties, and a few projects from behind the curtain. New videos land on @MagicTrickGuy first.</p>
+        <p>Videos from street shows, festivals, and parties, plus a few projects from behind the curtain. New videos go up on @MagicTrickGuy first.</p>
       </PageIntro>
 
       <section aria-labelledby="promo-heading" className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -51,7 +51,7 @@ export default function WatchPage() {
           </video>
         </div>
         <p className="mt-3 text-[0.92rem] text-so-mute">
-          My corporate events promo, about a minute and a half. Planning an event?{" "}
+          This is my promo for corporate events. It runs about a minute and a half. Planning an event?{" "}
           <a
             href={links.mtg}
             target="_blank"

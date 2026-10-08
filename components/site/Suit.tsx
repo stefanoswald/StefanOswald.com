@@ -1,4 +1,4 @@
-import type { SuitName } from "@/data/site/home";
+import type { SuitName } from "@/data/site/types";
 
 // Drawn as SVG instead of the ♠♥♦♣ characters, which iPhones like to turn into emoji.
 const PATHS: Record<SuitName, string> = {

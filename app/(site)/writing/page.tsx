@@ -17,7 +17,7 @@ const BOOKS = [
     title: "Your Fullest Potential",
     kind: "Personal growth",
     body: [
-      "Habits, mornings, evenings, and abundance, told through the stories that shaped me. It took ten years to write.",
+      "It covers habits, mornings, evenings, and abundance, told through the stories that shaped me. It took me ten years to write.",
       "The book became the foundation for everything that followed: a series of talks, a full album, an iPhone app, and a stage show now in the works."
     ],
     href: "/your-fullest-potential",
@@ -40,7 +40,7 @@ export default function WritingPage() {
   return (
     <>
       <PageIntro kicker="Writing" title="Books">
-        <p>Two very different projects. One is about building a better day. The other is about saving the human race.</p>
+        <p>I'm working on two very different books. One is about building a better day, and the other is about saving the human race.</p>
       </PageIntro>
 
       <section aria-label="Books" className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:pb-32">

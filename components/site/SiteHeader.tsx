@@ -1,20 +1,24 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+import { discoveryCall } from "@/data/site/home";
 
 const NAV = [
-  { href: "/#ai", label: "AI consulting" },
-  { href: "/#entertainment", label: "Entertainment" },
-  { href: "/#projects", label: "Projects" },
-  { href: "/#more", label: "Passions" },
-  { href: "/#about", label: "About" }
+  { href: "/#services", label: "Services" },
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/#work", label: "My work" },
+  { href: "/AboutMe", label: "About me" }
 ];
+
+const CALL_LINK_PROPS = discoveryCall.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const menuId = useId();
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -57,7 +61,11 @@ export function SiteHeader() {
           <ul className="flex items-center gap-7 text-[0.92rem] text-so-paper/80">
             {NAV.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="transition-colors so-hover:text-so-gold-2">
+                <Link
+                  href={item.href}
+                  aria-current={item.href === pathname ? "page" : undefined}
+                  className={`transition-colors so-hover:text-so-gold-2 ${item.href === pathname ? "text-so-gold" : ""}`}
+                >
                   {item.label}
                 </Link>
               </li>
@@ -66,12 +74,13 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/#contact"
+          <a
+            href={discoveryCall.href}
+            {...CALL_LINK_PROPS}
             className="hidden rounded-[3px] bg-so-gold px-4 py-2 text-[0.88rem] font-semibold text-so-ink transition-colors so-hover:bg-so-gold-2 sm:inline-block"
           >
-            Let’s talk
-          </Link>
+            {discoveryCall.shortLabel}
+          </a>
           <button
             type="button"
             className="-mr-2 inline-flex h-11 w-11 items-center justify-center text-so-paper lg:hidden"
@@ -102,7 +111,10 @@ export function SiteHeader() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="block py-3 font-so-display text-[2rem] leading-tight text-so-paper"
+                  aria-current={item.href === pathname ? "page" : undefined}
+                  className={`block py-3 font-so-display text-[2rem] leading-tight ${
+                    item.href === pathname ? "text-so-gold" : "text-so-paper"
+                  }`}
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
@@ -111,13 +123,15 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <Link
-          href="/#contact"
+        <a
+          href={discoveryCall.href}
+          {...CALL_LINK_PROPS}
           className="mt-8 inline-block rounded-[3px] bg-so-gold px-5 py-3 font-semibold text-so-ink"
           onClick={() => setOpen(false)}
         >
-          Let’s talk
-        </Link>
+          {discoveryCall.label}
+        </a>
+        <p className="mt-3 text-[0.9rem] text-so-dim">{discoveryCall.note}</p>
       </div>
     </header>
   );

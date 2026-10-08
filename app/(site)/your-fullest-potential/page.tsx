@@ -25,11 +25,10 @@ export default function YourFullestPotentialPage() {
       intro={
         <>
           <p>
-            Ten years to write the book. Ten months to write the talks. Ten weeks to write the album. Ten days to build the app.
-            It all started here.
+            This book took me ten years to write. My talks, my album, and my app all grew out of it.
           </p>
           <p>
-            This is an early draft of the opening chapters. I’m still polishing the final version, so if something here
+            This is an early draft of the opening chapters. I'm still polishing the final version, so if something here
             helps you, or trips you up,{" "}
             <a
               href={`${links.mailto}?subject=Your%20Fullest%20Potential`}
@@ -43,7 +42,7 @@ export default function YourFullestPotentialPage() {
       }
       after={
         <p className="text-[1rem] leading-7 text-so-mute">
-          Want more? Guided meditations and talks live on the{" "}
+          There's a guided meditation and more on the{" "}
           <a
             href={links.yfpYoutube}
             target="_blank"

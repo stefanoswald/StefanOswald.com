@@ -13,12 +13,12 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const INSIDE = [
-  { name: "A theater for mystery shows", body: "The main stage, built for magic, mentalism, and wonder." },
-  { name: "Signature dining", body: "Dinner that’s part of the night, not a stop before it." },
-  { name: "An immersive art experience", body: "Rooms you walk through, touch, and explore." },
-  { name: "A gym and spa", body: "Training, recovery, and a place to reset." },
-  { name: "A performing arts college", body: "Where the next generation of performers learns the craft." },
-  { name: "Innovation incubators", body: "Space for creators and builders to launch new ideas." }
+  { name: "A theater for mystery shows", body: "The main stage, built for magic and mentalism." },
+  { name: "Signature dining", body: "Dinner and the show in the same building." },
+  { name: "An immersive art experience", body: "Art rooms you can walk through and touch." },
+  { name: "A gym and spa", body: "A place to train and recover." },
+  { name: "A performing arts college", body: "A school for the next generation of performers." },
+  { name: "Innovation incubators", body: "Space for creators to build and launch new ideas." }
 ];
 
 export default function TopHatPage() {
@@ -26,9 +26,9 @@ export default function TopHatPage() {
     <>
       <PageIntro kicker="A future project" title="The Top Hat">
         <p>
-          An all-in-one entertainment and hospitality destination, planned for Orlando. Shows, food, art, wellness, and
-          education under one roof, wrapped in an LED exterior you won’t forget. The Orlando flagship comes first, with
-          more cities to follow.
+          The Top Hat is my plan for an all-in-one entertainment and hospitality destination in Orlando. It puts shows,
+          dining, art, a gym and spa, and a performing arts college under one roof, in a building wrapped in LED screens.
+          Orlando comes first, and other cities come after.
         </p>
       </PageIntro>
 
@@ -47,7 +47,7 @@ export default function TopHatPage() {
 
         <section aria-labelledby="inside-heading" className="mt-20">
           <h2 id="inside-heading" className="font-so-display text-[2.6rem] font-medium leading-tight text-so-paper">
-            What’s inside
+            What's inside
           </h2>
           <ul className="mt-8 grid border-t border-so-line sm:grid-cols-2 lg:grid-cols-3">
             {INSIDE.map((item) => (
@@ -84,14 +84,14 @@ export default function TopHatPage() {
         <div className="mt-20 border-t border-so-line pt-12">
           <h2 className="font-so-display text-[2.2rem] font-medium leading-tight text-so-paper">Want to be part of it?</h2>
           <p className="so-pretty mt-4 max-w-2xl text-[1.05rem] leading-[1.8] text-so-mute">
-            If you’re a performer, a builder, or someone who wants to help bring The Top Hat to life, I’d love to hear from you.
+            If you want to help build The Top Hat, I'd like to hear from you.
           </p>
-          <Link
-            href="/#contact"
+          <a
+            href="mailto:StefanPaulOswald@gmail.com?subject=The%20Top%20Hat"
             className="mt-7 inline-flex items-center rounded-[3px] bg-so-gold px-5 py-3 text-[0.95rem] font-semibold text-so-ink transition-colors so-hover:bg-so-gold-2"
           >
-            Let’s talk
-          </Link>
+            Email me about The Top Hat
+          </a>
         </div>
       </div>
     </>
