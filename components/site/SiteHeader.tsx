@@ -3,16 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-import { discoveryCall } from "@/data/site/home";
 
+// The three things Stefan sells come first. Everything else about him is one click away.
 const NAV = [
-  { href: "/#services", label: "Services" },
-  { href: "/#how-it-works", label: "How it works" },
-  { href: "/#work", label: "My work" },
+  { href: "/#ai-consulting", label: "AI consulting" },
+  { href: "/#entertainment", label: "Entertainment" },
+  { href: "/#murals", label: "Murals" },
+  { href: "/travel", label: "Travel" },
+  { href: "/watch", label: "Watch" },
   { href: "/AboutMe", label: "About me" }
 ];
 
-const CALL_LINK_PROPS = discoveryCall.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+const CONTACT = { href: "/#contact", label: "Contact" };
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -58,7 +60,7 @@ export function SiteHeader() {
         </Link>
 
         <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-7 text-[0.92rem] text-so-paper/80">
+          <ul className="flex items-center gap-6 text-[0.92rem] text-so-paper/80 xl:gap-7">
             {NAV.map((item) => (
               <li key={item.href}>
                 <Link
@@ -74,13 +76,12 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
-            href={discoveryCall.href}
-            {...CALL_LINK_PROPS}
+          <Link
+            href={CONTACT.href}
             className="hidden rounded-[3px] bg-so-gold px-4 py-2 text-[0.88rem] font-semibold text-so-ink transition-colors so-hover:bg-so-gold-2 sm:inline-block"
           >
-            {discoveryCall.shortLabel}
-          </a>
+            {CONTACT.label}
+          </Link>
           <button
             type="button"
             className="-mr-2 inline-flex h-11 w-11 items-center justify-center text-so-paper lg:hidden"
@@ -123,15 +124,13 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <a
-          href={discoveryCall.href}
-          {...CALL_LINK_PROPS}
+        <Link
+          href={CONTACT.href}
           className="mt-8 inline-block rounded-[3px] bg-so-gold px-5 py-3 font-semibold text-so-ink"
           onClick={() => setOpen(false)}
         >
-          {discoveryCall.label}
-        </a>
-        <p className="mt-3 text-[0.9rem] text-so-dim">{discoveryCall.note}</p>
+          {CONTACT.label}
+        </Link>
       </div>
     </header>
   );

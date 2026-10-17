@@ -4,7 +4,7 @@ const OG_IMAGE = {
   url: "/images/site/og.jpg",
   width: 1200,
   height: 630,
-  alt: "Stefan Oswald, AI consultant and corporate entertainer"
+  alt: "Stefan Oswald, AI consultant, corporate entertainer, and muralist"
 };
 
 /**

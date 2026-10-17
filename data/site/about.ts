@@ -1,6 +1,6 @@
 /**
- * Copy for /AboutMe: everything about Stefan that isn't AI consulting. The home page links here
- * once ("More about me"), and nothing else on the site points to the pages listed in `explore`.
+ * Copy for /AboutMe: Stefan's story, his projects, and the things he loves. The home page sells his three
+ * services (AI consulting, corporate entertainment, and murals), and this page links back to them.
  *
  * Same house style as data/site/home.ts. Show counts, countries, reviews, and TV credits match
  * MagicTrickGuy.com so the two sites never disagree.
@@ -8,15 +8,13 @@
 
 import type { Photo, Project, SuitGroup } from "@/data/site/types";
 
-const MTG = "https://www.magictrickguy.com";
-
 export const intro = {
   kicker: "About me",
   heading: "Hi, I'm Stefan.",
   paragraphs: [
     "I was born in Oklahoma City. In 2005 I joined the US Air Force and worked in air transportation until 2010, when I left as a Staff Sergeant. While I was deployed to Iraq, I did magic for patients in a military hospital.",
     "Along the way I earned degrees in engineering, software engineering, mathematics, theater, and air transportation. I've performed magic for almost twenty years, in 43 countries and on TV.",
-    "Today most of my work is AI consulting. The engineering helps me build things that work, and the years on stage help me explain them. I live near Orlando, Florida, and my purpose hasn't changed. I want to bring joy to as many people as I can."
+    "Today most of my work is AI consulting. I still perform at corporate events, and I paint murals too. The engineering helps me build things that work, and the years on stage help me explain them. I live near Orlando, Florida, and my purpose hasn't changed. I want to bring joy to as many people as I can."
   ],
   photo: {
     src: "/images/site/stefan-oswald-portrait.webp",
@@ -69,8 +67,7 @@ export const stage = {
       height: 1350
     }
   ] satisfies Photo[],
-  // The only link to MagicTrickGuy.com on this page.
-  link: { label: "Book me for an event at MagicTrickGuy.com", href: MTG }
+  link: { label: "See prices and book me for your event", href: "/#entertainment", external: false }
 };
 
 export const projects: { heading: string; stages: { label: string; note: string; items: Project[] }[] } = {
@@ -92,8 +89,14 @@ export const projects: { heading: string; stages: { label: string; note: string;
         {
           name: "AI consulting",
           body: "My main work now. I help businesses put AI to work.",
-          href: "/",
+          href: "/#ai-consulting",
           linkLabel: "See how it works"
+        },
+        {
+          name: "Murals",
+          body: "I paint murals by hand, and now you can hire me to paint one for you.",
+          href: "/#murals",
+          linkLabel: "See my mural"
         },
         {
           name: "Your Fullest Potential",
@@ -166,7 +169,7 @@ export const passions: { heading: string; intro: string; groups: SuitGroup[] } =
           href: "/writing"
         },
         { rank: "K", title: "Music", line: "I wrote the Your Fullest Potential album in ten weeks." },
-        { rank: "Q", title: "Murals", line: "Big walls and a lot of paint." },
+        { rank: "Q", title: "Murals", line: "Big walls and a lot of paint. You can hire me for one.", href: "/#murals" },
         { rank: "J", title: "3D printing", line: "Eleven printers and counting." }
       ]
     },
@@ -189,7 +192,7 @@ export const passions: { heading: string; intro: string; groups: SuitGroup[] } =
       suit: "hearts",
       label: "Live",
       cards: [
-        { rank: "A", title: "Travel", line: "Shows in 43 countries so far." },
+        { rank: "A", title: "Travel", line: "Shows in 43 countries so far.", href: "/travel" },
         { rank: "K", title: "Longevity", line: "I want a long, strong life, so I train for one." },
         { rank: "Q", title: "Calisthenics", line: "Bodyweight training I can do anywhere." },
         { rank: "J", title: "Cybertruck", line: "Want to drive mine? It's on Turo.", href: "/cybertruck" }
@@ -206,7 +209,7 @@ export const explore = {
     { label: "The Contingency", href: "/the-contingency", body: "The start of my science fiction series." },
     { label: "The Top Hat", href: "/top-hat", body: "My plan for an entertainment destination in Orlando." },
     { label: "Energy for Energy", href: "/energy-for-energy", body: "An app idea built on trading favors." },
-    { label: "Travel gear", href: "/travel-gear", body: "Everything I pack to travel light and film." },
+    { label: "Travel", href: "/travel", body: "Photos from a few places I've been, and the gear I pack." },
     { label: "Cybertruck", href: "/cybertruck", body: "Rent my truck on Turo." },
     { label: "Learn magic", href: "/learn-magic", body: "A few rules and some easy tricks to start with." }
   ],

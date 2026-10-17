@@ -26,7 +26,7 @@ const sans = localFont({
 // Each page sets its own title, description, and share preview with pageMetadata() (lib/site/meta.ts).
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.stefanoswald.com"),
-  title: { default: "Stefan Oswald | AI Consultant and Corporate Entertainer", template: "%s | Stefan Oswald" },
+  title: { default: "Stefan Oswald | AI Consultant, Corporate Entertainer, and Muralist", template: "%s | Stefan Oswald" },
   icons: { icon: "/images/site/favicon.svg", apple: "/images/site/apple-touch-icon.png" }
 };
 

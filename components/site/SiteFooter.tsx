@@ -1,14 +1,20 @@
 import Link from "next/link";
 import { footer, links } from "@/data/site/home";
-import { CallButton } from "@/components/site/ui";
 import { NewTabNote } from "@/components/site/ExternalMark";
+
+const SOCIAL = [
+  { label: "MagicTrickGuy.com", href: links.mtg },
+  { label: "Instagram", href: links.instagram },
+  { label: "YouTube", href: links.youtube },
+  { label: "GitHub", href: links.github }
+];
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-so-line bg-so-coal">
       <div className="mx-auto max-w-6xl px-4 pb-10 pt-16 sm:px-6">
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-          <div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="col-span-2 lg:col-span-1">
             <Link href="/" className="font-so-display text-[1.4rem] font-semibold uppercase tracking-[0.14em] text-so-paper">
               Stefan Oswald
             </Link>
@@ -21,27 +27,34 @@ export function SiteFooter() {
             </a>
           </div>
 
-          <nav aria-label="Footer">
-            <ul className="flex flex-wrap gap-x-7 gap-y-3 text-[0.95rem] text-so-mute">
-              {footer.links.map((item) => (
+          {footer.groups.map((group) => (
+            <nav key={group.title} aria-label={group.title}>
+              <p className="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-so-dim">{group.title}</p>
+              <ul className="mt-4 space-y-3 text-[0.95rem] text-so-mute">
+                {group.links.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="transition-colors so-hover:text-so-paper">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+
+          <nav aria-label="Elsewhere">
+            <p className="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-so-dim">Elsewhere</p>
+            <ul className="mt-4 space-y-3 text-[0.95rem] text-so-mute">
+              {SOCIAL.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="transition-colors so-hover:text-so-paper">
+                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="transition-colors so-hover:text-so-paper">
                     {item.label}
-                  </Link>
+                    <NewTabNote />
+                  </a>
                 </li>
               ))}
-              <li>
-                <a href={links.github} target="_blank" rel="noopener noreferrer" className="transition-colors so-hover:text-so-paper">
-                  GitHub
-                  <NewTabNote />
-                </a>
-              </li>
             </ul>
           </nav>
-
-          <div className="lg:text-right">
-            <CallButton />
-          </div>
         </div>
 
         <div className="mt-14 border-t border-so-line pt-6 text-[0.82rem] text-so-dim">

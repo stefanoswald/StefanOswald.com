@@ -22,7 +22,13 @@ const LEGACY_PAGES: Array<[string, string]> = [
   // Other ways people might type /AboutMe. "/aboutme" lives in vercel.json instead: these redirects ignore
   // letter case, so "/aboutme" here would also catch "/AboutMe" and loop forever.
   ["/about-me", "/AboutMe"],
-  ["/about", "/AboutMe"]
+  ["/about", "/AboutMe"],
+  // Short addresses for the three services on the home page.
+  ["/ai", "/#ai-consulting"],
+  ["/ai-consulting", "/#ai-consulting"],
+  ["/entertainment", "/#entertainment"],
+  ["/murals", "/#murals"],
+  ["/mural", "/#murals"]
 ];
 
 const nextConfig: NextConfig = {

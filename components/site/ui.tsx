@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ExternalMark, NewTabNote } from "@/components/site/ExternalMark";
-import { discoveryCall } from "@/data/site/home";
+import { discoveryCall, type Action } from "@/data/site/home";
 
 /** Keeps a hyphenated word like "30-minute" on one line, so a line never breaks right after the hyphen. */
 export function keepHyphenatedWordsWhole(text: string): ReactNode {
@@ -38,20 +38,40 @@ export function Kicker({ children, className = "" }: { children: ReactNode; clas
 const GOLD_BUTTON =
   "inline-flex items-center gap-2 whitespace-nowrap rounded-[3px] bg-so-gold px-5 py-3 text-[0.95rem] font-semibold text-so-ink transition-colors so-hover:bg-so-gold-2";
 
+const OUTLINE_BUTTON =
+  "inline-flex items-center gap-2 rounded-[3px] border border-so-line-2 px-5 py-3 text-[0.95rem] font-semibold text-so-paper transition-colors so-hover:border-so-gold so-hover:text-so-gold-2";
+
 /** The discovery call button. Where it goes (email now, a booking page later) lives in data/site/home.ts. */
 export function CallButton({ className = "", short = false }: { className?: string; short?: boolean }) {
   const label = short ? discoveryCall.shortLabel : discoveryCall.label;
-  if (discoveryCall.external) {
+  return (
+    <ActionButton action={{ href: discoveryCall.href, label, external: discoveryCall.external }} className={className} />
+  );
+}
+
+/** A gold (or outlined) button for one of the actions in data/site/home.ts. Other websites open in a new tab. */
+export function ActionButton({
+  action,
+  variant = "gold",
+  className = ""
+}: {
+  action: Action;
+  variant?: "gold" | "outline";
+  className?: string;
+}) {
+  const style = `${variant === "gold" ? GOLD_BUTTON : OUTLINE_BUTTON} ${className}`;
+  if (action.external) {
     return (
-      <a href={discoveryCall.href} target="_blank" rel="noopener noreferrer" className={`${GOLD_BUTTON} ${className}`}>
-        {label}
+      <a href={action.href} target="_blank" rel="noopener noreferrer" className={style}>
+        {action.label}
+        <ExternalMark />
         <NewTabNote />
       </a>
     );
   }
   return (
-    <a href={discoveryCall.href} className={`${GOLD_BUTTON} ${className}`}>
-      {label}
+    <a href={action.href} className={style}>
+      {action.label}
     </a>
   );
 }

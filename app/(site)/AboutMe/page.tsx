@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalMark, NewTabNote } from "@/components/site/ExternalMark";
+import { NewTabNote } from "@/components/site/ExternalMark";
 import { PassionDeck } from "@/components/site/PassionDeck";
-import { Kicker, SectionHeading, TextLink } from "@/components/site/ui";
+import { ActionButton, Kicker, SectionHeading, TextLink } from "@/components/site/ui";
 import { explore, intro, passions, projects, stage } from "@/data/site/about";
 import { links } from "@/data/site/home";
 import { pageMetadata } from "@/lib/site/meta";
@@ -11,7 +11,7 @@ import { pageMetadata } from "@/lib/site/meta";
 export const metadata: Metadata = pageMetadata({
   title: "About me",
   description:
-    "Stefan Oswald's story: Air Force veteran, engineer, magician in 43 countries, and now an AI consultant. Plus his projects, books, and the things he loves.",
+    "Stefan Oswald's story: Air Force veteran, engineer, magician in 43 countries, AI consultant, and muralist. Plus his projects, books, and the things he loves.",
   path: "/AboutMe"
 });
 
@@ -133,16 +133,7 @@ function Stage() {
             </figcaption>
           </figure>
           <div>
-            <a
-              href={stage.link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-[3px] border border-so-line-2 px-5 py-3 text-[0.95rem] font-semibold text-so-paper transition-colors so-hover:border-so-gold so-hover:text-so-gold-2"
-            >
-              {stage.link.label}
-              <ExternalMark />
-              <NewTabNote />
-            </a>
+            <ActionButton action={stage.link} variant="outline" />
           </div>
         </div>
       </div>
@@ -253,7 +244,7 @@ function PersonJsonLd() {
     name: "Stefan Oswald",
     url: "https://www.stefanoswald.com/AboutMe",
     image: "https://www.stefanoswald.com/images/site/stefan-oswald-portrait.webp",
-    jobTitle: ["AI Consultant", "Magician"],
+    jobTitle: ["AI Consultant", "Magician", "Muralist"],
     birthPlace: "Oklahoma City, Oklahoma",
     sameAs: [links.mtg, links.instagram, links.youtube, links.facebook, links.github]
   };
