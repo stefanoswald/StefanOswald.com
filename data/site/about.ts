@@ -14,7 +14,7 @@ export const intro = {
   paragraphs: [
     "I was born in Oklahoma City. In 2005 I joined the US Air Force and worked in air transportation until 2010, when I left as a Staff Sergeant. While I was deployed to Iraq, I did magic for patients in a military hospital.",
     "Along the way I earned degrees in engineering, software engineering, mathematics, theater, and air transportation. I've performed magic for almost twenty years, in 43 countries and on TV.",
-    "Today most of my work is AI consulting. I still perform at corporate events, and I paint murals too. The engineering helps me build things that work, and the years on stage help me explain them. I live near Orlando, Florida, and my purpose hasn't changed. I want to bring joy to as many people as I can."
+    "Today AI consulting is my main business. I still perform at corporate events, and I paint murals too. The engineering helps me build things that work, and the years on stage help me explain them. I live near Orlando, Florida, and my purpose hasn't changed. I want to bring joy to as many people as I can."
   ],
   photo: {
     src: "/images/site/stefan-oswald-portrait.webp",
@@ -50,7 +50,7 @@ export const stage = {
   photos: [
     {
       src: "/images/site/corporate-guests-laughing-together.webp",
-      alt: "Two guests laughing at a corporate event after a card trick",
+      alt: "Two guests laughing together at a corporate party in a jet hangar",
       width: 1080,
       height: 1350
     },
@@ -78,7 +78,7 @@ export const projects: { heading: string; stages: { label: string; note: string;
       note: "Past projects",
       items: [
         { name: "Super Host Florida", body: "My vacation rental and vehicle rental company." },
-        { name: "The Great Magic Hall", body: "I was the resident magician there, in Old Town Kissimmee." },
+        { name: "The Great Magic Hall", body: "I was a resident magician there, in Old Town Kissimmee." },
         { name: "Drone stock footage", body: "A library of aerial footage for filmmakers and editors." }
       ]
     },
@@ -88,7 +88,7 @@ export const projects: { heading: string; stages: { label: string; note: string;
       items: [
         {
           name: "AI consulting",
-          body: "My main work now. I help businesses put AI to work.",
+          body: "My main business now. I help businesses put AI to work.",
           href: "/#ai-consulting",
           linkLabel: "See how it works"
         },

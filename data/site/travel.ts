@@ -30,7 +30,7 @@ export const travel = {
       width: 1600,
       height: 900,
       place: "Santorini, Greece",
-      note: "Above Fira, 2023"
+      note: "Above Imerovigli, 2023"
     },
     {
       src: "/images/site/travel/dubai-burj-khalifa.webp",

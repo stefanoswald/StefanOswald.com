@@ -180,7 +180,7 @@ export const ai = {
     }
   ],
   buildsHeading: "I build the AI I recommend.",
-  buildsIntro: "I use all of these myself. Some run every day, and one is still in progress.",
+  buildsIntro: "I built all of these for my own work, and one is still in progress.",
   builds: [
     {
       name: "Ronathon",
@@ -190,7 +190,7 @@ export const ai = {
     {
       name: "The NAS Index",
       kind: "Private search",
-      body: "A private search engine for my archive of more than 260,000 photos and videos. It can find a face in a crowd or the moment an audience started laughing."
+      body: "A private search engine for my archive of more than 260,000 files. It can find a face in a crowd or the moment an audience started laughing."
     },
     {
       name: "YFP",
@@ -209,7 +209,7 @@ export const ai = {
     },
     {
       name: "Anti-Social",
-      kind: "iPhone and Android",
+      kind: "iPhone app",
       body: "Facebook and Instagram without the feed. I still get my messages and Marketplace, but there's nothing to scroll."
     },
     {
@@ -245,7 +245,7 @@ export const entertainment = {
   photos: [
     {
       src: "/images/site/corporate-guests-laughing-together.webp",
-      alt: "Two guests laughing at a corporate event after a card trick",
+      alt: "Two guests laughing together at a corporate party in a jet hangar",
       width: 1080,
       height: 1350
     },
@@ -298,7 +298,7 @@ export const murals = {
     },
     {
       src: "/images/site/murals/mural-in-progress.webp",
-      alt: "Stefan painting the left side of the mural. The galaxy and sky are filled in, and the figure on the right is still an outline",
+      alt: "Stefan painting the left side of the mural. The galaxy and sky are filled in, and the figure on the right is still mostly an outline",
       width: 1600,
       height: 901,
       caption: "Later that day"
