@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { DroneReel } from "@/components/site/DroneReel";
 import { PageIntro } from "@/components/site/PageIntro";
 import { travel, type TravelPhoto } from "@/data/site/travel";
 import { pageMetadata } from "@/lib/site/meta";
@@ -8,7 +9,7 @@ import { pageMetadata } from "@/lib/site/meta";
 export const metadata: Metadata = pageMetadata({
   title: "Travel",
   description:
-    "Photos from Stefan Oswald's travels: drone shots of Santorini, Mykonos, and Paros, plus Dubai, Hyderabad, and London.",
+    "Drone footage and photos from Stefan Oswald's travels: Santorini, Mykonos, and Paros, plus Dubai, Hyderabad, and London.",
   path: "/travel"
 });
 
@@ -21,16 +22,20 @@ export default function TravelPage() {
         ))}
       </PageIntro>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <Figure photo={travel.hero} sizes="(min-width: 1152px) 1104px, 100vw" priority />
-      </div>
+      <figure className="mx-auto max-w-6xl px-4 sm:px-6">
+        <DroneReel src={travel.reel.src} poster={travel.reel.poster} label={travel.reel.label} autoPlay />
+        <figcaption className="mt-2.5 flex flex-wrap items-baseline gap-x-2 text-[0.92rem]">
+          <span className="text-so-paper">{travel.reel.place}</span>
+          <span className="text-so-dim">{travel.reel.note}</span>
+        </figcaption>
+      </figure>
 
       <section aria-label="Photos" className="mx-auto max-w-6xl px-4 pt-6 sm:px-6">
         {/* Columns keep each photo's own shape, so tall and wide shots sit together without cropping. */}
         <ul className="gap-6 sm:columns-2 lg:columns-3">
-          {travel.photos.map((photo) => (
+          {travel.photos.map((photo, index) => (
             <li key={photo.src} className="mb-6 break-inside-avoid">
-              <Figure photo={photo} sizes="(min-width: 1152px) 352px, (min-width: 640px) 46vw, 100vw" />
+              <Figure photo={photo} sizes="(min-width: 1152px) 352px, (min-width: 640px) 46vw, 100vw" priority={index < 2} />
             </li>
           ))}
         </ul>

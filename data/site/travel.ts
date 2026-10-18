@@ -15,17 +15,17 @@ export const travel = {
     "I've performed in 43 countries. These are a few of the places I've been, and I shot most of them with my drone.",
     "Costa Rica is my favorite country. Santorini is my favorite city."
   ],
-  hero: {
-    src: "/images/site/travel/mykonos-harbor.webp",
-    alt: "Aerial view of the harbor on Mykonos, with turquoise water, white houses, and boats",
-    width: 2000,
-    height: 1125,
-    place: "Mykonos, Greece",
+  /** 36 seconds cut from Stefan's 2023 drone flights over the Greek islands. Silent, 720p. */
+  reel: {
+    src: "/videos/drone-reel-greece.mp4",
+    poster: "/videos/drone-reel-greece-poster.jpg",
+    label: "Drone footage of Mykonos, Santorini, and Paros",
+    place: "Mykonos, Santorini, and Paros, Greece",
     note: "From my drone, 2023"
-  } satisfies TravelPhoto,
+  },
   photos: [
     {
-      src: "/images/site/travel/santorini-fira.webp",
+      src: "/images/site/travel/santorini-imerovigli.webp",
       alt: "Aerial view of white houses along the top of red volcanic cliffs above the sea in Santorini",
       width: 1600,
       height: 900,

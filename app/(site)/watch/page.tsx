@@ -3,12 +3,15 @@ import { pageMetadata } from "@/lib/site/meta";
 import { ExternalMark, NewTabNote } from "@/components/site/ExternalMark";
 import { PageIntro } from "@/components/site/PageIntro";
 import { YouTubeLite } from "@/components/site/YouTubeLite";
+import Link from "next/link";
+import { DroneReel } from "@/components/site/DroneReel";
 import { links } from "@/data/site/home";
+import { travel } from "@/data/site/travel";
 
 export const metadata: Metadata = pageMetadata({
   title: "Watch",
   description:
-    "Magic from festivals, parties, campuses, and corporate events, plus a few behind-the-scenes projects from Stefan Oswald.",
+    "Magic from festivals, parties, campuses, and corporate events, plus behind-the-scenes projects and drone footage from Stefan Oswald.",
   path: "/watch"
 });
 
@@ -31,7 +34,10 @@ export default function WatchPage() {
   return (
     <>
       <PageIntro kicker="Watch" title="Magic, up close">
-        <p>Videos from street shows, festivals, and parties, plus a few projects from behind the curtain. New videos go up on @MagicTrickGuy first.</p>
+        <p>
+          Videos from street shows, festivals, and parties, plus a few projects from behind the curtain and some footage from my
+          drone. New magic videos go up on @MagicTrickGuy first.
+        </p>
       </PageIntro>
 
       <section aria-labelledby="promo-heading" className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -65,7 +71,7 @@ export default function WatchPage() {
         </p>
       </section>
 
-      <section aria-labelledby="videos-heading" className="mx-auto max-w-6xl px-4 pb-24 pt-20 sm:px-6 lg:pb-32">
+      <section aria-labelledby="videos-heading" className="mx-auto max-w-6xl px-4 pt-20 sm:px-6">
         <h2 id="videos-heading" className="font-so-display text-[2.2rem] font-medium text-so-paper">
           More videos
         </h2>
@@ -87,6 +93,22 @@ export default function WatchPage() {
           <ExternalMark />
           <NewTabNote />
         </a>
+      </section>
+
+      <section aria-labelledby="drone-heading" className="mx-auto max-w-6xl px-4 pb-24 pt-20 sm:px-6 lg:pb-32">
+        <h2 id="drone-heading" className="font-so-display text-[2.2rem] font-medium text-so-paper">
+          From my drone
+        </h2>
+        <p className="mt-3 max-w-2xl text-[1rem] leading-[1.7] text-so-mute">
+          I shot this over Mykonos, Santorini, and Paros in 2023. More photos from my trips are on the{" "}
+          <Link href="/travel" className="text-so-paper underline decoration-so-gold/60 underline-offset-4 so-hover:text-so-gold-2">
+            travel page
+          </Link>
+          .
+        </p>
+        <div className="mt-8">
+          <DroneReel src={travel.reel.src} poster={travel.reel.poster} label={travel.reel.label} />
+        </div>
       </section>
     </>
   );
