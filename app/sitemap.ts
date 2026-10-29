@@ -15,7 +15,7 @@ const PAGES = [
   { path: "/top-hat", priority: 0.4 },
   { path: "/energy-for-energy", priority: 0.3 },
   { path: "/travel-gear", priority: 0.4 },
-  { path: "/cybertruck", priority: 0.3 },
+  { path: "/cybertruck-rental", priority: 0.3 },
   { path: "/learn-magic", priority: 0.4 }
 ];
 

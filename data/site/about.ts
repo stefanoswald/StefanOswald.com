@@ -195,7 +195,7 @@ export const passions: { heading: string; intro: string; groups: SuitGroup[] } =
         { rank: "A", title: "Travel", line: "Shows in 43 countries so far.", href: "/travel" },
         { rank: "K", title: "Longevity", line: "I want a long, strong life, so I train for one." },
         { rank: "Q", title: "Calisthenics", line: "Bodyweight training I can do anywhere." },
-        { rank: "J", title: "Cybertruck", line: "Want to drive mine? It's on Turo.", href: "/cybertruck" }
+        { rank: "J", title: "Cybertruck", line: "Want to drive mine? It's on Turo.", href: "/cybertruck-rental" }
       ]
     }
   ]
@@ -210,7 +210,7 @@ export const explore = {
     { label: "The Top Hat", href: "/top-hat", body: "My plan for an entertainment destination in Orlando." },
     { label: "Energy for Energy", href: "/energy-for-energy", body: "An app idea built on trading favors." },
     { label: "Travel", href: "/travel", body: "Photos from a few places I've been, and the gear I pack." },
-    { label: "Cybertruck", href: "/cybertruck", body: "Rent my truck on Turo." },
+    { label: "Cybertruck", href: "/cybertruck-rental", body: "Rent my truck on Turo." },
     { label: "Learn magic", href: "/learn-magic", body: "A few rules and some easy tricks to start with." }
   ],
   socialNote: "I post as @MagicTrickGuy on"

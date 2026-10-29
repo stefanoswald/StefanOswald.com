@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Rent my Cybertruck",
   description:
     "Drive to the show in style. Rent Stefan Oswald's Tesla Cybertruck on Turo, and watch the quick overview on the basics and charging.",
-  path: "/cybertruck"
+  path: "/cybertruck-rental"
 });
 
 // The live listing (Kissimmee, FL), checked Oct 8, 2026.

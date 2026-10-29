@@ -10,7 +10,7 @@ const LEGACY_PAGES: Array<[string, string]> = [
   ["/your-fullest-potential.html", "/your-fullest-potential"],
   ["/the-contingency.html", "/the-contingency"],
   ["/travel-gear.html", "/travel-gear"],
-  ["/cybertruck.html", "/cybertruck"],
+  ["/cybertruck.html", "/cybertruck-rental"],
   ["/tophat.html", "/top-hat"],
   ["/the-magic-hostel.html", "/top-hat#the-magic-hostel"],
   ["/learn-magic.html", "/learn-magic"],
@@ -31,9 +31,18 @@ const LEGACY_PAGES: Array<[string, string]> = [
   ["/mural", "/#murals"]
 ];
 
+// Short-term redirects (307), so browsers don't remember them and they can be changed back any time.
+// /cybertruck is printed on the magnet on Stefan's Cybertruck. Since Oct 29, 2026 it sends people to his magic
+// site, because he performs from the back of the truck at events. The Turo rental page moved to /cybertruck-rental.
+// To send the magnet back to the rental page, change the destination to "/cybertruck-rental".
+const TEMPORARY: Array<[string, string]> = [["/cybertruck", "https://www.magictrickguy.com"]];
+
 const nextConfig: NextConfig = {
   async redirects() {
-    return LEGACY_PAGES.map(([source, destination]) => ({ source, destination, permanent: true }));
+    return [
+      ...LEGACY_PAGES.map(([source, destination]) => ({ source, destination, permanent: true })),
+      ...TEMPORARY.map(([source, destination]) => ({ source, destination, permanent: false }))
+    ];
   }
 };
 
