@@ -40,7 +40,7 @@ export function AcadiaGoverningDocuments() {
   return (
     <section
       id="governing-documents"
-      className="scroll-mt-6 border-t border-acadia-moss/20 bg-white"
+      className="scroll-mt-20 border-t border-acadia-moss/20 bg-white"
       aria-labelledby="governing-documents-title"
     >
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">

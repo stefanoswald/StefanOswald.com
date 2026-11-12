@@ -25,6 +25,12 @@ export type RelatedDocument = {
   note?: string;
 };
 
+export type RelatedPage = {
+  title: string;
+  href: string;
+  note?: string;
+};
+
 export type SourceStatus = "Verified" | "Estimate" | "Pending" | "Historical";
 
 export type ProjectSourceNote = {
@@ -66,6 +72,7 @@ export type Project = {
   boardNotes: string;
   vendorQuoteNotes?: string;
   relatedDocuments?: RelatedDocument[];
+  relatedPages?: RelatedPage[];
   lastReviewed?: string;
   sourceNotes?: ProjectSourceNote[];
   openQuestions?: string[];

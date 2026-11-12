@@ -11,8 +11,120 @@ import {
 } from "@/data/acadiaPublicDocuments";
 
 const reviewed = "August 10, 2026";
+const reviewedNovember = "November 12, 2026";
 
 export const acadiaProjects: Project[] = [
+  {
+    id: "self-management-software",
+    title: "Self-Management Software and Owner Portal",
+    status: "Proposed",
+    shortDescription:
+      "A proposal would end the outside management contract and run billing, payments, records, and requests through HOA software with an online owner portal. No change has been approved.",
+    fullDescription:
+      "A proposal before the board would move Acadia Estates from an outside management company to self-management supported by software. PayHOA is the product under review. It would handle invoices, online payments and autopay, the owner ledger, bank syncing, requests, violations, and owner messages. Board volunteers would keep the duties that need judgment. A preview of the owner portal is published on this site so homeowners can see the idea before any decision.",
+    estimatedCost:
+      "PayHOA lists $49 per month for 1 to 25 homes and $59 per month for 26 to 50 homes on annual billing. Online payment fees are extra: $2.45 per bank payment and 3.5% plus $0.50 per card payment. The current management cost and any contract exit terms have not been published here yet.",
+    estimatedTimeline:
+      "No decision date is set. PayHOA offers a 30-day free trial, so a test could run before any contract change.",
+    boardNotes:
+      "Before a vote, the board should confirm the management contract's notice and exit terms, assign each duty the manager handles today to a named volunteer or tool, and confirm that the association's crime and directors and officers coverage fits a self-managed board. Payments should keep two-person approval.",
+    vendorQuoteNotes:
+      "Prices come from PayHOA's public pricing page as read on November 12, 2026. PayHOA's AI add-on is switched on by default and becomes a paid add-on after three months unless it is turned off. No written quote has been requested.",
+    relatedPages: [
+      {
+        title: "Owner portal preview",
+        href: "/Acadia/portal",
+        note: "A clickable model with sample data. It takes no payments."
+      },
+      {
+        title: "Savings plan",
+        href: "/Acadia/savings",
+        note: "Costs, a calculator, the duty list, and safeguards."
+      }
+    ],
+    lastReviewed: reviewedNovember,
+    openQuestions: [
+      "What does the association pay for management today, and what notice or exit fee does the contract require?",
+      "Which board member or volunteer will own each duty: billing, records requests, estoppel letters, meeting notices, and vendor payments?",
+      "Will the association absorb online payment fees or pass them to the owner who chooses to pay online?",
+      "Do the association's insurers have any conditions for a self-managed board?"
+    ],
+    sourceNotes: [
+      {
+        title: "PayHOA public pricing page",
+        sourceType: "Vendor information",
+        date: "November 12, 2026",
+        status: "Verified",
+        summary:
+          "Supports the plan prices, payment fees, free trial, and no-contract terms. Prices can change, and no written quote is on file.",
+        href: "https://www.payhoa.com/pricing"
+      },
+      {
+        title: "Board proposal",
+        sourceType: "Board record",
+        date: "November 2026",
+        status: "Pending",
+        summary: "Raised as a proposal. No approved minutes or resolution are on file here."
+      }
+    ]
+  },
+  {
+    id: "professional-review-model",
+    title: "Attorney and CPA Review Model",
+    status: "Proposed",
+    shortDescription:
+      "A proposal would have AI tools prepare first drafts of routine documents and tax work, with a licensed attorney or CPA reviewing, correcting, and signing off. Review-only pricing has not been quoted.",
+    fullDescription:
+      "Under this proposal the association would stop paying professionals for first drafts and routine preparation. AI tools would draft routine notices, policies, letters, and the year-end tax package from the association's own records. A Florida attorney would review legal documents before use. A CPA would verify the books and file the tax return. The association would still pay for professional judgment and accountability. Liens, collections, lawsuits, and changes to recorded documents would stay attorney-led.",
+    estimatedCost:
+      "Not yet known. Savings depend on what the attorney and CPA charge for review-only work. No review-only quote is on file.",
+    estimatedTimeline:
+      "Could be tested on one routine document and on the next tax return before wider use",
+    boardNotes:
+      "A professional is accountable only for work they agree to stand behind. Each engagement letter should state in writing that the attorney or CPA has reviewed and approved the final document. Owner account details and private information should not be entered into public AI tools. Every AI draft should be marked as a draft until a professional has reviewed it.",
+    vendorQuoteNotes: "No attorney or CPA proposal for review-only work has been received.",
+    relatedPages: [
+      {
+        title: "Savings plan",
+        href: "/Acadia/savings",
+        note: "How the review model works, with safeguards and the rules behind it."
+      }
+    ],
+    lastReviewed: reviewedNovember,
+    openQuestions: [
+      "Will the association's attorney accept review-only work, and at what price per document or per hour?",
+      "Will the CPA sign and file a return prepared from the association's software records, and what will that cost?",
+      "Which document types are approved for AI drafting, and which must stay with the attorney from the start?",
+      "Which level of year-end financial report does Florida law require for the association's revenue?"
+    ],
+    sourceNotes: [
+      {
+        title: "Florida Bar Ethics Opinion 24-1",
+        sourceType: "Public agency",
+        date: "January 19, 2024",
+        status: "Verified",
+        summary:
+          "Says Florida lawyers may use generative AI if they protect confidentiality, check the work, and bill fairly. It does not address an association preparing its own drafts.",
+        href: "https://www.floridabar.org/the-florida-bar-news/board-of-governors-adopts-ethics-guidelines-for-generative-ai-use/"
+      },
+      {
+        title: "IRS Instructions for Form 1120-H",
+        sourceType: "Public agency",
+        date: "2025 edition",
+        status: "Verified",
+        summary:
+          "Describes the homeowners association tax return. An association may file Form 1120-H or Form 1120, whichever results in the lower tax.",
+        href: "https://www.irs.gov/instructions/i1120h"
+      },
+      {
+        title: "Board proposal",
+        sourceType: "Board record",
+        date: "November 2026",
+        status: "Pending",
+        summary: "Raised as a proposal. No approved minutes or resolution are on file here."
+      }
+    ]
+  },
   {
     id: "security-cameras",
     title: "Security Cameras",
