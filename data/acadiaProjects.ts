@@ -19,17 +19,17 @@ export const acadiaProjects: Project[] = [
     title: "Self-Management Software and Owner Portal",
     status: "Proposed",
     shortDescription:
-      "A proposal would end the outside management contract and run billing, payments, records, and requests through HOA software with an online owner portal. No change has been approved.",
+      "A proposal would end the outside management contract and run billing, payments, records, and requests through an owner portal built into this site. No change has been approved.",
     fullDescription:
-      "A proposal before the board would move Acadia Estates from an outside management company to self-management supported by software. PayHOA is the product under review. It would handle invoices, online payments and autopay, the owner ledger, bank syncing, requests, violations, and owner messages. Board volunteers would keep the duties that need judgment. A preview of the owner portal is published on this site so homeowners can see the idea before any decision.",
+      "A proposal before the board would move Acadia Estates from an outside management company to self-management supported by software. The plan shown on this site is an owner portal built for Acadia and run here. It would handle invoices, online payments and autopay, the owner ledger, requests, documents, and owner messages. A subscription product such as PayHOA is the off-the-shelf alternative, and the portal is measured against it. Board volunteers would keep the duties that need judgment. A preview of the portal is published so homeowners can try the idea before any decision.",
     estimatedCost:
-      "PayHOA lists $59 per month for 26 to 50 homes on annual billing. That is $708 a year for Acadia's 32 homes. Online payment fees are extra: $2.45 per bank payment and 3.5% plus $0.50 per card payment. The proposed 2027 budget lists $3,948 for the management company: a $200 monthly fee plus postage, printing, supplies, and other admin charges. The difference is about $3,240 a year, or about $101 per home, before any costs that remain.",
+      "The proposed 2027 budget lists $3,948 for the management company: a $200 monthly fee plus postage, printing, supplies, and other admin charges. Acadia's own portal would have no subscription. Its running cost is estimated at about $150 a year, and a payment processor would charge 0.8% on a bank payment, capped at $5, or 2.9% plus $0.30 on a card. PayHOA lists $59 per month for 26 to 50 homes on annual billing, which is $708 a year for Acadia's 32 homes, plus $2.45 per bank payment and 3.5% plus $0.50 per card payment. Either path is about $3,200 to $3,800 a year below the management company line, before any costs that remain. Volunteer time is not counted.",
     estimatedTimeline:
-      "No decision date is set. PayHOA offers a 30-day free trial, so a test could run before any contract change.",
+      "No decision date is set. The portal would be built in steps: this preview first, then owner sign-in and the ledger, then online payments. PayHOA offers a 30-day free trial for comparison.",
     boardNotes:
-      "Before a vote, the board should confirm the management contract's notice and exit terms, assign each duty the manager handles today to a named volunteer or tool, and confirm that the association's crime and directors and officers coverage fits a self-managed board. Payments should keep two-person approval.",
+      "Before a vote, the board should confirm the management contract's notice and exit terms, assign each duty the manager handles today to a named volunteer or tool, and confirm that the association's crime and directors and officers coverage fits a self-managed board. Payments should keep two-person approval. A portal built by volunteers also needs a second person who can maintain it and a written handoff plan.",
     vendorQuoteNotes:
-      "Prices come from PayHOA's public pricing page as read on November 12, 2026. PayHOA's AI add-on is switched on by default and becomes a paid add-on after three months unless it is turned off. No written quote has been requested.",
+      "PayHOA prices come from its public pricing page as read on November 12, 2026. Its AI add-on is switched on by default and becomes a paid add-on after three months unless it is turned off. Payment processor rates are Stripe's published US rates. The portal running cost is a planning estimate. No written quote has been requested for either path.",
     relatedPages: [
       {
         title: "Owner portal preview",
@@ -45,6 +45,7 @@ export const acadiaProjects: Project[] = [
     lastReviewed: reviewedNovember,
     openQuestions: [
       "What notice or exit fee does the management contract require?",
+      "Who keeps the portal running if the volunteer who built it steps away?",
       "How much of the postage, printing, and admin cost would remain after the change?",
       "Which board member or volunteer will own each duty: billing, records requests, estoppel letters, meeting notices, and vendor payments?",
       "Will the association absorb online payment fees or pass them to the owner who chooses to pay online?",
@@ -59,6 +60,15 @@ export const acadiaProjects: Project[] = [
         summary:
           "Supports the plan prices, payment fees, free trial, and no-contract terms. Prices can change, and no written quote is on file.",
         href: "https://www.payhoa.com/pricing"
+      },
+      {
+        title: "Stripe public pricing",
+        sourceType: "Vendor information",
+        date: "November 12, 2026",
+        status: "Verified",
+        summary:
+          "Supports the processor rates used for Acadia's own portal: 0.8% on a bank payment, capped at $5, and 2.9% plus $0.30 on a card. No account has been opened.",
+        href: "https://stripe.com/pricing"
       },
       {
         title: "Proposed 2027 budget",

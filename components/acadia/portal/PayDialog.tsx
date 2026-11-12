@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { payhoaFees } from "@/data/acadiaSavingsPlan";
+import { processorBankFee, processorCardFee, processorFees } from "@/data/acadiaSavingsPlan";
 import { samplePaymentMethods, type PaymentMethodId } from "./sampleData";
 import { PrimaryButton, QuietButton, money } from "./ui";
 
 type Step = "choose" | "review" | "done";
 
+/** The payment processor's published fee for one payment. */
 export function paymentFee(amount: number, method: PaymentMethodId) {
-  if (amount <= 0) return 0;
-  if (method === "bank") return payhoaFees.bankPayment;
-  return Math.round((amount * (payhoaFees.cardPercent / 100) + payhoaFees.cardFixed) * 100) / 100;
+  return method === "bank" ? processorBankFee(amount) : processorCardFee(amount);
 }
 
 export function PayDialog({
@@ -136,8 +135,8 @@ export function PayDialog({
                     </span>
                     <span className="text-right text-xs font-semibold text-slate-600">
                       {item.id === "bank"
-                        ? `${money(payhoaFees.bankPayment)} fee`
-                        : `${payhoaFees.cardPercent}% + ${money(payhoaFees.cardFixed)} fee`}
+                        ? `${processorFees.bankPercent}% fee, ${money(processorFees.bankCap)} at most`
+                        : `${processorFees.cardPercent}% + ${money(processorFees.cardFixed)} fee`}
                     </span>
                   </label>
                 ))}
@@ -175,8 +174,9 @@ export function PayDialog({
               </div>
             </dl>
             <p className="text-xs leading-5 text-slate-500">
-              The fee shown is PayHOA&apos;s published rate. The board would decide whether the
-              association absorbs it or the payer covers it. This preview shows the payer covering it.
+              The fee shown is the payment processor&apos;s published rate. The board would decide
+              whether the association absorbs it or the payer covers it. This preview shows the
+              payer covering it.
             </p>
             <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <QuietButton onClick={() => setStep("choose")}>Back</QuietButton>

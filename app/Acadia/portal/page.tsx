@@ -1,46 +1,44 @@
 import Link from "next/link";
 import { PortalMockup } from "@/components/acadia/portal/PortalMockup";
-import { PAYHOA_FEATURES_URL, PAYHOA_REVIEWED } from "@/data/acadiaSavingsPlan";
+import {
+  PAYHOA_FEATURES_URL,
+  PAYHOA_REVIEWED,
+  PROCESSOR_PRICING_URL,
+  PROCESSOR_REVIEWED,
+  portalComparison,
+  type ComparisonStatus
+} from "@/data/acadiaSavingsPlan";
 
 export const metadata = {
   title: "Owner Portal Preview | Acadia Estates HOA",
   description:
-    "A preview of the online owner portal Acadia Estates could offer: pay dues, set up autopay, track requests, and see where the money goes. Sample data only.",
+    "A preview of the owner portal being designed for Acadia Estates, on Acadia's own site: pay dues, set up autopay, track requests, and see where the money goes. Sample data only.",
   robots: { index: false }
 };
 
-type FeatureSource = "PayHOA" | "Live" | "Extra";
-
-const featureRows: { feature: string; source: FeatureSource }[] = [
-  { feature: "Pay online by bank transfer or card", source: "PayHOA" },
-  { feature: "Autopay with a spending limit", source: "PayHOA" },
-  { feature: "Automatic late fees on the board's schedule", source: "PayHOA" },
-  { feature: "Ledger, receipts, and statements for each home", source: "PayHOA" },
-  { feature: "Request forms with approval steps", source: "PayHOA" },
-  { feature: "Document storage, calendar, and announcements", source: "PayHOA" },
-  { feature: "Bank sync, reconciliation, and budget reports", source: "PayHOA" },
-  { feature: "Vendor bills with approval steps", source: "PayHOA" },
-  { feature: "Document helper that answers with page links", source: "Live" },
-  { feature: "Project tracker with homeowner feedback", source: "Live" },
-  { feature: "Source documents with a redaction log", source: "Live" },
-  { feature: "Where each dollar goes, shown to every owner", source: "Extra" },
-  { feature: "Private payment plan requests", source: "Extra" },
-  { feature: "AI drafts routed to attorney or CPA review", source: "Extra" }
-];
-
-const sourceStyles: Record<FeatureSource, { label: string; className: string }> = {
-  PayHOA: { label: "Included with PayHOA", className: "bg-blue-100 text-blue-800" },
-  Live: { label: "Live on this site today", className: "bg-emerald-100 text-emerald-800" },
-  Extra: { label: "Acadia extra to build", className: "bg-amber-100 text-amber-900" }
+const statusStyles: Record<ComparisonStatus, string> = {
+  live: "bg-emerald-100 text-emerald-800",
+  planned: "bg-amber-100 text-amber-900",
+  later: "bg-slate-100 text-slate-700",
+  no: "bg-slate-100 text-slate-700",
+  yes: "bg-blue-100 text-blue-800",
+  partial: "bg-slate-100 text-slate-700",
+  unlisted: "bg-slate-100 text-slate-500"
 };
+
+function StatusPill({ status, label }: { status: ComparisonStatus; label: string }) {
+  return (
+    <span className={`inline-flex rounded-md px-2.5 py-1 text-xs font-bold ${statusStyles[status]}`}>{label}</span>
+  );
+}
 
 export default function AcadiaPortalPreviewPage() {
   return (
     <main className="min-h-screen bg-acadia-cream">
       <div className="border-b border-amber-300 bg-amber-100 text-amber-950">
         <p className="mx-auto max-w-6xl px-4 py-3 text-sm font-semibold leading-6 sm:px-6 lg:px-8">
-          This is a preview. Every name, balance, and budget figure on this page is made up. No
-          payment can be made here. The board has not approved a payment system.
+          This is a preview. Every name, balance, and budget figure in the portal below is made up.
+          No payment can be made here. The board has not approved a payment system.
         </p>
       </div>
 
@@ -51,9 +49,10 @@ export default function AcadiaPortalPreviewPage() {
             Pay dues, track requests, and see the books in one place
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-700">
-            This is a working model of the owner portal Acadia Estates could offer if the board
-            moves to HOA software. Click around. Try a sample payment, turn on autopay, send a
-            sample request, or switch to the board view.
+            This is a working model of an owner portal designed for Acadia Estates and built into
+            Acadia&apos;s own site. The aim is to do more than off-the-shelf HOA software does. Click
+            around. Try a sample payment, turn on autopay, send a sample request, or switch to the
+            board view.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -80,52 +79,73 @@ export default function AcadiaPortalPreviewPage() {
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-acadia-leaf">Behind the preview</p>
           <h2 id="real-title" className="mt-2 text-2xl font-bold text-acadia-ink">
-            How this would really work
+            How the real portal would work
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <div className="rounded-lg border border-acadia-moss/20 bg-acadia-cream p-5">
-              <h3 className="font-bold text-acadia-ink">The software runs the secure part</h3>
+              <h3 className="font-bold text-acadia-ink">It lives on Acadia&apos;s own site</h3>
               <p className="mt-2 text-sm leading-6 text-slate-700">
-                Payments, bank details, and owner balances would live inside PayHOA, which processes
-                payments through Stripe. This site would never see or store a card or bank number.
+                Owners would sign in here with a private link sent to their email. Balances,
+                receipts, requests, and documents would sit in the association&apos;s own records, not
+                in a rented product.
               </p>
             </div>
             <div className="rounded-lg border border-acadia-moss/20 bg-acadia-cream p-5">
-              <h3 className="font-bold text-acadia-ink">This site stays the front door</h3>
+              <h3 className="font-bold text-acadia-ink">A payment processor moves the money</h3>
               <p className="mt-2 text-sm leading-6 text-slate-700">
-                One Pay dues button here would take owners to their private portal. Project updates,
-                source documents, votes, and the document helper would stay on this site.
+                Card and bank details would go straight to a licensed payment processor such as
+                Stripe. This site would never see or store them. Payments would land in the
+                association&apos;s bank account.
               </p>
             </div>
             <div className="rounded-lg border border-acadia-moss/20 bg-acadia-cream p-5">
-              <h3 className="font-bold text-acadia-ink">The real screens will look different</h3>
+              <h3 className="font-bold text-acadia-ink">It would be built in steps</h3>
               <p className="mt-2 text-sm leading-6 text-slate-700">
-                The real portal would use PayHOA&apos;s own screens, so it would not match this
-                preview exactly. The table below shows what PayHOA lists as included, what is
-                already live here, and what the board would have to build.
+                This preview comes first. Owner sign-in and the ledger would follow, then online
+                payments and autopay. The board would test each step before owners use it.
               </p>
             </div>
           </div>
 
-          <h3 className="mt-8 text-sm font-bold uppercase tracking-wide text-slate-500">
-            Where each feature in the preview would come from
+          <h3 id="compare" className="mt-10 scroll-mt-24 text-xl font-bold text-acadia-ink">
+            How it compares with off-the-shelf software
           </h3>
-          <ul className="mt-2 divide-y divide-acadia-moss/15 border-y border-acadia-moss/30 text-sm">
-            {featureRows.map((row) => (
-              <li key={row.feature} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 py-3">
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700">
+            PayHOA is a well-known product for self-managed associations, so it is the yardstick
+            here. The list is meant to be fair. It includes the places where PayHOA is ahead.
+          </p>
+
+          <div className="mt-4 hidden grid-cols-[1.5fr_1fr_1fr] gap-4 border-b border-acadia-moss/30 pb-2 text-xs font-bold uppercase tracking-wide text-slate-500 md:grid">
+            <span>Feature</span>
+            <span>Acadia&apos;s own portal</span>
+            <span>PayHOA</span>
+          </div>
+          <ul className="divide-y divide-acadia-moss/15 border-b border-acadia-moss/30 text-sm">
+            {portalComparison.map((row) => (
+              <li key={row.feature} className="grid gap-2 py-3 md:grid-cols-[1.5fr_1fr_1fr] md:items-center md:gap-4">
                 <span className="font-semibold text-acadia-ink">{row.feature}</span>
-                <span className={`inline-flex rounded-md px-2.5 py-1 text-xs font-bold ${sourceStyles[row.source].className}`}>
-                  {sourceStyles[row.source].label}
+                <span className="flex items-center gap-2">
+                  <span className="w-16 shrink-0 text-xs font-bold uppercase tracking-wide text-slate-500 md:hidden">Acadia</span>
+                  <StatusPill status={row.acadia.status} label={row.acadia.label} />
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-16 shrink-0 text-xs font-bold uppercase tracking-wide text-slate-500 md:hidden">PayHOA</span>
+                  <StatusPill status={row.payhoa.status} label={row.payhoa.label} />
                 </span>
               </li>
             ))}
           </ul>
           <p className="mt-4 text-xs leading-5 text-slate-500">
-            PayHOA features read from{" "}
+            PayHOA details read from{" "}
             <a href={PAYHOA_FEATURES_URL} target="_blank" rel="noreferrer" className="font-bold text-acadia-leaf underline underline-offset-4">
               PayHOA&apos;s feature list
             </a>{" "}
-            and pricing page on {PAYHOA_REVIEWED}. This page is not affiliated with or endorsed by PayHOA.
+            and pricing page on {PAYHOA_REVIEWED}. &quot;Not listed&quot; means the feature was not found
+            on those pages. Processor fees are{" "}
+            <a href={PROCESSOR_PRICING_URL} target="_blank" rel="noreferrer" className="font-bold text-acadia-leaf underline underline-offset-4">
+              Stripe&apos;s published US rates
+            </a>{" "}
+            as of {PROCESSOR_REVIEWED}. This page is not affiliated with or endorsed by PayHOA or Stripe.
           </p>
         </div>
       </section>
