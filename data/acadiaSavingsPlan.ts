@@ -8,6 +8,32 @@ export const PAYHOA_REVIEWED = "November 12, 2026";
 export const PAYHOA_PRICING_URL = "https://www.payhoa.com/pricing";
 export const PAYHOA_FEATURES_URL = "https://www.payhoa.com/features";
 
+// Acadia Estates figures. The dollar amounts come from the proposed 2027 budget that the board
+// emailed to every homeowner on November 8, 2026, ahead of the November 12 budget meeting.
+// The 2026 amounts are the adopted 2026 budget shown beside it in the board's budget workbook.
+// If the adopted 2027 budget differs, update these numbers and the BUDGET_SOURCE line.
+export const BUDGET_SOURCE = "Proposed 2027 budget, sent to homeowners November 8, 2026";
+
+export const acadiaBudget = {
+  homes: 32,
+  /** Dues are billed quarterly. */
+  duesPaymentsPerYear: 4 as const,
+  proposed2027: {
+    /** The management company's base fee: $200 a month. */
+    managementFee: 2400,
+    /** Base fee plus the postage, printing, office supply, and other admin charges billed through it. */
+    managementCompanyTotal: 3948,
+    legalFees: 2040,
+    legalFeeReimbursements: 1200,
+    taxPreparation: 1400
+  },
+  budget2026: {
+    managementFee: 2400,
+    legalFees: 1000,
+    taxReturn: 1250
+  }
+};
+
 export type PayhoaPlan = {
   label: string;
   minHomes: number;
@@ -79,6 +105,8 @@ export type SavingsProposal = {
   number: number;
   title: string;
   projectId: string;
+  /** What the budget shows for this cost today. */
+  budgetLine: string;
   summary: string;
   howItWorks: string[];
   stillPayFor: string;
@@ -90,6 +118,8 @@ export const savingsProposals: SavingsProposal[] = [
     number: 1,
     title: "Use software in place of a management company",
     projectId: "self-management-software",
+    budgetLine:
+      "The proposed 2027 budget lists $3,948 for the management company. That is a $200 monthly fee plus postage, printing, supplies, and other admin charges.",
     summary:
       "The association would end its outside management contract. HOA software would handle the routine work, and board volunteers would handle decisions.",
     howItWorks: [
@@ -106,6 +136,8 @@ export const savingsProposals: SavingsProposal[] = [
     number: 2,
     title: "Pay the attorney to review, not to draft",
     projectId: "professional-review-model",
+    budgetLine:
+      "The proposed 2027 budget lists $2,040 for legal fees. The 2026 budget listed $1,000. The 2027 budget also expects $1,200 in legal fee reimbursements.",
     summary:
       "AI tools would prepare first drafts of routine legal documents from the association's own governing documents. A licensed Florida attorney would review, correct, and approve each one before it is used.",
     howItWorks: [
@@ -123,6 +155,8 @@ export const savingsProposals: SavingsProposal[] = [
     number: 3,
     title: "Pay the CPA to verify and file, not to prepare",
     projectId: "professional-review-model",
+    budgetLine:
+      "The proposed 2027 budget lists $1,400 for tax preparation. The 2026 budget listed $1,250.",
     summary:
       "The software would keep the books all year. AI tools would assemble the year-end report and tax package. A CPA would verify the numbers, sign, and file.",
     howItWorks: [
@@ -290,8 +324,8 @@ export const otherSavings: { projectId: string; title: string; note: string }[] 
 ];
 
 export const savingsOpenQuestions = [
-  "What does the association pay today for management, legal work, and tax preparation?",
   "What notice period or exit fee is in the management contract?",
+  "How much of the postage, printing, and admin cost would remain after the change?",
   "What will the attorney and the CPA charge for review-only work?",
   "Which board member will own each duty, and who is the backup?",
   "Do the association's insurers set any conditions for a self-managed board?"

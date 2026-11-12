@@ -10,19 +10,28 @@ function toNumber(value: string) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+export type SavingsCalculatorStart = {
+  homes?: number;
+  managementPerYear?: number;
+  attorneyPerYear?: number;
+  cpaPerYear?: number;
+  paymentsPerYear?: 1 | 2 | 4 | 12;
+};
+
 /**
- * A what-if calculator. The current HOA costs are left blank on purpose: they are not published on
- * this site yet, so nothing here should look like a real figure until someone types one in.
- * The PayHOA prices are real and come from data/acadiaSavingsPlan.ts.
+ * A what-if calculator. The page passes in starting figures from the HOA budget
+ * (data/acadiaSavingsPlan.ts). The "after" boxes for attorney and CPA stay blank until a real
+ * review-only quote exists, so the tool never claims savings nobody has quoted.
+ * The PayHOA prices are real and come from the same data file.
  */
-export function SavingsCalculator() {
-  const [homes, setHomes] = useState("");
-  const [management, setManagement] = useState("");
-  const [attorneyNow, setAttorneyNow] = useState("");
+export function SavingsCalculator({ start = {} }: { start?: SavingsCalculatorStart }) {
+  const [homes, setHomes] = useState(start.homes ? String(start.homes) : "");
+  const [management, setManagement] = useState(start.managementPerYear ? String(start.managementPerYear) : "");
+  const [attorneyNow, setAttorneyNow] = useState(start.attorneyPerYear ? String(start.attorneyPerYear) : "");
   const [attorneyAfter, setAttorneyAfter] = useState("");
-  const [cpaNow, setCpaNow] = useState("");
+  const [cpaNow, setCpaNow] = useState(start.cpaPerYear ? String(start.cpaPerYear) : "");
   const [cpaAfter, setCpaAfter] = useState("");
-  const [paymentsPerYear, setPaymentsPerYear] = useState("4");
+  const [paymentsPerYear, setPaymentsPerYear] = useState(String(start.paymentsPerYear || 4));
   const [absorbFees, setAbsorbFees] = useState(false);
 
   const homeCount = Math.floor(toNumber(homes));
@@ -35,7 +44,7 @@ export function SavingsCalculator() {
   const attorneyAfterYearly = attorneyAfter.trim() ? toNumber(attorneyAfter) : toNumber(attorneyNow);
   const cpaAfterYearly = cpaAfter.trim() ? toNumber(cpaAfter) : toNumber(cpaNow);
 
-  const currentYearly = toNumber(management) * 12 + toNumber(attorneyNow) + toNumber(cpaNow);
+  const currentYearly = toNumber(management) + toNumber(attorneyNow) + toNumber(cpaNow);
   const proposedYearly = softwareYearly + feesYearly + attorneyAfterYearly + cpaAfterYearly;
   const difference = currentYearly - proposedYearly;
   const hasCurrentCosts = currentYearly > 0;
@@ -49,7 +58,7 @@ export function SavingsCalculator() {
           <legend className="text-sm font-bold uppercase tracking-[0.14em] text-acadia-leaf">Today</legend>
           <div className="mt-3 grid gap-4 sm:grid-cols-2">
             <Field label="Homes in Acadia Estates" value={homes} onChange={setHomes} placeholder="Number of homes" />
-            <Field label="Management fee per month" value={management} onChange={setManagement} placeholder="Enter amount" money />
+            <Field label="Management company cost per year" value={management} onChange={setManagement} placeholder="Enter amount" money />
             <Field label="Attorney cost per year" value={attorneyNow} onChange={setAttorneyNow} placeholder="Enter amount" money />
             <Field label="CPA and tax cost per year" value={cpaNow} onChange={setCpaNow} placeholder="Enter amount" money />
           </div>

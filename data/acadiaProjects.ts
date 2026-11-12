@@ -23,7 +23,7 @@ export const acadiaProjects: Project[] = [
     fullDescription:
       "A proposal before the board would move Acadia Estates from an outside management company to self-management supported by software. PayHOA is the product under review. It would handle invoices, online payments and autopay, the owner ledger, bank syncing, requests, violations, and owner messages. Board volunteers would keep the duties that need judgment. A preview of the owner portal is published on this site so homeowners can see the idea before any decision.",
     estimatedCost:
-      "PayHOA lists $49 per month for 1 to 25 homes and $59 per month for 26 to 50 homes on annual billing. Online payment fees are extra: $2.45 per bank payment and 3.5% plus $0.50 per card payment. The current management cost and any contract exit terms have not been published here yet.",
+      "PayHOA lists $59 per month for 26 to 50 homes on annual billing. That is $708 a year for Acadia's 32 homes. Online payment fees are extra: $2.45 per bank payment and 3.5% plus $0.50 per card payment. The proposed 2027 budget lists $3,948 for the management company: a $200 monthly fee plus postage, printing, supplies, and other admin charges. The difference is about $3,240 a year, or about $101 per home, before any costs that remain.",
     estimatedTimeline:
       "No decision date is set. PayHOA offers a 30-day free trial, so a test could run before any contract change.",
     boardNotes:
@@ -44,7 +44,8 @@ export const acadiaProjects: Project[] = [
     ],
     lastReviewed: reviewedNovember,
     openQuestions: [
-      "What does the association pay for management today, and what notice or exit fee does the contract require?",
+      "What notice or exit fee does the management contract require?",
+      "How much of the postage, printing, and admin cost would remain after the change?",
       "Which board member or volunteer will own each duty: billing, records requests, estoppel letters, meeting notices, and vendor payments?",
       "Will the association absorb online payment fees or pass them to the owner who chooses to pay online?",
       "Do the association's insurers have any conditions for a self-managed board?"
@@ -58,6 +59,14 @@ export const acadiaProjects: Project[] = [
         summary:
           "Supports the plan prices, payment fees, free trial, and no-contract terms. Prices can change, and no written quote is on file.",
         href: "https://www.payhoa.com/pricing"
+      },
+      {
+        title: "Proposed 2027 budget",
+        sourceType: "Board record",
+        date: "November 8, 2026",
+        status: "Pending",
+        summary:
+          "Lists $2,400 in management fees and $3,948 for the management company in total. It was sent to homeowners and scheduled for a vote on November 12, 2026."
       },
       {
         title: "Board proposal",
@@ -77,7 +86,7 @@ export const acadiaProjects: Project[] = [
     fullDescription:
       "Under this proposal the association would stop paying professionals for first drafts and routine preparation. AI tools would draft routine notices, policies, letters, and the year-end tax package from the association's own records. A Florida attorney would review legal documents before use. A CPA would verify the books and file the tax return. The association would still pay for professional judgment and accountability. Liens, collections, lawsuits, and changes to recorded documents would stay attorney-led.",
     estimatedCost:
-      "Not yet known. Savings depend on what the attorney and CPA charge for review-only work. No review-only quote is on file.",
+      "The proposed 2027 budget lists $2,040 for legal fees and $1,400 for tax preparation. The 2026 budget listed $1,000 and $1,250. Savings depend on what the attorney and CPA charge for review-only work. No review-only quote is on file.",
     estimatedTimeline:
       "Could be tested on one routine document and on the next tax return before wider use",
     boardNotes:
@@ -115,6 +124,14 @@ export const acadiaProjects: Project[] = [
         summary:
           "Describes the homeowners association tax return. An association may file Form 1120-H or Form 1120, whichever results in the lower tax.",
         href: "https://www.irs.gov/instructions/i1120h"
+      },
+      {
+        title: "Proposed 2027 budget",
+        sourceType: "Board record",
+        date: "November 8, 2026",
+        status: "Pending",
+        summary:
+          "Lists $2,040 for legal fees, $1,400 for tax preparation, and $1,200 in legal fee reimbursements. It was sent to homeowners and scheduled for a vote on November 12, 2026."
       },
       {
         title: "Board proposal",

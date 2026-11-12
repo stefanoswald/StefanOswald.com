@@ -4,15 +4,18 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { VoteButtons } from "@/components/VoteButtons";
 import { getAcadiaProject } from "@/data/acadiaProjects";
 import {
+  BUDGET_SOURCE,
   PAYHOA_FEATURES_URL,
   PAYHOA_PRICING_URL,
   PAYHOA_REVIEWED,
   SAVINGS_REVIEWED,
+  acadiaBudget,
   dutyMap,
   floridaNotes,
   otherSavings,
   payhoaFees,
   payhoaIncluded,
+  payhoaPlanForHomes,
   payhoaPlans,
   safeguards,
   savingsOpenQuestions,
@@ -28,6 +31,25 @@ export const metadata = {
 const voteProjects = ["self-management-software", "professional-review-model"]
   .map((projectId) => getAcadiaProject(projectId))
   .filter((project): project is NonNullable<typeof project> => Boolean(project));
+
+const wholeDollars = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+// The headline comparison: what the budget lists for the management company against the software price.
+const acadiaPlan = payhoaPlanForHomes(acadiaBudget.homes);
+const softwarePerYear = acadiaPlan ? acadiaPlan.annualBillingMonthly * 12 : 0;
+const managementPerYear = acadiaBudget.proposed2027.managementCompanyTotal;
+const differencePerYear = managementPerYear - softwarePerYear;
+const differencePerHome = differencePerYear / acadiaBudget.homes;
+
+const glanceStats = [
+  { value: String(acadiaBudget.homes), label: "homes in Acadia Estates" },
+  { value: wholeDollars.format(managementPerYear), label: "budgeted for the management company in 2027" },
+  { value: wholeDollars.format(softwarePerYear), label: "a year for PayHOA at this size" },
+  {
+    value: wholeDollars.format(differencePerYear),
+    label: `difference a year, about ${wholeDollars.format(differencePerHome)} per home`
+  }
+];
 
 export default function AcadiaSavingsPage() {
   return (
@@ -52,6 +74,28 @@ export default function AcadiaSavingsPage() {
         </div>
       </section>
 
+      <section className="border-b border-acadia-moss/20 bg-white" aria-labelledby="glance-title">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+          <h2 id="glance-title" className="text-xs font-bold uppercase tracking-[0.16em] text-acadia-leaf">
+            The numbers at a glance
+          </h2>
+          <dl className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {glanceStats.map((stat) => (
+              <div key={stat.label} className="rounded-lg border border-acadia-moss/20 bg-acadia-cream p-4">
+                <dd className="text-3xl font-bold tracking-tight text-acadia-ink">{stat.value}</dd>
+                <dt className="mt-1 text-sm leading-6 text-slate-700">{stat.label}</dt>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-4 max-w-4xl text-sm leading-6 text-slate-600">
+            The management figure is the company&apos;s $200 monthly fee plus the postage, printing,
+            supplies, and other admin charges billed through it. Some of those costs would remain
+            after a change. Online payment fees would be extra if the association chose to absorb
+            them. Source: {BUDGET_SOURCE}. The budget was scheduled for a vote on November 12, 2026.
+          </p>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8" aria-labelledby="proposals-title">
         <h2 id="proposals-title" className="text-2xl font-bold text-acadia-ink">
           The three proposals
@@ -67,6 +111,10 @@ export default function AcadiaSavingsPage() {
               </div>
               <h3 className="mt-4 text-xl font-bold text-acadia-ink">{proposal.title}</h3>
               <p className="mt-3 text-base leading-7 text-slate-700">{proposal.summary}</p>
+              <p className="mt-3 rounded-md bg-acadia-sky px-3 py-2 text-sm leading-6 text-acadia-ink">
+                <strong className="block">In the budget today</strong>
+                {proposal.budgetLine}
+              </p>
               <ul className="mt-4 space-y-2 text-sm leading-6 text-slate-700">
                 {proposal.howItWorks.map((step) => (
                   <li key={step} className="flex gap-2">
@@ -114,15 +162,25 @@ export default function AcadiaSavingsPage() {
                 <caption className="sr-only">PayHOA plan prices</caption>
                 <thead>
                   <tr className="border-b border-acadia-moss/30 text-xs uppercase tracking-wide text-slate-500">
-                    <th scope="col" className="py-2 pr-3 font-bold">Community size</th>
+                    <th scope="col" className="py-2 pl-2 pr-3 font-bold">Community size</th>
                     <th scope="col" className="py-2 pr-3 font-bold">Billed yearly</th>
                     <th scope="col" className="py-2 font-bold">Billed monthly</th>
                   </tr>
                 </thead>
                 <tbody>
                   {payhoaPlans.map((plan) => (
-                    <tr key={plan.label} className="border-b border-acadia-moss/15">
-                      <th scope="row" className="py-3 pr-3 font-bold text-acadia-ink">{plan.label}</th>
+                    <tr
+                      key={plan.label}
+                      className={`border-b border-acadia-moss/15 ${plan === acadiaPlan ? "bg-acadia-sky" : ""}`}
+                    >
+                      <th scope="row" className="py-3 pl-2 pr-3 font-bold text-acadia-ink">
+                        {plan.label}
+                        {plan === acadiaPlan ? (
+                          <span className="mt-1 block text-xs font-bold uppercase tracking-wide text-acadia-leaf">
+                            Acadia, {acadiaBudget.homes} homes
+                          </span>
+                        ) : null}
+                      </th>
                       <td className="py-3 pr-3 text-slate-700">
                         ${plan.annualBillingMonthly} per month
                         <span className="block text-xs text-slate-500">${plan.annualBillingMonthly * 12} per year</span>
@@ -194,12 +252,21 @@ export default function AcadiaSavingsPage() {
           Savings calculator
         </h2>
         <p className="mt-2 max-w-3xl leading-7 text-slate-700">
-          Today&apos;s management, legal, and tax costs are not published on this site yet, so those
-          boxes start empty. Type in the real figures to compare. Nothing you enter is saved or sent
-          anywhere.
+          The boxes start with Acadia&apos;s figures from the proposed 2027 budget. The attorney and
+          CPA boxes under the proposals stay empty until a review-only quote comes in, so no savings
+          are counted for them yet. Change any number to test a different case. Nothing you enter is
+          saved or sent anywhere.
         </p>
         <div className="mt-6">
-          <SavingsCalculator />
+          <SavingsCalculator
+            start={{
+              homes: acadiaBudget.homes,
+              managementPerYear: acadiaBudget.proposed2027.managementCompanyTotal,
+              attorneyPerYear: acadiaBudget.proposed2027.legalFees,
+              cpaPerYear: acadiaBudget.proposed2027.taxPreparation,
+              paymentsPerYear: acadiaBudget.duesPaymentsPerYear
+            }}
+          />
         </div>
       </section>
 

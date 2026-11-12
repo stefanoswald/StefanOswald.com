@@ -27,17 +27,24 @@ Both proposals are also listed as HOA items so homeowners can vote on them:
 - The Florida and IRS notes in the same file. Each one links to its source.
 - Links to the governing documents, the source document library, and the document helper.
 
+## Acadia's own figures
+
+`data/acadiaSavingsPlan.ts` holds these in `acadiaBudget`:
+
+- 32 homes, with dues billed quarterly
+- From the proposed 2027 budget sent to homeowners on November 8, 2026: $3,948 for the management
+  company ($2,400 fee plus admin charges), $2,040 for legal fees, $1,400 for tax preparation
+- From the 2026 budget: $1,000 for legal fees and $1,250 for the tax return
+
+The savings calculator starts from the 2027 figures. If the adopted budget differs, change the
+numbers in `acadiaBudget` and the `BUDGET_SOURCE` line. The page and the two HOA items repeat a few
+of these numbers in their text, so search for the old amount after changing one.
+
 ## What is not known yet
 
-The savings calculator starts empty because these figures are not published on the site:
-
-- the current management fee and the contract's notice or exit terms
-- current attorney and CPA costs
+- the management contract's notice period and any exit fee
 - what the attorney and CPA would charge for review-only work
-- the exact number of homes (PayHOA's price changes at 26 homes)
-
-When the board is ready to publish them, add them to `data/acadiaSavingsPlan.ts` and pass them to
-`SavingsCalculator` as starting values.
+- how much postage, printing, and admin cost would remain after a change
 
 ## How a real portal would connect
 
