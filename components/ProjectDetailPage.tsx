@@ -124,6 +124,28 @@ export function ProjectDetailPage({ project }: { project: Project }) {
               </div>
             </section>
           ) : null}
+          {project.relatedPages?.length ? (
+            <section className="rounded-lg border border-acadia-moss/20 bg-white p-5">
+              <h2 className="text-xl font-bold text-acadia-ink">See it on this site</h2>
+              <div className="mt-4 space-y-3">
+                {project.relatedPages.map((page) => (
+                  <Link
+                    key={page.href}
+                    href={page.href}
+                    className="flex items-center justify-between gap-4 rounded-md border border-acadia-moss/20 bg-acadia-sky px-4 py-3 text-acadia-ink transition hover:border-acadia-leaf hover:bg-white"
+                  >
+                    <span>
+                      <span className="block text-sm font-bold">{page.title}</span>
+                      {page.note ? (
+                        <span className="mt-1 block text-xs leading-5 text-slate-600">{page.note}</span>
+                      ) : null}
+                    </span>
+                    <span className="shrink-0 text-sm font-bold text-acadia-leaf">Open</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
           <section className="rounded-lg border border-dashed border-acadia-moss/40 bg-white p-5">
             <h2 className="text-xl font-bold text-acadia-ink">Related documents</h2>
             {project.relatedDocuments?.length ? (

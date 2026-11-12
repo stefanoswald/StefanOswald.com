@@ -1,15 +1,25 @@
 import { NextResponse } from "next/server";
 import { answerFromChunks, unsupportedAnswer } from "@/lib/acadia-rag/answer";
+import {
+  ACADIA_CHAT_CONTEXT,
+  ACADIA_CHAT_MODEL,
+  answerWithClaude,
+  isClaudeConfigured,
+  type AcadiaChatTurn
+} from "@/lib/acadia-rag/claude";
 import { isDebugAllowed } from "@/lib/acadia-rag/config";
 import { embedText } from "@/lib/acadia-rag/openai";
+import { checkChatRateLimit, visitorKeyFromRequest } from "@/lib/acadia-rag/rate-limit";
 import { retrieveCandidateChunks } from "@/lib/acadia-rag/supabase";
 import { expandQuery } from "@/lib/acadia-rag/text";
 import type { AcadiaChatAnswer } from "@/types/acadia-rag";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
 
 type ChatRequest = {
   question?: string;
+  history?: AcadiaChatTurn[];
 };
 
 export async function POST(request: Request) {
@@ -21,7 +31,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please send a valid question." }, { status: 400 });
   }
 
-  const question = body.question?.trim();
+  const question = typeof body.question === "string" ? body.question.trim() : "";
 
   if (!question) {
     return NextResponse.json({ error: "Please enter a question." }, { status: 400 });
@@ -36,6 +46,34 @@ export async function POST(request: Request) {
 
   const debugAllowed = isDebugAllowed(request);
 
+  // Preferred path: Claude reads the documents directly. No database is involved.
+  if (isClaudeConfigured()) {
+    const limit = checkChatRateLimit(visitorKeyFromRequest(request));
+
+    if (!limit.allowed) {
+      return NextResponse.json({ error: limit.reason }, { status: 429 });
+    }
+
+    try {
+      const history = Array.isArray(body.history) ? body.history : [];
+      const { result, usage } = await answerWithClaude(question, history);
+
+      return NextResponse.json(
+        debugAllowed
+          ? { ...result, engine: { model: ACADIA_CHAT_MODEL, context: ACADIA_CHAT_CONTEXT, usage } }
+          : result
+      );
+    } catch (error) {
+      console.error("Acadia Claude helper failed", error);
+      return NextResponse.json(
+        { error: "The document helper could not reach its answer service. Please try again in a moment." },
+        { status: 502 }
+      );
+    }
+  }
+
+  // Older path, kept so the helper still works until ANTHROPIC_API_KEY is added in Vercel:
+  // OpenAI embeddings, Supabase vector search, then an OpenAI answer.
   try {
     const rewrittenQuery = rewriteQuestion(question);
     const embedding = await embedText(rewrittenQuery);

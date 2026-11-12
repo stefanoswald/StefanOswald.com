@@ -4,6 +4,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "acadia:rag:pages": "node scripts/acadia-rag/build-pages.mjs",
     "acadia:rag:prepare": "python3 scripts/acadia-rag/prepare-index.py",
     "acadia:rag:index": "node scripts/acadia-rag/index-to-supabase.mjs",
     "acadia:rag:evaluate": "node scripts/acadia-rag/evaluate.mjs",

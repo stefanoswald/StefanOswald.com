@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { acadiaProjects } from "@/data/acadiaProjects";
-import { ProjectCard } from "@/components/ProjectCard";
+import { acadiaGoverningDocuments } from "@/data/acadiaGoverningDocuments";
+import { ProjectBrowser } from "@/components/acadia/ProjectBrowser";
 import { AcadiaTransparencyNotice } from "@/components/AcadiaTransparencyNotice";
 import { AcadiaCommunityResources } from "@/components/AcadiaCommunityResources";
 import { AcadiaGoverningDocuments } from "@/components/AcadiaGoverningDocuments";
@@ -10,11 +12,36 @@ export const metadata = {
     "Review current Acadia Estates HOA projects and share informal thumbs up or thumbs down feedback."
 };
 
+const quickLinks = [
+  {
+    href: "#current-items",
+    title: "Current HOA items",
+    text: `${acadiaProjects.length} items. See where each one stands and share your vote.`
+  },
+  {
+    href: "/Acadia/savings",
+    title: "Savings plan",
+    text: "Three proposals to lower what the HOA pays for management, legal, and tax work.",
+    badge: "New"
+  },
+  {
+    href: "/Acadia/portal",
+    title: "Owner portal preview",
+    text: "Try online payments, autopay, and requests with sample data.",
+    badge: "Preview"
+  },
+  {
+    href: "#governing-documents",
+    title: "Governing documents",
+    text: `Download all ${acadiaGoverningDocuments.length} recorded documents, or ask the helper a question.`
+  }
+];
+
 export default function AcadiaHomePage() {
   return (
     <main className="min-h-screen bg-acadia-cream">
       <section className="bg-acadia-sky">
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-4 pb-10 pt-10 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-acadia-leaf">
               Acadia Estates HOA
@@ -32,6 +59,27 @@ export default function AcadiaHomePage() {
               homeowner priorities.
             </p>
           </div>
+
+          <nav aria-label="Popular sections" className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {quickLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="group flex flex-col rounded-lg border border-acadia-moss/25 bg-white p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-acadia-leaf focus:outline-none focus-visible:ring-2 focus-visible:ring-acadia-gold"
+              >
+                <span className="flex items-center justify-between gap-2">
+                  <span className="text-base font-bold text-acadia-ink">{link.title}</span>
+                  {link.badge ? (
+                    <span className="rounded bg-acadia-gold/25 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900">
+                      {link.badge}
+                    </span>
+                  ) : null}
+                </span>
+                <span className="mt-1.5 text-sm leading-6 text-slate-600">{link.text}</span>
+                <span className="mt-3 text-sm font-bold text-acadia-leaf group-hover:text-acadia-ink">Open</span>
+              </Link>
+            ))}
+          </nav>
         </div>
       </section>
 
@@ -39,22 +87,16 @@ export default function AcadiaHomePage() {
 
       <AcadiaTransparencyNotice />
 
-      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold text-acadia-ink">Current HOA items</h2>
-            <p className="mt-1 text-slate-600">
-              {acadiaProjects.length} items are listed. Information reviewed through August 10,
-              2026.
-            </p>
-          </div>
+      <section id="current-items" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mb-5">
+          <h2 className="text-2xl font-bold text-acadia-ink">Current HOA items</h2>
+          <p className="mt-1 text-slate-600">
+            {acadiaProjects.length} items are listed. Each card shows the date its information was
+            last reviewed.
+          </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {acadiaProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+        <ProjectBrowser projects={acadiaProjects} />
       </section>
 
       <AcadiaCommunityResources />

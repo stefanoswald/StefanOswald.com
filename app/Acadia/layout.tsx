@@ -1,6 +1,8 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { AcadiaChatbot } from "@/components/AcadiaChatbot";
+import { AcadiaFooter } from "@/components/acadia/AcadiaFooter";
+import { AcadiaHeader } from "@/components/acadia/AcadiaHeader";
 
 // These used to be the whole site's defaults. They live here now so only the Acadia pages use them.
 export const metadata: Metadata = {
@@ -12,7 +14,9 @@ export const metadata: Metadata = {
 export default function AcadiaLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      {children}
+      <AcadiaHeader />
+      <div id="acadia-main">{children}</div>
+      <AcadiaFooter />
       <AcadiaChatbot />
     </>
   );
