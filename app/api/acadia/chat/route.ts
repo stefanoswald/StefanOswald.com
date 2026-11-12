@@ -56,11 +56,11 @@ export async function POST(request: Request) {
 
     try {
       const history = Array.isArray(body.history) ? body.history : [];
-      const { result, usage } = await answerWithClaude(question, history);
+      const { result, usage, attempt } = await answerWithClaude(question, history);
 
       return NextResponse.json(
         debugAllowed
-          ? { ...result, engine: { model: ACADIA_CHAT_MODEL, context: ACADIA_CHAT_CONTEXT, usage } }
+          ? { ...result, engine: { model: ACADIA_CHAT_MODEL, context: ACADIA_CHAT_CONTEXT, attempt, usage } }
           : result
       );
     } catch (error) {

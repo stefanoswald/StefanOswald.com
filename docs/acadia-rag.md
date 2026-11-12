@@ -19,9 +19,17 @@ there is nothing to index and nothing to keep running.
 1. `data/acadiaDocumentPages.json` holds the OCR text of every page. It ships with the site.
 2. `lib/acadia-rag/corpus.ts` joins those pages with the current HOA items from `data/acadiaProjects.ts`.
 3. `lib/acadia-rag/claude.ts` sends that text to Claude with prompt caching turned on.
-4. Claude must answer through a `give_answer` tool. The tool returns the answer, a confidence level,
-   and the page IDs it relied on. Page IDs that do not exist are dropped before the reply is shown.
+4. Claude replies with one JSON object: the answer, a confidence level, and the page IDs it relied
+   on. The request asks for that shape with structured outputs (`output_config.format`). Page IDs
+   that do not exist are dropped before the reply is shown.
 5. An answer with no valid page behind it is always shown as Low confidence.
+6. If a request is rejected, the helper steps down: first to a plain JSON reply, then to only the
+   best-matching pages. This covers a refused setting or an account rate limit that is too small
+   for the full document set. Each failed attempt is logged in Vercel as a warning.
+
+Two rules of the current Claude models shaped the request. Thinking is always on, so `max_tokens`
+has to cover thinking plus the reply. Forcing a tool with `tool_choice` is rejected, so the helper
+does not use tools.
 
 ### Setup
 
@@ -37,20 +45,23 @@ Optional settings:
 | `ACADIA_CHAT_CONTEXT` | `full` | `full` sends every page. `search` sends only the best-matching pages. |
 | `ACADIA_CHAT_SEARCH_PAGES` | `36` | Pages sent in `search` mode. |
 | `ACADIA_CHAT_CACHE_TTL` | `5m` | Set to `1h` to keep the cache warm longer. Costs more per cache write. |
+| `ACADIA_CHAT_EFFORT` | `medium` | How hard the model thinks: `low`, `medium`, or `high`. Lower is faster and cheaper. |
 | `ACADIA_CHAT_MAX_PER_5_MIN` | `8` | Questions one visitor may ask in five minutes. |
 | `ACADIA_CHAT_MAX_PER_DAY` | `300` | Questions per server instance per day. |
 | `ACADIA_RAG_DEBUG_TOKEN` | none | Send it as `x-acadia-debug-token` to see the model and token usage. |
 
 ### Cost
 
-The full document set with the HOA items is about 460,000 characters, or roughly 115,000 tokens. Prices below use the
-Claude API price list as read on November 12, 2026. Check the current list before relying on them.
+The full document set with the HOA items is about 460,000 characters. That is roughly 115,000 to
+150,000 tokens, depending on the model's tokenizer. The figures below are estimates from the Claude
+API price list as read on November 12, 2026. Check real usage in the Claude Console after a few
+questions.
 
 | Setting | First question after a quiet spell | Follow-up within the cache window |
 | --- | --- | --- |
-| `full` + `claude-sonnet-5-5` (default) | about 25 to 30 cents | about 1 to 2 cents |
-| `full` + `claude-haiku-5-5` | about 6 to 8 cents | under 1 cent |
-| `search` + `claude-sonnet-5-5` | about 7 cents | about 7 cents |
+| `full` + `claude-sonnet-5-5` (default) | about 30 to 40 cents | about 2 to 3 cents |
+| `full` + `claude-haiku-5-5` | about 7 to 10 cents | about 1 cent |
+| `search` + `claude-sonnet-5-5` | about 7 to 9 cents | about 7 to 9 cents |
 | `search` + `claude-haiku-5-5` | under 1 cent | under 1 cent |
 
 `full` gives the best answers because the model sees every page and can notice when two documents
