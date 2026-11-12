@@ -1,12 +1,42 @@
 // Content for /Acadia/savings.
 //
+// The plan shown on the site is Acadia's own owner portal, built into this site. PayHOA is the
+// off-the-shelf product it is measured against.
+//
 // Everything about PayHOA below was read from PayHOA's public pricing and features pages on the
-// date in PAYHOA_REVIEWED. Prices change, so re-check them before a board vote and update the date.
+// date in PAYHOA_REVIEWED. Payment processor rates are Stripe's published US rates as reported on
+// the date in PROCESSOR_REVIEWED. Prices change, so re-check them before a board vote.
 
 export const SAVINGS_REVIEWED = "November 12, 2026";
 export const PAYHOA_REVIEWED = "November 12, 2026";
 export const PAYHOA_PRICING_URL = "https://www.payhoa.com/pricing";
 export const PAYHOA_FEATURES_URL = "https://www.payhoa.com/features";
+export const PROCESSOR_REVIEWED = "November 12, 2026";
+export const PROCESSOR_PRICING_URL = "https://stripe.com/pricing";
+
+/** Stripe's published US rates. A payment processor like this would move the money for Acadia's own portal. */
+export const processorFees = {
+  bankPercent: 0.8,
+  bankCap: 5,
+  cardPercent: 2.9,
+  cardFixed: 0.3
+};
+
+export function processorBankFee(amount: number) {
+  if (amount <= 0) return 0;
+  return Math.min(Math.round(amount * processorFees.bankPercent) / 100, processorFees.bankCap);
+}
+
+export function processorCardFee(amount: number) {
+  if (amount <= 0) return 0;
+  return Math.round(amount * processorFees.cardPercent + processorFees.cardFixed * 100) / 100;
+}
+
+/**
+ * A planning estimate, not a quote: the AI document helper, email sending, and hosting for a
+ * 32-home portal. Replace it with real usage once the portal has run for a few months.
+ */
+export const portalRunningCostEstimate = 150;
 
 // Acadia Estates figures. The dollar amounts come from the proposed 2027 budget that the board
 // emailed to every homeowner on November 8, 2026, ahead of the November 12 budget meeting.
@@ -25,7 +55,9 @@ export const acadiaBudget = {
     managementCompanyTotal: 3948,
     legalFees: 2040,
     legalFeeReimbursements: 1200,
-    taxPreparation: 1400
+    taxPreparation: 1400,
+    /** $345 a month, billed quarterly. */
+    quarterlyDues: 1035
   },
   budget2026: {
     managementFee: 2400,
@@ -62,42 +94,102 @@ export function payhoaPlanForHomes(homes: number) {
   return payhoaPlans.find((plan) => homes >= plan.minHomes && homes <= plan.maxHomes);
 }
 
-export const payhoaIncluded: { title: string; items: string[] }[] = [
+export type ComparisonStatus = "live" | "planned" | "later" | "no" | "yes" | "partial" | "unlisted";
+
+/**
+ * Acadia's own portal next to PayHOA. "unlisted" means the feature was not found on PayHOA's
+ * features or pricing pages on PAYHOA_REVIEWED. The table is meant to be fair: it includes the
+ * places where PayHOA is ahead.
+ */
+export const portalComparison: {
+  feature: string;
+  acadia: { status: ComparisonStatus; label: string };
+  payhoa: { status: ComparisonStatus; label: string };
+}[] = [
   {
-    title: "Dues and payments",
-    items: [
-      "Recurring and one-time invoices for every home",
-      "Online payment by bank transfer or card, plus autopay",
-      "Automatic late fees on the schedule the board sets",
-      "Checks and cash can still be recorded at no fee"
-    ]
+    feature: "Answers from the governing documents, with page links",
+    acadia: { status: "live", label: "Live today" },
+    payhoa: { status: "partial", label: "AI add-on for the board, at extra cost" }
   },
   {
-    title: "Books and banking",
-    items: [
-      "Bank connection, syncing, and reconciliation",
-      "Budgets and more than 40 reports",
-      "Vendor bills with scanning and approval steps",
-      "Vendor payments and check printing"
-    ]
+    feature: "Open project tracker with sources and homeowner feedback",
+    acadia: { status: "live", label: "Live today" },
+    payhoa: { status: "partial", label: "Surveys and voting only" }
   },
   {
-    title: "Owner services",
-    items: [
-      "A private portal for each homeowner",
-      "Request forms with approval steps, including architectural requests",
-      "Violation tracking and letters",
-      "Document storage, calendar, and amenity booking"
-    ]
+    feature: "Pay online by bank transfer or card",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "yes", label: "Included" }
   },
   {
-    title: "Communication",
-    items: [
-      "Unlimited emails, texts, and phone calls to owners",
-      "Mailed letters through USPS for a per-letter fee",
-      "Message boards, surveys, and online voting",
-      "Resale documents prepared from the association's records"
-    ]
+    feature: "Autopay with a spending limit",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "yes", label: "Included" }
+  },
+  {
+    feature: "Automatic late fees on the board's schedule",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "yes", label: "Included" }
+  },
+  {
+    feature: "Ledger, receipts, and statements for each home",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "yes", label: "Included" }
+  },
+  {
+    feature: "Requests with a step-by-step status tracker",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "yes", label: "Included" }
+  },
+  {
+    feature: "Documents, calendar, and announcements",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "yes", label: "Included" }
+  },
+  {
+    feature: "Two-person approval on every vendor bill",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "yes", label: "Approval steps included" }
+  },
+  {
+    feature: "Where each dollar goes, shown to every owner",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "unlisted", label: "Not listed" }
+  },
+  {
+    feature: "Private payment plan requests",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "unlisted", label: "Not listed" }
+  },
+  {
+    feature: "AI drafts routed to attorney or CPA review",
+    acadia: { status: "planned", label: "Planned" },
+    payhoa: { status: "unlisted", label: "Not listed" }
+  },
+  {
+    feature: "Bank sync and reconciliation",
+    acadia: { status: "later", label: "Later phase" },
+    payhoa: { status: "yes", label: "Included" }
+  },
+  {
+    feature: "Mailed letters and check printing",
+    acadia: { status: "no", label: "Not planned" },
+    payhoa: { status: "yes", label: "Included, letters at a fee" }
+  },
+  {
+    feature: "Subscription",
+    acadia: { status: "live", label: "None" },
+    payhoa: { status: "partial", label: "$59 a month at 32 homes" }
+  },
+  {
+    feature: "Fee on a bank payment",
+    acadia: { status: "partial", label: "0.8%, capped at $5" },
+    payhoa: { status: "yes", label: "$2.45 flat" }
+  },
+  {
+    feature: "Fee on a card payment",
+    acadia: { status: "live", label: "2.9% plus $0.30" },
+    payhoa: { status: "partial", label: "3.5% plus $0.50" }
   }
 ];
 
@@ -121,16 +213,17 @@ export const savingsProposals: SavingsProposal[] = [
     budgetLine:
       "The proposed 2027 budget lists $3,948 for the management company. That is a $200 monthly fee plus postage, printing, supplies, and other admin charges.",
     summary:
-      "The association would end its outside management contract. HOA software would handle the routine work, and board volunteers would handle decisions.",
+      "The association would end its outside management contract. An owner portal built into this site would handle the routine work, and board volunteers would handle decisions.",
     howItWorks: [
-      "Software sends invoices, takes online payments, runs autopay, and keeps each home's ledger.",
-      "The bank account syncs to the books, so the treasurer reviews the month instead of typing it in.",
-      "Owners get a portal for balances, receipts, requests, and documents.",
+      "The portal sends invoices, takes online payments, runs autopay, and keeps each home's ledger.",
+      "Owners sign in to see balances, receipts, requests, and documents.",
+      "The treasurer reviews the books each month and exports them for the CPA.",
       "The document helper on this site answers routine questions with page links."
     ],
-    stillPayFor: "The software subscription, online payment fees if the association absorbs them, and postage for mailed notices.",
+    stillPayFor:
+      "Payment processing fees if the association absorbs them, a small running cost for the portal, and postage for mailed notices.",
     watchFor:
-      "The work does not disappear. It moves to software and to volunteers. Each duty needs a named owner and a backup."
+      "The work does not disappear. It moves to the portal and to volunteers. Each duty needs a named owner and a backup, and so does the portal itself."
   },
   {
     number: 2,
@@ -176,22 +269,22 @@ export const dutyMap: { duty: string; underManagement: string; proposed: string 
   {
     duty: "Bill assessments and collect payments",
     underManagement: "Management company",
-    proposed: "Software sends invoices and takes online payments and autopay. Checks are still accepted."
+    proposed: "The portal sends invoices and takes online payments and autopay. Checks are still accepted."
   },
   {
     duty: "Late notices and late fees",
     underManagement: "Management company",
-    proposed: "Software applies the board's adopted policy the same way for every home."
+    proposed: "The portal applies the board's adopted policy the same way for every home."
   },
   {
     duty: "Bookkeeping and bank reconciliation",
     underManagement: "Management company",
-    proposed: "Software with bank sync. The treasurer reviews each month. The CPA verifies at year end."
+    proposed: "The portal keeps the ledger. The treasurer checks it against the bank each month. The CPA verifies at year end."
   },
   {
     duty: "Paying vendors",
     underManagement: "Management company",
-    proposed: "Bills are entered in the software. Two board members approve each payment."
+    proposed: "Bills are entered in the portal. Two board members approve each payment."
   },
   {
     duty: "Routine owner questions",
@@ -201,7 +294,7 @@ export const dutyMap: { duty: string; underManagement: string; proposed: string 
   {
     duty: "Meeting notices, agendas, and minutes",
     underManagement: "Management company",
-    proposed: "AI drafts from a template. The secretary checks it and sends it through the software."
+    proposed: "AI drafts from a template. The secretary checks it and sends it through the portal."
   },
   {
     duty: "Architectural and maintenance requests",
@@ -211,17 +304,17 @@ export const dutyMap: { duty: string; underManagement: string; proposed: string 
   {
     duty: "Covenant violations",
     underManagement: "Management company",
-    proposed: "Tracked in the software. The board decides. The attorney is involved before fines or legal steps."
+    proposed: "Tracked in the portal. The board decides. The attorney is involved before fines or legal steps."
   },
   {
     duty: "Estoppel letters and resale documents",
     underManagement: "Management company",
-    proposed: "Software prepares them from the records. A board officer reviews and signs."
+    proposed: "The portal prepares them from the records. A board officer reviews and signs."
   },
   {
     duty: "Official records and records requests",
     underManagement: "Management company",
-    proposed: "Records live in the software and on this site. The secretary answers requests."
+    proposed: "Records live in the portal and on this site. The secretary answers requests."
   },
   {
     duty: "Legal documents",
@@ -231,7 +324,7 @@ export const dutyMap: { duty: string; underManagement: string; proposed: string 
   {
     duty: "Tax return and year-end financial report",
     underManagement: "CPA prepares",
-    proposed: "Software and AI prepare the package. The CPA verifies, signs, and files."
+    proposed: "The portal and AI prepare the package. The CPA verifies, signs, and files."
   },
   {
     duty: "Insurance renewals and state filings",
@@ -259,7 +352,7 @@ export const safeguards: { title: string; text: string }[] = [
   },
   {
     title: "Private data stays private",
-    text: "Owner balances and contact details stay inside the HOA software. They are not posted on this site and are not entered into public AI tools."
+    text: "Owner balances and contact details stay behind each owner's sign-in. They are never shown on public pages and are not entered into public AI tools. Card and bank numbers go straight to the payment processor."
   },
   {
     title: "Insurance confirmed first",
@@ -328,5 +421,6 @@ export const savingsOpenQuestions = [
   "How much of the postage, printing, and admin cost would remain after the change?",
   "What will the attorney and the CPA charge for review-only work?",
   "Which board member will own each duty, and who is the backup?",
+  "Who keeps the portal running if the volunteer who built it steps away?",
   "Do the association's insurers set any conditions for a self-managed board?"
 ];

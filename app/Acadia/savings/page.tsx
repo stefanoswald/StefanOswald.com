@@ -5,18 +5,21 @@ import { VoteButtons } from "@/components/VoteButtons";
 import { getAcadiaProject } from "@/data/acadiaProjects";
 import {
   BUDGET_SOURCE,
-  PAYHOA_FEATURES_URL,
   PAYHOA_PRICING_URL,
   PAYHOA_REVIEWED,
+  PROCESSOR_PRICING_URL,
+  PROCESSOR_REVIEWED,
   SAVINGS_REVIEWED,
   acadiaBudget,
   dutyMap,
   floridaNotes,
   otherSavings,
   payhoaFees,
-  payhoaIncluded,
   payhoaPlanForHomes,
-  payhoaPlans,
+  portalRunningCostEstimate,
+  processorBankFee,
+  processorCardFee,
+  processorFees,
   safeguards,
   savingsOpenQuestions,
   savingsProposals
@@ -25,7 +28,7 @@ import {
 export const metadata = {
   title: "Savings Plan | Acadia Estates HOA",
   description:
-    "Board proposals to lower Acadia Estates operating costs: HOA software in place of a management company, attorney review of AI-prepared documents, and CPA verification of AI-prepared tax work."
+    "Board proposals to lower Acadia Estates operating costs: an owner portal built into this site in place of a management company, attorney review of AI-prepared documents, and CPA verification of AI-prepared tax work."
 };
 
 const voteProjects = ["self-management-software", "professional-review-model"]
@@ -34,21 +37,23 @@ const voteProjects = ["self-management-software", "professional-review-model"]
 
 const wholeDollars = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
-// The headline comparison: what the budget lists for the management company against the software price.
+// The headline comparison: what the budget lists for the management company against the two
+// software paths. Acadia's own portal is the plan shown on this site. PayHOA is the benchmark.
 const acadiaPlan = payhoaPlanForHomes(acadiaBudget.homes);
-const softwarePerYear = acadiaPlan ? acadiaPlan.annualBillingMonthly * 12 : 0;
+const payhoaPerYear = acadiaPlan ? acadiaPlan.annualBillingMonthly * 12 : 0;
 const managementPerYear = acadiaBudget.proposed2027.managementCompanyTotal;
-const differencePerYear = managementPerYear - softwarePerYear;
-const differencePerHome = differencePerYear / acadiaBudget.homes;
+const quarterlyDues = acadiaBudget.proposed2027.quarterlyDues;
+const ownPortalDifference = managementPerYear - portalRunningCostEstimate;
+const payhoaDifference = managementPerYear - payhoaPerYear;
 
 const glanceStats = [
   { value: String(acadiaBudget.homes), label: "homes in Acadia Estates" },
   { value: wholeDollars.format(managementPerYear), label: "budgeted for the management company in 2027" },
-  { value: wholeDollars.format(softwarePerYear), label: "a year for PayHOA at this size" },
   {
-    value: wholeDollars.format(differencePerYear),
-    label: `difference a year, about ${wholeDollars.format(differencePerHome)} per home`
-  }
+    value: `About ${wholeDollars.format(portalRunningCostEstimate)}`,
+    label: "a year to run Acadia's own portal. This is an estimate."
+  },
+  { value: wholeDollars.format(payhoaPerYear), label: "a year for PayHOA, the off-the-shelf option" }
 ];
 
 export default function AcadiaSavingsPage() {
@@ -87,11 +92,18 @@ export default function AcadiaSavingsPage() {
               </div>
             ))}
           </dl>
-          <p className="mt-4 max-w-4xl text-sm leading-6 text-slate-600">
+          <p className="mt-4 max-w-4xl leading-7 text-slate-700">
+            Either software path costs far less than the management company line. The difference is
+            about {wholeDollars.format(payhoaDifference)} to {wholeDollars.format(ownPortalDifference)} a year,
+            or roughly {wholeDollars.format(payhoaDifference / acadiaBudget.homes)} to{" "}
+            {wholeDollars.format(ownPortalDifference / acadiaBudget.homes)} per home.
+          </p>
+          <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-600">
             The management figure is the company&apos;s $200 monthly fee plus the postage, printing,
             supplies, and other admin charges billed through it. Some of those costs would remain
             after a change. Online payment fees would be extra if the association chose to absorb
-            them. Source: {BUDGET_SOURCE}. The budget was scheduled for a vote on November 12, 2026.
+            them, and volunteer time is not counted. Source: {BUDGET_SOURCE}. The budget was
+            scheduled for a vote on November 12, 2026.
           </p>
         </div>
       </section>
@@ -146,103 +158,131 @@ export default function AcadiaSavingsPage() {
 
       <section className="border-y border-acadia-moss/20 bg-white" aria-labelledby="software-title">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-acadia-leaf">The software under review</p>
-              <h2 id="software-title" className="mt-2 text-2xl font-bold text-acadia-ink">
-                What PayHOA costs
-              </h2>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-acadia-leaf">Build or buy</p>
+          <h2 id="software-title" className="mt-2 text-2xl font-bold text-acadia-ink">
+            Two ways to get the software
+          </h2>
+          <p className="mt-2 max-w-3xl leading-7 text-slate-700">
+            The plan shown on this site is a portal built for Acadia Estates and run on this site.
+            PayHOA is the off-the-shelf product it is measured against. Both cost far less than a
+            management company.
+          </p>
+
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            <article className="rounded-lg border-2 border-acadia-leaf bg-acadia-cream p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-xl font-bold text-acadia-ink">Acadia&apos;s own portal</h3>
+                <span className="rounded-md bg-acadia-leaf px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                  Shown in the preview
+                </span>
+              </div>
               <p className="mt-3 leading-7 text-slate-700">
-                PayHOA is software built for self-managed associations. Every plan includes every
-                feature. The price depends on the number of homes. There is no contract, no setup
-                fee, and a 30-day free trial.
+                Built into this site and shaped around how Acadia works. Owners sign in here. A
+                licensed payment processor moves the money, so card and bank numbers never touch
+                this site.
               </p>
-
-              <table className="mt-5 w-full border-collapse text-left text-sm">
-                <caption className="sr-only">PayHOA plan prices</caption>
-                <thead>
-                  <tr className="border-b border-acadia-moss/30 text-xs uppercase tracking-wide text-slate-500">
-                    <th scope="col" className="py-2 pl-2 pr-3 font-bold">Community size</th>
-                    <th scope="col" className="py-2 pr-3 font-bold">Billed yearly</th>
-                    <th scope="col" className="py-2 font-bold">Billed monthly</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {payhoaPlans.map((plan) => (
-                    <tr
-                      key={plan.label}
-                      className={`border-b border-acadia-moss/15 ${plan === acadiaPlan ? "bg-acadia-sky" : ""}`}
-                    >
-                      <th scope="row" className="py-3 pl-2 pr-3 font-bold text-acadia-ink">
-                        {plan.label}
-                        {plan === acadiaPlan ? (
-                          <span className="mt-1 block text-xs font-bold uppercase tracking-wide text-acadia-leaf">
-                            Acadia, {acadiaBudget.homes} homes
-                          </span>
-                        ) : null}
-                      </th>
-                      <td className="py-3 pr-3 text-slate-700">
-                        ${plan.annualBillingMonthly} per month
-                        <span className="block text-xs text-slate-500">${plan.annualBillingMonthly * 12} per year</span>
-                      </td>
-                      <td className="py-3 text-slate-700">${plan.monthToMonth} per month</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
-                <Fee term="Bank payment (ACH)" detail={`$${payhoaFees.bankPayment.toFixed(2)} per payment`} />
-                <Fee term="Card payment" detail={`${payhoaFees.cardPercent}% plus $${payhoaFees.cardFixed.toFixed(2)}`} />
-                <Fee term="Check or cash" detail="No fee to record" />
-                <Fee term="Mailed letter" detail={`$${payhoaFees.mailedLetterFirstClass.toFixed(2)} first class`} />
+              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                <Fee term="Subscription" detail="None" />
+                <Fee term="Running cost" detail={`About $${portalRunningCostEstimate} a year (estimate)`} />
+                <Fee
+                  term="Bank payment"
+                  detail={`${processorFees.bankPercent}%, capped at $${processorFees.bankCap}`}
+                />
+                <Fee
+                  term="Card payment"
+                  detail={`${processorFees.cardPercent}% plus $${processorFees.cardFixed.toFixed(2)}`}
+                />
               </dl>
-
-              <p className="mt-4 rounded-md bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-                <strong>One thing to switch off.</strong> PayHOA&apos;s AI add-on is turned on by
-                default and is free for three months. After that it costs about $
-                {payhoaFees.aiAddOnMonthlySmallestPlan.toFixed(2)} per month on the smallest plan
-                unless the board turns it off.
+              <ul className="mt-4 space-y-2 text-sm leading-6 text-slate-700">
+                <li className="flex gap-2">
+                  <CheckIcon />
+                  <span>Goes beyond the off-the-shelf option: answers from the governing documents with page links, open books for every owner, and AI drafts that wait for attorney or CPA review.</span>
+                </li>
+                <li className="flex gap-2">
+                  <CheckIcon />
+                  <span>The association owns its data and can change the portal as needs change.</span>
+                </li>
+                <li className="flex gap-2">
+                  <CheckIcon />
+                  <span>On a ${quarterlyDues.toLocaleString("en-US")} quarterly payment, the bank fee would be ${processorBankFee(quarterlyDues).toFixed(2)} and the card fee ${processorCardFee(quarterlyDues).toFixed(2)}.</span>
+                </li>
+              </ul>
+              <p className="mt-4 rounded-md bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-900">
+                <strong className="block">Watch for</strong>
+                Volunteers build it and keep it running. The association needs a second person who
+                can maintain it, and a written handoff plan.
               </p>
-              <p className="mt-4 text-xs leading-5 text-slate-500">
-                The association can absorb payment fees or have the payer cover them. Prices read from{" "}
-                <a href={PAYHOA_PRICING_URL} target="_blank" rel="noreferrer" className="font-bold text-acadia-leaf underline underline-offset-4">
-                  PayHOA&apos;s pricing page
-                </a>{" "}
-                on {PAYHOA_REVIEWED}. No written quote is on file.
-              </p>
-            </div>
+            </article>
 
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-acadia-leaf">Included in every plan</p>
-              <div className="mt-3 grid gap-4 sm:grid-cols-2">
-                {payhoaIncluded.map((group) => (
-                  <div key={group.title} className="rounded-lg border border-acadia-moss/20 bg-acadia-cream p-4">
-                    <h3 className="font-bold text-acadia-ink">{group.title}</h3>
-                    <ul className="mt-2 space-y-1.5 text-sm leading-6 text-slate-700">
-                      {group.items.map((item) => (
-                        <li key={item} className="flex gap-2">
-                          <CheckIcon />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+            <article className="rounded-lg border border-acadia-moss/25 bg-white p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-xl font-bold text-acadia-ink">PayHOA</h3>
+                <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-slate-700">
+                  Off-the-shelf option
+                </span>
               </div>
-              <div className="mt-5 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/Acadia/portal"
-                  className="inline-flex min-h-12 items-center justify-center rounded-md bg-acadia-leaf px-5 py-3 font-bold text-white shadow-soft transition hover:bg-acadia-ink"
-                >
-                  See the owner portal preview
-                </Link>
-                <a href={PAYHOA_FEATURES_URL} target="_blank" rel="noreferrer" className="text-sm font-bold text-acadia-leaf underline underline-offset-4 hover:text-acadia-ink">
-                  PayHOA feature list
-                </a>
-              </div>
-            </div>
+              <p className="mt-3 leading-7 text-slate-700">
+                Subscription software for self-managed associations. Every plan includes every
+                feature. There is no contract, no setup fee, and a 30-day free trial.
+              </p>
+              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                <Fee
+                  term={`Subscription at ${acadiaBudget.homes} homes`}
+                  detail={acadiaPlan ? `$${acadiaPlan.annualBillingMonthly} a month, $${payhoaPerYear} a year` : "Ask for a quote"}
+                />
+                <Fee term="Month to month" detail={acadiaPlan ? `$${acadiaPlan.monthToMonth} a month` : "Ask for a quote"} />
+                <Fee term="Bank payment" detail={`$${payhoaFees.bankPayment.toFixed(2)} flat`} />
+                <Fee term="Card payment" detail={`${payhoaFees.cardPercent}% plus $${payhoaFees.cardFixed.toFixed(2)}`} />
+              </dl>
+              <ul className="mt-4 space-y-2 text-sm leading-6 text-slate-700">
+                <li className="flex gap-2">
+                  <CheckIcon />
+                  <span>Ready now, with bank sync, reconciliation, more than 40 reports, and mailed letters.</span>
+                </li>
+                <li className="flex gap-2">
+                  <CheckIcon />
+                  <span>The vendor maintains it, so it does not depend on one volunteer.</span>
+                </li>
+                <li className="flex gap-2">
+                  <CheckIcon />
+                  <span>Its flat bank fee is lower than the processor fee on a payment of Acadia&apos;s size.</span>
+                </li>
+              </ul>
+              <p className="mt-4 rounded-md bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-900">
+                <strong className="block">Watch for</strong>
+                Its AI add-on is turned on by default and becomes a paid extra after three months,
+                about ${payhoaFees.aiAddOnMonthlySmallestPlan.toFixed(2)} a month on the smallest plan,
+                unless it is turned off.
+              </p>
+            </article>
           </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <Link
+              href="/Acadia/portal"
+              className="inline-flex min-h-12 items-center justify-center rounded-md bg-acadia-leaf px-5 py-3 font-bold text-white shadow-soft transition hover:bg-acadia-ink"
+            >
+              Try the owner portal preview
+            </Link>
+            <Link
+              href="/Acadia/portal#compare"
+              className="text-sm font-bold text-acadia-leaf underline underline-offset-4 hover:text-acadia-ink"
+            >
+              See the feature-by-feature comparison
+            </Link>
+          </div>
+          <p className="mt-4 text-xs leading-5 text-slate-500">
+            PayHOA prices read from{" "}
+            <a href={PAYHOA_PRICING_URL} target="_blank" rel="noreferrer" className="font-bold text-acadia-leaf underline underline-offset-4">
+              PayHOA&apos;s pricing page
+            </a>{" "}
+            on {PAYHOA_REVIEWED}. Processor rates are{" "}
+            <a href={PROCESSOR_PRICING_URL} target="_blank" rel="noreferrer" className="font-bold text-acadia-leaf underline underline-offset-4">
+              Stripe&apos;s published US rates
+            </a>{" "}
+            as of {PROCESSOR_REVIEWED}. The portal running cost is a planning estimate for the AI
+            helper, email, and hosting. No quote or contract is on file for either path.
+          </p>
         </div>
       </section>
 
@@ -252,10 +292,10 @@ export default function AcadiaSavingsPage() {
           Savings calculator
         </h2>
         <p className="mt-2 max-w-3xl leading-7 text-slate-700">
-          The boxes start with Acadia&apos;s figures from the proposed 2027 budget. The attorney and
-          CPA boxes under the proposals stay empty until a review-only quote comes in, so no savings
-          are counted for them yet. Change any number to test a different case. Nothing you enter is
-          saved or sent anywhere.
+          The boxes start with Acadia&apos;s figures from the proposed 2027 budget. Switch between
+          Acadia&apos;s own portal and PayHOA to compare them. The attorney and CPA boxes under the
+          proposals stay empty until a review-only quote comes in, so no savings are counted for
+          them yet. Nothing you enter is saved or sent anywhere.
         </p>
         <div className="mt-6">
           <SavingsCalculator
@@ -264,7 +304,8 @@ export default function AcadiaSavingsPage() {
               managementPerYear: acadiaBudget.proposed2027.managementCompanyTotal,
               attorneyPerYear: acadiaBudget.proposed2027.legalFees,
               cpaPerYear: acadiaBudget.proposed2027.taxPreparation,
-              paymentsPerYear: acadiaBudget.duesPaymentsPerYear
+              paymentsPerYear: acadiaBudget.duesPaymentsPerYear,
+              duesPerPayment: acadiaBudget.proposed2027.quarterlyDues
             }}
           />
         </div>

@@ -1,6 +1,9 @@
 # Acadia owner portal preview and savings plan
 
-Two pages were added for the proposal to move from a management company to HOA software.
+Direction, set November 12, 2026: the goal is Acadia's own owner portal, built into this site and
+better than off-the-shelf HOA software. PayHOA is the benchmark it is measured against, not the plan.
+
+Two pages were added for the proposal to move from a management company to self-management.
 
 | Page | Path | What it is |
 | --- | --- | --- |
@@ -46,17 +49,34 @@ of these numbers in their text, so search for the old amount after changing one.
 - what the attorney and CPA would charge for review-only work
 - how much postage, printing, and admin cost would remain after a change
 
-## How a real portal would connect
+## Building the real portal
 
-There are two ways to turn the preview into something real.
+The preview is step one. The real portal would be built in steps, and each step should be tested by
+the board before owners use it.
 
-1. **Use PayHOA (recommended).** PayHOA hosts the owner portal and holds all payment data. This site
-   gets one "Pay dues" button that links to it. No payment data touches this site. The real screens
-   will be PayHOA's, so they will not match the preview exactly. No public PayHOA API was found, so
-   live balances cannot be shown on this site.
-2. **Build it here.** This site would need owner sign-in, a payment processor such as Stripe, an
-   owner ledger, bank reconciliation, late-fee rules, and receipts. That turns the site into the
-   association's accounting system. It is more work and more risk than the subscription costs.
+1. **Preview** (done). Sample data, no sign-in, no payments.
+2. **Sign-in and records.** Owners sign in with an emailed link. Real ledger, receipts, requests,
+   documents, and announcements. The treasurer enters payments by hand at first. Project votes move
+   to the same database so they no longer depend on Supabase.
+3. **Online payments.** A payment processor (Stripe) handles bank and card payments, autopay, and
+   receipts. The ledger updates from the processor's confirmations. Late fees follow the policy the
+   board adopts.
+4. **Board tools.** Collections view, two-person bill approval, AI drafts with attorney and CPA
+   review, budget against actual, and exports for the CPA.
 
-The pieces marked "Acadia extra" on the preview page are not part of PayHOA. They would be built on
-this site from PayHOA's exported reports.
+Rules for the build:
+
+- Card and bank numbers never touch this site. The processor's own hosted pages collect them.
+- The processor account and the bank account belong to the association, never to a volunteer.
+- Owner data sits behind sign-in. Nothing private is rendered on a public page.
+- Every change to money records is logged with who made it and when.
+- A second person must be able to run and repair the portal. Keep these notes current.
+
+Things PayHOA does that this plan does not try to match at first: automatic bank sync and
+reconciliation, mailed letters, and check printing. PayHOA's flat $2.45 bank fee is also lower than
+the processor's fee on a payment of Acadia's size ($5 on a $1,035 quarterly payment).
+
+Needed before step 2: a database that does not pause (managed Postgres is the working choice), an
+email sender for sign-in links, and a decision on a dedicated Acadia domain.
+Needed before step 3: a Stripe account opened by the association, board approval, and a decision on
+who pays the processing fee.

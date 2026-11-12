@@ -2,8 +2,8 @@
 //
 // IMPORTANT: nothing in this file is real. No real homeowner, balance, bank account, vendor amount,
 // or budget figure appears here. Keep it that way. The preview must never be mistaken for the
-// association's actual records. The only real numbers on the page are PayHOA's published fees,
-// which come from data/acadiaSavingsPlan.ts.
+// association's actual records. The only real numbers in the portal are the payment processor's
+// published fees, which come from data/acadiaSavingsPlan.ts.
 
 export const sampleOwner = {
   name: "Sample Homeowner",
