@@ -94,7 +94,7 @@ export function payhoaPlanForHomes(homes: number) {
   return payhoaPlans.find((plan) => homes >= plan.minHomes && homes <= plan.maxHomes);
 }
 
-export type ComparisonStatus = "live" | "planned" | "later" | "no" | "yes" | "partial" | "unlisted";
+export type ComparisonStatus = "live" | "built" | "planned" | "later" | "no" | "yes" | "partial" | "unlisted";
 
 /**
  * Acadia's own portal next to PayHOA. "unlisted" means the feature was not found on PayHOA's
@@ -133,12 +133,12 @@ export const portalComparison: {
   },
   {
     feature: "Ledger, receipts, and statements for each home",
-    acadia: { status: "planned", label: "Planned" },
+    acadia: { status: "built", label: "Built, not yet turned on" },
     payhoa: { status: "yes", label: "Included" }
   },
   {
     feature: "Requests with a step-by-step status tracker",
-    acadia: { status: "planned", label: "Planned" },
+    acadia: { status: "built", label: "Built, not yet turned on" },
     payhoa: { status: "yes", label: "Included" }
   },
   {

@@ -1,0 +1,68 @@
+# Acadia data service, for a NAS or any machine that runs Docker.
+#
+# Start the database alone:            docker compose up -d
+# Start it with a Tailscale tunnel:    docker compose --profile tailscale up -d
+# Start it with a Cloudflare tunnel:   docker compose --profile cloudflare up -d
+#
+# No port is opened on the machine or the router. The website reaches the database only through
+# the tunnel container. Values come from the .env file next to this file. See README.md.
+
+name: acadia-data
+
+services:
+  acadia-data:
+    image: node:24-alpine
+    restart: unless-stopped
+    working_dir: /app
+    command: ["node", "/app/server.mjs"]
+    environment:
+      ACADIA_DATA_KEY: ${ACADIA_DATA_KEY:?Put ACADIA_DATA_KEY in the .env file}
+      ACADIA_DATA_DIR: /data
+      HOST: 0.0.0.0
+      PORT: "8787"
+      BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS:-30}
+      TZ: ${TZ:-America/New_York}
+    volumes:
+      - ./server.mjs:/app/server.mjs:ro
+      - ./data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8787/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Option A. Tailscale Funnel gives a steady https address ending in .ts.net. No domain needed.
+  tailscale:
+    profiles: ["tailscale"]
+    image: tailscale/tailscale:latest
+    restart: unless-stopped
+    hostname: ${TS_HOSTNAME:-acadia-data}
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:-}
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_USERSPACE: "true"
+      TS_SERVE_CONFIG: /config/funnel.json
+    volumes:
+      - ./tailscale-state:/var/lib/tailscale
+      - ./funnel.json:/config/funnel.json:ro
+    depends_on:
+      - acadia-data
+
+  # Option B. Cloudflare Tunnel, for when the Acadia domain is on Cloudflare.
+  # In the Cloudflare dashboard, point the public hostname at http://acadia-data:8787
+  cloudflared:
+    profiles: ["cloudflare"]
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: ["tunnel", "--no-autoupdate", "run"]
+    environment:
+      TUNNEL_TOKEN: ${CF_TUNNEL_TOKEN:-}
+    depends_on:
+      - acadia-data

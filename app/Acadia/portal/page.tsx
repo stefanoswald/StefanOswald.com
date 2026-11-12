@@ -18,6 +18,7 @@ export const metadata = {
 
 const statusStyles: Record<ComparisonStatus, string> = {
   live: "bg-emerald-100 text-emerald-800",
+  built: "bg-teal-100 text-teal-900",
   planned: "bg-amber-100 text-amber-900",
   later: "bg-slate-100 text-slate-700",
   no: "bg-slate-100 text-slate-700",
@@ -67,6 +68,12 @@ export default function AcadiaPortalPreviewPage() {
             >
               Vote on the proposal
             </Link>
+            <Link
+              href="/Acadia/portal/sign-in"
+              className="inline-flex min-h-12 items-center justify-center rounded-md border border-acadia-moss/40 bg-white px-5 py-3 font-bold text-acadia-ink transition hover:border-acadia-leaf hover:bg-acadia-sky"
+            >
+              Owner sign-in
+            </Link>
           </div>
         </div>
       </section>
@@ -79,15 +86,15 @@ export default function AcadiaPortalPreviewPage() {
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-acadia-leaf">Behind the preview</p>
           <h2 id="real-title" className="mt-2 text-2xl font-bold text-acadia-ink">
-            How the real portal would work
+            How the real portal works
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <div className="rounded-lg border border-acadia-moss/20 bg-acadia-cream p-5">
               <h3 className="font-bold text-acadia-ink">It lives on Acadia&apos;s own site</h3>
               <p className="mt-2 text-sm leading-6 text-slate-700">
-                Owners would sign in here with a private link sent to their email. Balances,
-                receipts, requests, and documents would sit in the association&apos;s own records, not
-                in a rented product.
+                Owners sign in here with a private link from the board. There is no password.
+                Balances, receipts, and requests sit in records the board keeps itself, on its own
+                records server. They are not in a rented product.
               </p>
             </div>
             <div className="rounded-lg border border-acadia-moss/20 bg-acadia-cream p-5">
@@ -99,10 +106,11 @@ export default function AcadiaPortalPreviewPage() {
               </p>
             </div>
             <div className="rounded-lg border border-acadia-moss/20 bg-acadia-cream p-5">
-              <h3 className="font-bold text-acadia-ink">It would be built in steps</h3>
+              <h3 className="font-bold text-acadia-ink">It is being built in steps</h3>
               <p className="mt-2 text-sm leading-6 text-slate-700">
-                This preview comes first. Owner sign-in and the ledger would follow, then online
-                payments and autopay. The board would test each step before owners use it.
+                This preview came first. Owner sign-in, the ledger, receipts, and requests are built
+                and waiting for board testing. Online payments and autopay come next. The board
+                tests each step before owners use it.
               </p>
             </div>
           </div>
