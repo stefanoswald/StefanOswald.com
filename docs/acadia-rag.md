@@ -19,9 +19,10 @@ there is nothing to index and nothing to keep running.
 1. `data/acadiaDocumentPages.json` holds the OCR text of every page. It ships with the site.
 2. `lib/acadia-rag/corpus.ts` joins those pages with the current HOA items from `data/acadiaProjects.ts`.
 3. `lib/acadia-rag/claude.ts` sends that text to Claude with prompt caching turned on.
-4. Claude replies with one JSON object: the answer, a confidence level, and the page IDs it relied
-   on. The request asks for that shape with structured outputs (`output_config.format`). Page IDs
-   that do not exist are dropped before the reply is shown.
+4. Claude replies with one JSON object: the bottom line, the rules it relied on (each tied to a
+   page), the next step, a confidence level, and the page IDs it used. The request asks for that
+   shape with structured outputs (`output_config.format`). Rules and page IDs that point at a page
+   that does not exist are dropped before the reply is shown.
 5. An answer with no valid page behind it is always shown as Low confidence.
 6. If a request is rejected, the helper steps down: first to a plain JSON reply, then to only the
    best-matching pages. This covers a refused setting or an account rate limit that is too small
@@ -30,6 +31,23 @@ there is nothing to index and nothing to keep running.
 Two rules of the current Claude models shaped the request. Thinking is always on, so `max_tokens`
 has to cover thinking plus the reply. Forcing a tool with `tool_choice` is rejected, so the helper
 does not use tools.
+
+### How the helper is told to answer
+
+The instructions are in `lib/acadia-rag/claude.ts`. The main points:
+
+- Start with the bottom line: yes, no, yes with approval, or the documents do not cover it.
+- Most questions do not match the documents word for word. A garden gnome is not named, but the
+  Master Declaration requires approval for "ornamental structures" and for anything that changes
+  how a lot looks. The helper must find the general rule and apply it. It must not stop at "the
+  documents do not mention it".
+- Show each rule with its document, section, and a short quote. Each rule links to its page.
+- Say who decides and what the owner should do next.
+- Every rule, fee, and deadline must come from the documents. No outside law and no guesses about
+  how the board enforces a rule.
+
+If answers are too thin or too bold, change those instructions first. A bigger model does not fix
+instructions that tell it to hold back.
 
 ### Setup
 
@@ -41,7 +59,7 @@ Optional settings:
 
 | Variable | Default | What it does |
 | --- | --- | --- |
-| `ACADIA_CHAT_MODEL` | `claude-sonnet-5-5` | Model that answers. `claude-haiku-5-5` is cheaper. |
+| `ACADIA_CHAT_MODEL` | `claude-sonnet-5-5` | Model that answers. `claude-opus-5-5` reasons more carefully at twice the price. `claude-haiku-5-5` is cheaper. |
 | `ACADIA_CHAT_CONTEXT` | `full` | `full` sends every page. `search` sends only the best-matching pages. |
 | `ACADIA_CHAT_SEARCH_PAGES` | `36` | Pages sent in `search` mode. |
 | `ACADIA_CHAT_CACHE_TTL` | `5m` | Set to `1h` to keep the cache warm longer. Costs more per cache write. |
@@ -60,6 +78,7 @@ questions.
 | Setting | First question after a quiet spell | Follow-up within the cache window |
 | --- | --- | --- |
 | `full` + `claude-sonnet-5-5` (default) | about 30 to 40 cents | about 2 to 3 cents |
+| `full` + `claude-opus-5-5` | about 60 to 80 cents | about 4 to 6 cents |
 | `full` + `claude-haiku-5-5` | about 7 to 10 cents | about 1 cent |
 | `search` + `claude-sonnet-5-5` | about 7 to 9 cents | about 7 to 9 cents |
 | `search` + `claude-haiku-5-5` | under 1 cent | under 1 cent |
