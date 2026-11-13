@@ -24,7 +24,8 @@ What this means in practice:
 
 ## What you need
 
-1. A machine that stays on. A NAS that runs Docker is the best fit.
+1. A machine that stays on. A Mac that is left on works for the proof of concept. A NAS that runs
+   Docker is the better long-term home.
 2. A tunnel. Pick one:
    - **Tailscale Funnel.** Free. Gives an address ending in `.ts.net`. No domain needed.
    - **Cloudflare Tunnel.** Free. Needs a domain that uses Cloudflare for DNS. A good fit once
@@ -83,16 +84,48 @@ Vendor page: https://developers.cloudflare.com/tunnel/
 
 Do not use a Cloudflare quick tunnel (`trycloudflare.com`). Its address changes on every restart.
 
-## Run it without Docker
+## Set up on a Mac that stays on
 
-On a Mac or any machine with Node 22.13 or newer:
+This is the setup for the proof of concept. It needs no Docker and no administrator password.
+
+1. Open Terminal and run the setup script from this folder:
+
+   ```
+   bash services/acadia-data/mac/install.sh
+   ```
+
+   It puts everything in `~/acadia-data` on the Mac's own disk. It makes the two keys and saves
+   them in `~/acadia-data/.env` without showing them. It adds a launch agent so the service starts
+   at login and restarts if it stops. If the Mac has no Node.js 22.13 or newer, it asks before
+   downloading a private copy from nodejs.org.
+
+2. Install Tailscale from the Mac App Store or tailscale.com/download. Sign in.
+
+3. Turn on the tunnel:
+
+   ```
+   bash services/acadia-data/mac/connect-tailscale.sh
+   ```
+
+   The first time, Tailscale shows a web link to approve Funnel. Approve it and run the script
+   again. The script then writes the three Vercel settings to `~/acadia-data/vercel-settings.txt`.
+
+Good to know:
+
+- The database must stay on the Mac's own disk. Do not move `~/acadia-data` to a network share.
+  SQLite files can be damaged there.
+- The service keeps the Mac awake while it runs. After a restart, it starts when you log in.
+- `bash services/acadia-data/mac/uninstall.sh` stops it. The database and keys are left alone.
+- The scripts were tested with stand-ins for the Mac-only commands. The Tailscale step has not been
+  run on a real Mac yet.
+
+To run it by hand instead, on any machine with Node 22.13 or newer:
 
 ```
 ACADIA_DATA_KEY="the long key" ACADIA_DATA_DIR="/path/to/acadia-data" node server.mjs
 ```
 
-It listens on `127.0.0.1:8787`. Point the tunnel at that address. Use a launchd agent (Mac) or a
-service manager so it starts again after a restart.
+It listens on `127.0.0.1:8787`. Point the tunnel at that address.
 
 ## Settings on Vercel
 
