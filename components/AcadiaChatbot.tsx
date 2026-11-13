@@ -1,12 +1,14 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
-import type { AcadiaChatCitation, AcadiaChatDebug } from "@/types/acadia-rag";
+import type { AcadiaChatCitation, AcadiaChatDebug, AcadiaChatRule } from "@/types/acadia-rag";
 
 type ChatMessage = {
   id: number;
   role: "assistant" | "resident";
   text: string;
+  rules?: AcadiaChatRule[];
+  nextStep?: string;
   details?: string;
   confidence?: "High" | "Medium" | "Low";
   confidenceReason?: string;
@@ -17,6 +19,8 @@ type ChatMessage = {
 
 type ChatResponse = {
   answer: string;
+  rules?: AcadiaChatRule[];
+  nextStep?: string;
   details?: string;
   confidence: "High" | "Medium" | "Low";
   confidenceReason?: string;
@@ -35,6 +39,7 @@ const introMessage: ChatMessage = {
 };
 
 const quickPrompts = [
+  "Can I put a garden gnome in my front yard?",
   "Can I park a boat or RV at my home?",
   "How are assessments set and when are they late?",
   "Do I need approval to change my exterior?",
@@ -99,6 +104,8 @@ export function AcadiaChatbot() {
             id: nextId.current++,
             role: "assistant",
             text: payload.answer || "I do not see a clear answer supported by the HOA documents.",
+            rules: payload.rules,
+            nextStep: payload.nextStep,
             details: payload.details,
             confidence: payload.confidence || "Low",
             confidenceReason: payload.confidenceReason,
@@ -143,7 +150,12 @@ export function AcadiaChatbot() {
   // Keep the newest message in view, and put the cursor in the box when the panel opens.
   useEffect(() => {
     if (isOpen && scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      const area = scrollRef.current;
+      const questions = area.querySelectorAll<HTMLElement>("[data-resident-message]");
+      const lastQuestion = questions[questions.length - 1];
+      // Long answers start at the top: show the latest question, with its answer right below it.
+      // Short ones, and the "reading" note, simply sit at the bottom.
+      area.scrollTop = lastQuestion ? Math.min(lastQuestion.offsetTop - 12, area.scrollHeight) : area.scrollHeight;
     }
   }, [messages, isAsking, isOpen]);
 
@@ -199,7 +211,7 @@ export function AcadiaChatbot() {
 
           <div
             ref={scrollRef}
-            className="min-h-0 flex-1 space-y-3 overflow-y-auto bg-acadia-cream px-4 py-4"
+            className="relative min-h-0 flex-1 space-y-3 overflow-y-auto bg-acadia-cream px-4 py-4"
             role="log"
             aria-live="polite"
           >
@@ -285,10 +297,13 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   const [showDetails, setShowDetails] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
   const hasMore = Boolean(message.details || message.confidenceReason);
+  // Each rule already links to its page. The chips below list only the other pages used.
+  const linkedFromRules = new Set((message.rules || []).map((rule) => rule.citation?.chunkId));
+  const otherSources = (message.citations || []).filter((citation) => !linkedFromRules.has(citation.chunkId));
 
   if (isResident) {
     return (
-      <div className="flex justify-end">
+      <div className="flex justify-end" data-resident-message>
         <div className="max-w-[85%] rounded-lg bg-acadia-leaf px-4 py-3 text-sm leading-6 text-white">
           <p className="whitespace-pre-line">{message.text}</p>
         </div>
@@ -307,11 +322,46 @@ function MessageBubble({ message }: { message: ChatMessage }) {
       >
         <p className="whitespace-pre-line">{message.text}</p>
 
-        {message.citations?.length ? (
+        {message.rules?.length ? (
           <div className="mt-3">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-500">Check the source</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-500">What the documents say</p>
+            <ul className="mt-1.5 space-y-2">
+              {message.rules.map((rule, index) => (
+                <li key={`${rule.where}-${index}`} className="border-l-2 border-acadia-moss/40 pl-3">
+                  <p className="text-acadia-ink">{rule.says}</p>
+                  {rule.citation ? (
+                    <a
+                      href={rule.citation.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-semibold text-acadia-leaf underline decoration-acadia-moss/50 underline-offset-2 hover:text-acadia-ink"
+                    >
+                      {rule.where}
+                      {rule.citation.page > 0 ? `, page ${rule.citation.page}` : ""}
+                    </a>
+                  ) : (
+                    <span className="text-xs font-semibold text-slate-500">{rule.where}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {message.nextStep ? (
+          <div className="mt-3 rounded-md bg-acadia-sky px-3 py-2">
+            <p className="text-xs font-bold uppercase tracking-wide text-acadia-leaf">What to do next</p>
+            <p className="mt-0.5 text-acadia-ink">{message.nextStep}</p>
+          </div>
+        ) : null}
+
+        {otherSources.length ? (
+          <div className="mt-3">
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+              {message.rules?.length ? "Also checked" : "Check the source"}
+            </p>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {message.citations.map((citation) => (
+              {otherSources.map((citation) => (
                 <a
                   key={`${citation.chunkId}-${citation.page}`}
                   href={citation.href}
