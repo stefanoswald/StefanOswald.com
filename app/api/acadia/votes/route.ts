@@ -5,12 +5,35 @@ import {
   getStoredVoteCounts,
   storeVote
 } from "@/lib/acadia-vote-store";
+import { visitorKeyFromRequest } from "@/lib/acadia-rag/rate-limit";
 import { isValidHouseNumber } from "@/lib/votes";
 import type { VoteType } from "@/types/acadia";
 
 export const dynamic = "force-dynamic";
 
 const projectIds = new Set(acadiaProjects.map((project) => project.id));
+
+// A small speed bump so a script cannot flood the home server with votes. It lives in the memory
+// of one server instance, like the chat limit.
+const VOTE_WINDOW_MS = 5 * 60 * 1000;
+const MAX_VOTES_PER_WINDOW = 40;
+const recentVotes = new Map<string, number[]>();
+
+function voteAllowed(visitorKey: string, now = Date.now()) {
+  const recent = (recentVotes.get(visitorKey) || []).filter((time) => now - time < VOTE_WINDOW_MS);
+  if (recent.length >= MAX_VOTES_PER_WINDOW) {
+    recentVotes.set(visitorKey, recent);
+    return false;
+  }
+  recent.push(now);
+  recentVotes.set(visitorKey, recent);
+  if (recentVotes.size > 2000) {
+    for (const [key, times] of recentVotes) {
+      if (!times.some((time) => now - time < VOTE_WINDOW_MS)) recentVotes.delete(key);
+    }
+  }
+  return true;
+}
 
 export async function GET(request: Request) {
   const projectId = new URL(request.url).searchParams.get("projectId") || "";
@@ -60,10 +83,13 @@ export async function POST(request: Request) {
     return jsonError("Please choose thumbs up or thumbs down.", 400);
   }
 
+  if (!voteAllowed(visitorKeyFromRequest(request))) {
+    return jsonError("That is a lot of votes in a short time. Please wait a few minutes and try again.", 429);
+  }
+
   try {
-    await storeVote(projectId, Number(houseNumber), voteType);
     return NextResponse.json(
-      { counts: await getStoredVoteCounts(projectId) },
+      { counts: await storeVote(projectId, Number(houseNumber), voteType) },
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch (error) {

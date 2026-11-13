@@ -5,3 +5,9 @@ out/
 tmp/
 .DS_Store
 npm-debug.log*
+
+# Acadia data service: the real database, backups, keys, and tunnel state never go in the repo.
+services/acadia-data/.env
+services/acadia-data/data/
+services/acadia-data/tailscale-state/
+*.tsbuildinfo

@@ -29,7 +29,7 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <section className={`rounded-xl border border-acadia-moss/20 bg-white p-5 ${className}`}>
+    <section className={`min-w-0 rounded-xl border border-acadia-moss/20 bg-white p-5 ${className}`}>
       {title || eyebrow || action ? (
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
           <div>
